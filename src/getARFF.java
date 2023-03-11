@@ -3,13 +3,18 @@ import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class getARFF {
 
     /**
-     *
+     * This program needs two arguments:
+     * <ol>
+     *     <li>CSV file to transform</li>
+     *     <li>Transformed arff file</li>
+     * </ol>
      * @param args
      * @throws Exception
      */
@@ -52,13 +57,14 @@ public class getARFF {
             String[] l = unekoa.split(",");
             ema[i][0] = l[0];
             ema[i][2] = l[l.length - 1];
-            String erdikoa = "";
-            for (int j = 1; j < l.length - 2; j++) {
-                erdikoa = erdikoa + l[j];
+            StringBuilder erdikoa = new StringBuilder();
+            for (int j = 1; j <= l.length - 2; j++) {
+                erdikoa.append(l[j]).append(",");
             }
-            ema[i][1] = erdikoa;
-            //System.out.println("\nID: " + ema[i][0]+"\nTestua: " +ema[i][1]+"\nKlasea: " +ema[i][2]+"\n-------------------------------------------------------------------------------");
+            ema[i][1] = erdikoa.toString();
+            System.out.println("\nID: " + ema[i][0] + "\nTestua: " + ema[i][1] + "\nKlasea: " + ema[i][2] + "\n-------------------------------------------------------------------------------");
         }
+
     }
 
     public static void KomakBanatu(String csv, String arff, String datu) throws Exception {
