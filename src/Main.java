@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 
 public class Main {
     public static void main(String[] args) throws  Exception{
@@ -19,35 +20,14 @@ public class Main {
             dataArffPath = args[1];
             dataPath = args[1];
         }
-        //Load CSV
-        //Parametroak:
-        // --> csv_a: .csv fitxategiaren path-a
-        // --> j_path: csv_a-ren path berbera, baina .arff bukaerarekin
-        // --> h_path: bihurturiko .arff-a gorden nahi den path-a
+        HashSet a = new HashSet<String>();
         Path csvPath = Path.of(dataCSVPath);
         String csvEdukia = Files.readString(csvPath);
-        String csvEdukiaOna = csvEdukia.replace("'", " ");
+        String lista[] = csvEdukia.split("(?<=suicide\n)");
 
-        File csvFile = new File(dataPath);
-        FileWriter fw = new FileWriter(dataPath);
-        fw.write(csvEdukiaOna);
-        fw.close();
-
-        File csvOna = new File(dataPath);
-
-
-        CSVLoader loader = new CSVLoader();
-        loader.setSource(csvOna);
-
-
-        Instances data = loader.getDataSet();
-
-        // save as an  ARFF (output file)
-        ArffSaver saver = new ArffSaver();
-        saver.setInstances(data);
-        saver.setFile(new File(dataArffPath));
-        // saver.setDestination(new File(j_path));
-        saver.writeBatch();
-        System.out.println("Arff fitxategia sortu da");
+        for (int i=0 ; i<lista.length; i++){
+            System.out.println("----------------------------------------------------------------------");
+            System.out.println(lista[i]);
+        }
     }
 }
