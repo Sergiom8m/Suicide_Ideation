@@ -66,7 +66,6 @@ public class Main {
         // save ARFF
         ArffSaver saver = new ArffSaver();
         saver.setInstances(data);
-        File f = new File(arff);
         saver.setFile(new File(arff));
         saver.setDestination(new File(datu));
         saver.writeBatch();
