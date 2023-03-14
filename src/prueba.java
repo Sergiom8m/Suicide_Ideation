@@ -88,7 +88,7 @@ public class prueba {
         Path csvPath = Path.of(path);
         String csvEdukia = Files.readString(csvPath);
         String[] instantzien_lista = csvEdukia.split("(?<=suicide\n)");
-        //String[] instantzien_lista = csvEdukia.split("(?<=,non-suicide\n) | (?<=,suicide\n)");
+        //String[] instantzien_lista = csvEdukia.split("(?<=,non\\-suicide\n)|(?<=,suicide\n)");
         return instantzien_lista;
     }
 
