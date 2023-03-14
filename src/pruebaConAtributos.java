@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-public class prueba {
+public class pruebaConAtributos {
 
     public static void main(String[] args) throws Exception {
 
@@ -19,11 +19,11 @@ public class prueba {
         String[] instantzien_lista = getInstantzienLista(csv_source_path);
         String[][] instantzienMatrizea = getInstantzienMatrizea(instantzien_lista);
 
-        arffGoiburuaEzarri(instantzien_lista, arff_origin_path);
+        arffGoiburuaEzarri(instantzien_lista, arff_origin_path, instantzienMatrizea);
         gordeInstantzienMatrizea(instantzienMatrizea, arff_origin_path);
     }
 
-    public static void arffGoiburuaEzarri (String[] instantzien_lista, String path) throws IOException {
+    public static void arffGoiburuaEzarri (String[] instantzien_lista, String path, String[][] mat) throws IOException {
 
         FileWriter myWriter = new FileWriter(path);
         myWriter.append("@relation Suicide_Detection");
@@ -31,7 +31,11 @@ public class prueba {
         String [] atributuen_lista = instantzien_lista[0].split("\r?\n|\r");
         atributuen_lista = atributuen_lista[0].split(",");
 
-        myWriter.append("\n" +"@attribute " + atributuen_lista[1] + " string");
+        String at1="\n" +"@attribute " + atributuen_lista[1]+" {"; //TODO IGUAL HAY Q METERLOS AQUI?
+        for(int i=0; i<mat.length; i++){
+            at1=at1+mat[i][1]+" ";
+        }
+        myWriter.append(at1);
         myWriter.append("\n" +"@attribute " + atributuen_lista[2] + " {'suicide', 'non-suicide'}");
 
         myWriter.close();
