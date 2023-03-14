@@ -66,28 +66,28 @@ public class prueba {
             //System.out.println("\nID: " + ema[i][0] + "\nTestua: " + ema[i][1] + "\nKlasea: " + ema[i][2] + "\n-------------------------------------------------------------------------------");
         }
         System.out.println("Hasierako matrizearen luzeera: "+ema.length);
-        garbituInstantzienMatrizea(ema);
-        return ema;
+        return garbituInstantzienMatrizea(ema);
     }
 
     //TODO
     public static String[][] garbituInstantzienMatrizea(String[][] mat) {
         String[][] aux = new String[mat.length][mat[0].length];
         int i=1;
+        int kont =0;
         for(String[] instantzia: mat){
-            if(instantzia[1].length()>10){
+            if(instantzia[2].equals("suicide\n") || instantzia[2].equals("non-suicide\n")){
                 aux[i-1]=instantzia;
                 i++;
-            }else{System.out.println(instantzia[2]);}
+            }
         }
         String[][] ema = new String[i][aux[0].length];
-        System.out.println("10 karaktere baino gutxiago dituzten instantziak kenduz "+ema.length);
+        System.out.println("Instantziak kenduz "+ema.length);
         return ema;
     }
     public static String[] getInstantzienLista(String path) throws IOException {
         Path csvPath = Path.of(path);
         String csvEdukia = Files.readString(csvPath);
-        String[] instantzien_lista = csvEdukia.split("(?<=suicide\n)"); //TODO DA MAL
+        String[] instantzien_lista = csvEdukia.split("(?<=suicide\n)");
         //String[] instantzien_lista = csvEdukia.split("(?<=,non-suicide\n) | (?<=,suicide\n)");
         return instantzien_lista;
     }
