@@ -9,15 +9,6 @@ import java.nio.file.Path;
 
 public class getARFF {
 
-    /**
-     * This program needs two arguments:
-     * <ol>
-     *     <li>CSV file to transform</li>
-     *     <li>Transformed arff file</li>
-     * </ol>
-     * @param args
-     * @throws Exception
-     */
     public static void main(String[] args) throws Exception {
         String dataPath, dataArffPath, dataArffPath2, dataCSVPath;
         if (args.length == 0) {
