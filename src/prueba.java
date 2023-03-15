@@ -60,9 +60,10 @@ public class prueba {
             ema[i][2] = "\'"+l[l.length - 1].replace("\n", "")+"\'";
             StringBuilder erdikoa = new StringBuilder();
             for (int j = 1; j <= l.length - 2; j++) {
-                erdikoa.append(l[j]).append(",");
+                erdikoa.append(l[j]).append(" ");
             }
-            ema[i][1] = "\""+erdikoa.toString().replace("\r\n", " ").replace("\n", " ").replace("\r", " ").replace(",", " ").replace("\"", "")+"\",";
+            String testua = removePunctuations(erdikoa.toString());
+            ema[i][1] = "\""+testua.replace("\r\n", " ").replace("\n", " ").replace("\r", " ").replace("\"", "")+"\",";
 
             //System.out.println("\nID: " + ema[i][0] + "\nTestua: " + ema[i][1] + "\nKlasea: " + ema[i][2] + "\n-------------------------------------------------------------------------------");
         }
@@ -74,11 +75,14 @@ public class prueba {
     public static String[][] garbituInstantzienMatrizea(String[][] mat) {
         String[][] aux = new String[mat.length][mat[0].length];
         int i=0;
-        int kont =0;
         for(String[] instantzia: mat){
             if(instantzia[2].equals("\'suicide\'") || instantzia[2].equals("\'non-suicide\'")){
-                aux[i]=instantzia;
-                i++;
+                if(70<instantzia[1].length() && instantzia[1].length()<1500){
+                    if(instantzia[1].contains("\s")){
+                        aux[i]=instantzia;
+                        i++;
+                    }
+                }else {System.out.println(instantzia[2]);}
             }
         }
         String[][] ema = new String[i][aux[0].length];
@@ -96,6 +100,9 @@ public class prueba {
         return instantzien_lista;
     }
 
+    public static String removePunctuations(String source) {
+        return source.replaceAll("\\p{Punct}", " ");
+    }
 
     public static void printLista(String[] lista){
         for (int i = 0; i < lista.length; i++) {
