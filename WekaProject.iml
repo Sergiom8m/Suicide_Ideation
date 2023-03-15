@@ -8,5 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="weka" level="project" />
+    <orderEntry type="library" name="emoji-java-5.1.1" level="project" />
+    <orderEntry type="library" name="emoji-java-5.1.1-javadoc" level="project" />
   </component>
 </module>

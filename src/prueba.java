@@ -13,7 +13,7 @@ public class prueba {
 
     public static void main(String[] args) throws Exception {
 
-        String csv_source_path = "Suicide_Detection_raw.csv";
+        String csv_source_path = "Suicide_Detection.csv";
         String arff_origin_path = "Suicide_Detection.arff";
 
         String[] instantzien_lista = getInstantzienLista(csv_source_path);
@@ -63,6 +63,7 @@ public class prueba {
                 erdikoa.append(l[j]).append(" ");
             }
             String testua = removePunctuations(erdikoa.toString());
+            testua = testua.replaceAll("’", "");
             ema[i][1] = "\""+testua.replace("\r\n", " ").replace("\n", " ").replace("\r", " ").replace("\"", "")+"\",";
 
             //System.out.println("\nID: " + ema[i][0] + "\nTestua: " + ema[i][1] + "\nKlasea: " + ema[i][2] + "\n-------------------------------------------------------------------------------");
@@ -78,10 +79,10 @@ public class prueba {
         for(String[] instantzia: mat){
             if(instantzia[2].equals("\'suicide\'") || instantzia[2].equals("\'non-suicide\'")){
                 if(70<instantzia[1].length() && instantzia[1].length()<1500){
-                    if(instantzia[1].contains("\s")){
+                   if(! instantzia[1].matches("[^a-zA-Z0-9 ]")){ //Si hubiese algun texto solo con caracteres especiales lo borra
                         aux[i]=instantzia;
                         i++;
-                    }
+                   }
                 }else {System.out.println(instantzia[2]);}
             }
         }
