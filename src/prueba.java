@@ -51,7 +51,9 @@ public class prueba {
         myWriter.close();
 
     }
+
     public static String[][] getInstantzienMatrizea(String[] lista) {
+
         String[][] ema = new String[lista.length][3];
         for (int i = 0; i < lista.length; i++) {
             String unekoa = lista[i];
@@ -70,16 +72,17 @@ public class prueba {
         }
         System.out.println("Hasierako matrizearen luzeera: "+ema.length);
         return garbituInstantzienMatrizea(ema);
+
     }
 
-    //TODO
     public static String[][] garbituInstantzienMatrizea(String[][] mat) {
+
         String[][] aux = new String[mat.length][mat[0].length];
         int i=0;
         for(String[] instantzia: mat){
             if(instantzia[2].equals("\'suicide\'") || instantzia[2].equals("\'non-suicide\'")){
                 if(70<instantzia[1].length() && instantzia[1].length()<1500){
-                   if(! instantzia[1].matches("[^a-zA-Z0-9 ]")){ //Si hubiese algun texto solo con caracteres especiales lo borra
+                   if(!instantzia[1].matches("[^a-zA-Z0-9 ]")){ //Si hubiese algun texto solo con caracteres especiales lo borra
                         aux[i]=instantzia;
                         i++;
                    }
@@ -92,7 +95,9 @@ public class prueba {
         }
         System.out.println("Instantziak kenduz "+ema.length);
         return ema;
+
     }
+
     public static String[] getInstantzienLista(String path) throws IOException {
         Path csvPath = Path.of(path);
         String csvEdukia = Files.readString(csvPath);
