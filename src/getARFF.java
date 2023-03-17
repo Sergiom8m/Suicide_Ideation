@@ -76,6 +76,8 @@ public class getARFF {
 
     public static String kenduKaraktere(String testua) {
 
+        testua = testua.replaceAll("[\\u2800-\\u28FF]", "");
+
         testua = parseToAliases(testua); //Ezabatu emoji-ak
         testua = removePunctuations(testua); //Puntuazioa ezabatu
 
@@ -88,6 +90,10 @@ public class getARFF {
         Matcher matcher = pattern.matcher(testua);
         if (matcher.find()) {
             testua = testua.replace( matcher.group(), "");
+        }
+
+        if(!testua.matches(".*[a-zA-Z0-9]+.*")){
+            testua=" ";
         }
 
         return "\""+testua+"\",";
