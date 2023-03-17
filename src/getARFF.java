@@ -75,6 +75,7 @@ public class getARFF {
     }
 
     public static String kenduKaraktere(String testua) {
+
         testua = parseToAliases(testua); //Ezabatu emoji-ak
         testua = removePunctuations(testua); //Puntuazioa ezabatu
 
