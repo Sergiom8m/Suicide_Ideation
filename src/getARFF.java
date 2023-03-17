@@ -92,6 +92,13 @@ public class getARFF {
             testua = testua.replace( matcher.group(), "");
         }
 
+        regex = "\\b\\w{1,1}\\b"; //20 karaktere baino gehiago dituzten hitzak
+        pattern = Pattern.compile(regex);
+        matcher = pattern.matcher(testua);
+        if (matcher.find()) {
+            testua = testua.replace( matcher.group(), "");
+        }
+
         if(!testua.matches(".*[a-zA-Z0-9]+.*")){
             testua=" ";
         }
