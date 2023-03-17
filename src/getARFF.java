@@ -82,7 +82,7 @@ public class getARFF {
         testua = removePunctuations(testua); //Puntuazioa ezabatu
 
         testua = testua.replaceAll("[0-9]", ""); //Zenbakiak ezabatu
-        testua = testua.replaceAll("’", "").replace("\"", ""); //Komillak ezabatu
+        testua = testua.replaceAll("’", "").replace("\"", "").replace("-", ""); //Komillak ezabatu
         testua = testua.replace("\r\n", " ").replace("\n", " ").replace("\r", " ");//Enter ezabatu
 
         String regex = "\\b\\w{20,}\\b"; //20 karaktere baino gehiago dituzten hitzak
