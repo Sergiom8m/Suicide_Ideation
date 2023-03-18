@@ -1,3 +1,5 @@
+package Aurreprozesamendua;
+
 import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
 import weka.classifiers.Evaluation;
@@ -61,7 +63,6 @@ public class fssInfoGain {
             as.setInputFormat(train);
             System.out.println(train.numAttributes());
 
-
             int numaux=-1; //Numero de atributos que se quieren mantener (-1=todos)
             double taux=0.0; //Threshold puede ir del 0 (se mantienen todos los atributos) al 1 (se borran todos los atributos)
             double fmax = 0.0;
@@ -73,26 +74,25 @@ public class fssInfoGain {
                     ranker.setThreshold(t);
                     as.setSearch(ranker);
                     as.setInputFormat(train);
-                    Instances filteredData= Filter.useFilter(train, as);
-                    filteredData.setClassIndex(filteredData.numAttributes()-1);
 
                     RandomForest rf = new RandomForest();
                     rf.buildClassifier(train);
 
                     FilteredClassifier fc = new FilteredClassifier();
                     fc.setClassifier(rf);
-                    fc.buildClassifier(filteredData);
+                    fc.setFilter(as);
+                    fc.buildClassifier(train);
 
-                    Evaluation evaluation = new Evaluation(filteredData);
+                    Evaluation evaluation = new Evaluation(train);
                     evaluation.evaluateModel(fc, test);
                     double f= evaluation.weightedFMeasure();
+
                     if(fmax<f){
                         System.out.println("Fmax berria: "+f);
                         fmax=f;
                         numaux=n;
                         taux=t;
                     }
-                    System.out.println(5);
                 }
             }
             System.out.println("\nATERA DIREN PARAMETROAK:" +
@@ -100,15 +100,12 @@ public class fssInfoGain {
                     "\nThreshold: "+taux);
             System.out.println("LORTU DEN F-MEASURE MAXIMOA:"+ fmax);
 
-
             ranker.setNumToSelect(numaux);
             ranker.setThreshold(taux);
             as.setSearch(ranker);
             as.setInputFormat(data);
             Instances filteredData= Filter.useFilter(data, as);
             filteredData.setClassIndex(filteredData.numAttributes()-1);
-
-            System.out.println(filteredData.numAttributes());
 
             //5. DATUAK GORDE
             datuakGorde(args[2], filteredData);
