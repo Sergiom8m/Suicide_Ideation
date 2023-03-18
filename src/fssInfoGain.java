@@ -70,23 +70,21 @@ public class fssInfoGain {
                 ranker.setNumToSelect(n);
                 System.out.println(n);
                 for(double t=0.0; t<1.01; t+=0.1){
-                    System.out.println(t);
                     ranker.setThreshold(t);
                     as.setSearch(ranker);
                     as.setInputFormat(train);
                     Instances filteredData= Filter.useFilter(train, as);
                     filteredData.setClassIndex(filteredData.numAttributes()-1);
-                    System.out.println(1);
+
                     RandomForest rf = new RandomForest();
                     rf.buildClassifier(train);
-                    System.out.println(2);
+
                     FilteredClassifier fc = new FilteredClassifier();
                     fc.setClassifier(rf);
                     fc.buildClassifier(filteredData);
-                    System.out.println(3);
+
                     Evaluation evaluation = new Evaluation(filteredData);
                     evaluation.evaluateModel(fc, test);
-                    System.out.println(4);
                     double f= evaluation.weightedFMeasure();
                     if(fmax<f){
                         System.out.println("Fmax berria: "+f);
@@ -129,5 +127,4 @@ public class fssInfoGain {
         s.setFile(new File(path));
         s.writeBatch();
     }
-
 }
