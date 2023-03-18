@@ -1,6 +1,7 @@
 import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
 import weka.classifiers.Evaluation;
+import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.meta.AttributeSelectedClassifier;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.RandomForest;
@@ -31,6 +32,8 @@ public class fssInfoGain {
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(args[0]);
             Instances data = source.getDataSet();
             data.setClassIndex(data.numAttributes() - 1);
+
+            System.out.println(data.numAttributes());
 
             //2. DATUAK SEPARATU RESAMPLE BIDEZ
             Resample resample = new Resample();
@@ -63,17 +66,27 @@ public class fssInfoGain {
             double taux=0.0; //Threshold puede ir del 0 (se mantienen todos los atributos) al 1 (se borran todos los atributos)
             double fmax = 0.0;
 
-            for(int n=0; n<data.numAttributes()-1; n+=10){
+            for(int n=0; n<data.numAttributes()-1; n++){
                 ranker.setNumToSelect(n);
+                System.out.println(n);
                 for(double t=0.0; t<1.01; t+=0.1){
+                    System.out.println(t);
                     ranker.setThreshold(t);
                     as.setSearch(ranker);
-                    as.setInputFormat(data);
-                    Instances filteredData= Filter.useFilter(data, as);
+                    as.setInputFormat(train);
+                    Instances filteredData= Filter.useFilter(train, as);
                     filteredData.setClassIndex(filteredData.numAttributes()-1);
-
+                    System.out.println(1);
+                    RandomForest rf = new RandomForest();
+                    rf.buildClassifier(train);
+                    System.out.println(2);
+                    FilteredClassifier fc = new FilteredClassifier();
+                    fc.setClassifier(rf);
+                    fc.buildClassifier(filteredData);
+                    System.out.println(3);
                     Evaluation evaluation = new Evaluation(filteredData);
-                    evaluation.crossValidateModel(new RandomForest(), filteredData, 3, new Random());
+                    evaluation.evaluateModel(fc, test);
+                    System.out.println(4);
                     double f= evaluation.weightedFMeasure();
                     if(fmax<f){
                         System.out.println("Fmax berria: "+f);
@@ -81,6 +94,7 @@ public class fssInfoGain {
                         numaux=n;
                         taux=t;
                     }
+                    System.out.println(5);
                 }
             }
             System.out.println("\nATERA DIREN PARAMETROAK:" +
@@ -95,6 +109,8 @@ public class fssInfoGain {
             as.setInputFormat(data);
             Instances filteredData= Filter.useFilter(data, as);
             filteredData.setClassIndex(filteredData.numAttributes()-1);
+
+            System.out.println(filteredData.numAttributes());
 
             //5. DATUAK GORDE
             datuakGorde(args[2], filteredData);
