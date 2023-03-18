@@ -3,8 +3,6 @@ package Aurreprozesamendua;
 import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.meta.AttributeSelectedClassifier;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
@@ -14,11 +12,8 @@ import weka.filters.Filter;
 import weka.filters.supervised.attribute.AttributeSelection;
 import weka.filters.supervised.instance.Resample;
 import weka.filters.unsupervised.attribute.Reorder;
-import weka.filters.unsupervised.attribute.StringToWordVector;
-import weka.filters.unsupervised.instance.Randomize;
 
 import java.io.File;
-import java.util.Random;
 
 public class fssInfoGain {
     public static void main(String[] args) {
@@ -61,10 +56,9 @@ public class fssInfoGain {
             as.setEvaluator(new InfoGainAttributeEval());
             as.setSearch(ranker);
             as.setInputFormat(train);
-            System.out.println(train.numAttributes());
 
             int numaux=-1; //Numero de atributos que se quieren mantener (-1=todos)
-            double taux=0.0; //Threshold puede ir del 0 (se mantienen todos los atributos) al 1 (se borran todos los atributos)
+            double taux=0.0; //Threshold
             double fmax = 0.0;
 
             for(int n=0; n<data.numAttributes()-1; n++){
@@ -75,16 +69,23 @@ public class fssInfoGain {
                     as.setSearch(ranker);
                     as.setInputFormat(train);
 
+                    //Erabiliko dugun baseko klasifikadorea (train erabiliz)
                     RandomForest rf = new RandomForest();
                     rf.buildClassifier(train);
 
+                    //Train-eri filtroa aplikatuz geratuko diren parametroak ->
+                    //Test multzoko atributuak egokitzeko
                     FilteredClassifier fc = new FilteredClassifier();
                     fc.setClassifier(rf);
                     fc.setFilter(as);
                     fc.buildClassifier(train);
 
+                    //Ebaluazioa Filtered Classifier erabiliz egingo da non:
+                    //AttributeSelection filtroa eta RandomForest Klasifikadorea jasotzen diren
                     Evaluation evaluation = new Evaluation(train);
                     evaluation.evaluateModel(fc, test);
+                    //Ebaluazioaren eboluzioa ikusteko weighted F-Measure erabiliko dugu,
+                    //baina beste bat erabili genezake
                     double f= evaluation.weightedFMeasure();
 
                     if(fmax<f){
@@ -100,6 +101,7 @@ public class fssInfoGain {
                     "\nThreshold: "+taux);
             System.out.println("LORTU DEN F-MEASURE MAXIMOA:"+ fmax);
 
+            //4. LORTUTAKO PARAMETROEKIN DATUAK FILTRATU ETA MULTZO BERRIA LORTU
             ranker.setNumToSelect(numaux);
             ranker.setThreshold(taux);
             as.setSearch(ranker);
