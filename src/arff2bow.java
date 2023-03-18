@@ -52,13 +52,20 @@ public class arff2bow {
             datuakGorde(args[3],dev);
 
 
-            //5. STRINGTOWORDVECTOR APLIKATU
-            File hiztegia = new File(args[1]); //hiztegia gordetzeko//TODO PONIA 2 PERO ES EL DE ABAJO CREO
+            //4. STRINGTOWORDVECTOR APLIKATU
+            File hiztegia = new File(args[1]); //hiztegia gordetzeko
             Instances trainBOW= stringToWordVector(train,hiztegia);
 
+            //5. NONSPARSE APLIKATU (matrizea bitarra, 0 atributua ez badago, 1 badago)  //TODO
+            trainBOW = nonSparse(trainBOW);
 
-            // 7. TRAINBOW GORDE
-            datuakGorde(args[2], trainBOW); //TODO PONIA 4 PERO DABA ERROR??
+
+            //6. TRAINBOW GORDE
+            Reorder reorder = new Reorder();
+            reorder.setAttributeIndices("2-last,1");        //klasea azken atributua izateko
+            reorder.setInputFormat(trainBOW);
+            trainBOW = Filter.useFilter(trainBOW, reorder);
+            datuakGorde(args[2], trainBOW);
 
 
 
@@ -69,13 +76,6 @@ public class arff2bow {
     }
 
     private static void datuakGorde(String path, Instances data) throws Exception {
-
-        Reorder reorder = new Reorder();
-        reorder.setAttributeIndices("2-last,1");        //klasea azken atributua izateko
-        reorder.setInputFormat(data);
-        data = Filter.useFilter(data, reorder);
-
-
         ArffSaver s = new ArffSaver();
         s.setInstances(data);
         s.setFile(new File(path));
@@ -89,11 +89,18 @@ public class arff2bow {
         stringToWordVector.setIDFTransform(false);
         stringToWordVector.setTFTransform(false);
         stringToWordVector.setDictionaryFileToSaveTo(hiztegia);             // hiztegia gordetzeko fitxategia ezarri
-        //stringToWordVector.setWordsToKeep(2000);                            // bektorearen dimentsioa, coje las primeras x que tengan maiztasun mas grande ???
-        stringToWordVector.setOutputWordCounts(false);                      // bitarra
+        stringToWordVector.setWordsToKeep(100);                            // bektorearen dimentsioa, coje las primeras x que tengan maiztasun mas grande TODO
+        stringToWordVector.setOutputWordCounts(false);                      // false: bitarra, true: maiztasuna
         stringToWordVector.setInputFormat(train);
         Instances trainBOW= Filter.useFilter(train,stringToWordVector);
         return trainBOW;
+    }
+
+    private static Instances nonSparse(Instances data) throws Exception{
+        SparseToNonSparse filterNonSparse = new SparseToNonSparse();
+        filterNonSparse.setInputFormat(data);
+        Instances nonSparseData = Filter.useFilter(data,filterNonSparse);
+        return nonSparseData;
     }
 
 
