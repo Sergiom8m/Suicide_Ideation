@@ -46,7 +46,7 @@ public class getARFF {
         FileWriter myWriter = new FileWriter(path, true);
         myWriter.append("\n");
         myWriter.append("@data");
-        for (int i = 0; i < 1000; i++){
+        for (int i = 0; i < instantzien_matrizea.length; i++){
 
             myWriter.append("\n"+ instantzien_matrizea[i][1] +" " + instantzien_matrizea[i][2]);
         }
