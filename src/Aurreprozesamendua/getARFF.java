@@ -46,7 +46,7 @@ public class getARFF {
         FileWriter myWriter = new FileWriter(path, true);
         myWriter.append("\n");
         myWriter.append("@data");
-        for (int i = 0; i < instantzien_matrizea.length; i++){
+        for (int i = 0; i < 1000; i++){
 
             myWriter.append("\n"+ instantzien_matrizea[i][1] +" " + instantzien_matrizea[i][2]);
         }
@@ -94,12 +94,7 @@ public class getARFF {
             testua = testua.replace( matcher.group(), "");
         }
 
-        regex = "\\b\\w{1,1}\\b"; //20 karaktere baino gehiago dituzten hitzak
-        pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(testua);
-        if (matcher.find()) {
-            testua = testua.replace( matcher.group(), "");
-        }
+        testua = testua.replaceAll("\\b\\w{1}\\b", "");
 
         if(!testua.matches(".*[a-zA-Z0-9]+.*")){
             testua=" ";
