@@ -16,23 +16,20 @@ import weka.filters.unsupervised.attribute.Reorder;
 import java.io.File;
 
 public class fssInfoGain {
-    public static void main(String[] args) {
+    public static void fssInfoGain(String trainBowPath, String FSSArffPath) {
         try {
-            args= new String[]{"trainBOW.arff", "hiztegiBerria.txt", "trainBOW_FSS_InfoGain.arff"};
-            /** BOW/TFIDF --> InfoGain LORTU
-             *  0. parametroa: .arff fitxategia (atributu guztiekin)
-             *  1. parametroa: Hiztegi berria gordetzeko .txt
-             *  2. parametroa: TrainBOW-ren bertsio berria gordetzeko. arff
+            /*
+               0. parametroa: .arff fitxategia (atributu guztiekin)
+               1. parametroa: TrainBOW-ren bertsio berria gordetzeko. arff
              */
 
-            //1. DATUAK LORTU
-            ConverterUtils.DataSource source = new ConverterUtils.DataSource(args[0]);
+            //DATUAK LORTU
+            ConverterUtils.DataSource source = new ConverterUtils.DataSource(trainBowPath);
             Instances data = source.getDataSet();
             data.setClassIndex(data.numAttributes() - 1);
 
-            System.out.println(data.numAttributes());
 
-            //2. DATUAK SEPARATU RESAMPLE BIDEZ
+            //TRAIN MULTZOA LORTU
             Resample resample = new Resample();
             resample.setRandomSeed(42);
             resample.setInvertSelection(false);
@@ -42,6 +39,7 @@ public class fssInfoGain {
             Instances train = Filter.useFilter(data, resample);
             train.setClassIndex(train.numAttributes()-1);
 
+            //TEST MULTZOA LORTU
             resample.setRandomSeed(42);
             resample.setInvertSelection(true);
             resample.setNoReplacement(true);
@@ -50,58 +48,57 @@ public class fssInfoGain {
             Instances test = Filter.useFilter(data, resample);
             test.setClassIndex(test.numAttributes()-1);
 
-            //3. ATRIBUTUEN SELEKZIOA PLANTEATU:
+            //ATRIBUTUEN AUKERAKETA
             Ranker ranker = new Ranker();
             AttributeSelection as = new AttributeSelection();
             as.setEvaluator(new InfoGainAttributeEval());
             as.setSearch(ranker);
             as.setInputFormat(train);
 
-            int numaux=-1; //Numero de atributos que se quieren mantener (-1=todos)
-            double taux=0.0; //Threshold
-            double fmax = 0.0;
+            int numaux = -1; //KONTSERBATUKO DIREN ATRIBUTU KOPURUA (-1 = GUZTIAK MANTENDU)
+            double taux = 0.0; //THRESHOLD
+            double fmax = 0.0; //F-MEASURE
 
-            for(int n=0; n<data.numAttributes()-1; n++){
+            for(int n = 0; n < data.numAttributes()-1; n++){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU
                 ranker.setNumToSelect(n);
                 System.out.println(n);
-                for(double t=0.0; t<1.01; t+=0.1){
+                for(double t = 0.0; t <1.01; t +=0.1){ //THRESHOLD OPTIMOA LORTU
                     ranker.setThreshold(t);
                     as.setSearch(ranker);
                     as.setInputFormat(train);
 
-                    //Erabiliko dugun baseko klasifikadorea (train erabiliz)
+                    //ERABILIKO DEN OINARRIZKO CLASSIFIER-A (TRAIN MULTZOA ERABILIZ)
                     RandomForest rf = new RandomForest();
                     rf.buildClassifier(train);
 
-                    //Train-eri filtroa aplikatuz geratuko diren parametroak ->
-                    //Test multzoko atributuak egokitzeko
+                    //ATRIBUTUAK FILTRATUKO DITEN CLASSIFIER-A SORTU (TEST EGOKITZEN DU)
                     FilteredClassifier fc = new FilteredClassifier();
                     fc.setClassifier(rf);
                     fc.setFilter(as);
                     fc.buildClassifier(train);
 
-                    //Ebaluazioa Filtered Classifier erabiliz egingo da non:
-                    //AttributeSelection filtroa eta RandomForest Klasifikadorea jasotzen diren
+                    //EBALUAZIOA EGIN FILTERED CLASSIFIER-A ERABILIZ
                     Evaluation evaluation = new Evaluation(train);
                     evaluation.evaluateModel(fc, test);
-                    //Ebaluazioaren eboluzioa ikusteko weighted F-Measure erabiliko dugu,
-                    //baina beste bat erabili genezake
-                    double f= evaluation.weightedFMeasure();
+                    //SORTUTAKO MODELOAREN KALITATEA AZTERTZEKO F-MEASURE METRIKA AZTERTUKO DA
+                    double fMeasure= evaluation.weightedFMeasure();
 
-                    if(fmax<f){
-                        System.out.println("Fmax berria: "+f);
-                        fmax=f;
-                        numaux=n;
-                        taux=t;
+                    //F-MEASURE MAXIMOA EGUNRETZEA
+                    if(fmax < fMeasure){
+                        //System.out.println("Fmax berria: "+f);
+                        fmax = fMeasure;
+                        numaux = n;
+                        taux = t;
                     }
                 }
             }
-            System.out.println("\nATERA DIREN PARAMETROAK:" +
-                    "\nNumToSelect: " + numaux+
-                    "\nThreshold: "+taux);
+            System.out.println("\nPARAMETRO EKORKETAREN EMAITZAK:" +
+                    "\nNumToSelect: " + numaux +
+                    "\nThreshold: "+ taux);
             System.out.println("LORTU DEN F-MEASURE MAXIMOA:"+ fmax);
 
-            //4. LORTUTAKO PARAMETROEKIN DATUAK FILTRATU ETA MULTZO BERRIA LORTU
+
+            //LORTUTAKO PARAMETROEKIN DATUAK FILTRATU ETA MULTZO BERRIA LORTU
             ranker.setNumToSelect(numaux);
             ranker.setThreshold(taux);
             as.setSearch(ranker);
@@ -109,18 +106,20 @@ public class fssInfoGain {
             Instances filteredData= Filter.useFilter(data, as);
             filteredData.setClassIndex(filteredData.numAttributes()-1);
 
-            //5. DATUAK GORDE
-            datuakGorde(args[2], filteredData);
+            //DATUAK GORDE
+            datuakGorde(FSSArffPath, filteredData);
 
         }catch (Exception e){e.printStackTrace();}
     }
 
     private static void datuakGorde(String path, Instances data) throws Exception {
 
+        //INSTANTZIAK ORDENATU
         Reorder reorder = new Reorder();
         reorder.setInputFormat(data);
         data = Filter.useFilter(data, reorder);
 
+        //INSTANTZIAK GORDE
         ArffSaver s = new ArffSaver();
         s.setInstances(data);
         s.setFile(new File(path));
