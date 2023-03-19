@@ -67,7 +67,6 @@ public class Ebaluazioa {
             evaluation = new Evaluation(data);
 
             for(int i = 0; i<50; i++){
-                System.out.println("Hold out iterazioa: "+i);
                 Resample resample = new Resample();
                 resample.setRandomSeed(42);
                 resample.setSampleSizePercent(80);
