@@ -58,8 +58,8 @@ public class fssInfoGain {
             int numaux = -1; //KONTSERBATUKO DIREN ATRIBUTU KOPURUA (-1 = GUZTIAK MANTENDU)
             double taux = 0.0; //THRESHOLD
             double fmax = 0.0; //F-MEASURE
-
-            for(int n = 0; n < data.numAttributes()-1; n++){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU
+            System.out.println(data.numAttributes());
+            for(int n = 0; n < data.numAttributes()-1; n+=50){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU
                 ranker.setNumToSelect(n);
                 System.out.println(n);
                 for(double t = 0.0; t <1.01; t +=0.1){ //THRESHOLD OPTIMOA LORTU
@@ -85,7 +85,7 @@ public class fssInfoGain {
 
                     //F-MEASURE MAXIMOA EGUNRETZEA
                     if(fmax < fMeasure){
-                        //System.out.println("Fmax berria: "+f);
+                        System.out.println("Fmax berria: "+fMeasure);
                         fmax = fMeasure;
                         numaux = n;
                         taux = t;

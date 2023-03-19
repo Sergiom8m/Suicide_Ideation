@@ -44,7 +44,7 @@ public class getARFF {
         FileWriter myWriter = new FileWriter(path, true);
         myWriter.append("\n");
         myWriter.append("@data");
-        for (int i = 0; i < 100; i++){
+        for (int i = 0; i < 10000; i++){
             //LERRO BAKOITZEKO TESTUA ETA KLASEA IDATZI
             myWriter.append("\n" + instantzien_matrizea[i][1] + " " + instantzien_matrizea[i][2]);
         }

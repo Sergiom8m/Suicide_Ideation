@@ -32,7 +32,7 @@ public class MainProgram {
         System.out.println("---------------------------------------------------");
         System.out.println("BoW SORTUKO DA");
         System.out.println("---------------------------------------------------");
-        fssInfoGain.fssInfoGain("trainBOW.arff","FSS.arff)");
+        fssInfoGain.fssInfoGain("trainBOW.arff","FSS.arff");
 
     }
 }
