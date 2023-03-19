@@ -1,6 +1,11 @@
 package Aurreprozesamendua;
 
 
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils;
+import weka.filters.Filter;
+import weka.filters.unsupervised.instance.Resample;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,13 +19,44 @@ public class getARFF {
 
     public static void getArff(String csvPath, String arffPath) throws Exception {
 
+        String pathOsoa = arffPath.split("\\.")[0]+"_Osoa.arff";
         //INSTANTZIEN IRAKURKETA:
         String[] instantzien_lista = getInstantzienLista(csvPath);
         String[][] instantzienMatrizea = getInstantzienMatrizea(instantzien_lista);
 
         //ARFF-A SORTU
-        arffGoiburuaEzarri(instantzien_lista, arffPath);
-        instantziakSartuArff(instantzienMatrizea, arffPath);
+        arffGoiburuaEzarri(instantzien_lista, pathOsoa);
+        instantziakSartuArff(instantzienMatrizea, pathOsoa);
+
+        sortuErabiltzekoArff(pathOsoa, arffPath);
+    }
+
+    public static void sortuErabiltzekoArff(String dagoenaPath, String berriaPath) throws Exception {
+        /*Resample setSampleSizePercent
+        * %50 ->  95426 instantzia
+        * %40 ->  76340 instantzia
+        * %25 ->  47713 instantzia
+        * %10 ->  19085 instantzia
+        * %6  ->  11451 instantzia
+        * %5  ->  9542  instantzia*/
+        ConverterUtils.DataSource source = new ConverterUtils.DataSource(dagoenaPath);
+        Instances data = source.getDataSet();
+        data.setClassIndex(data.numAttributes()-1);
+
+        System.out.println(".arff osoaren instantzia kopurua: "+data.numInstances());
+
+        Resample resample = new Resample();
+        resample.setRandomSeed(42);
+        resample.setNoReplacement(true);
+        resample.setInvertSelection(false);
+        resample.setSampleSizePercent(5);
+        resample.setInputFormat(data);
+        data = Filter.useFilter(data, resample);
+
+        System.out.println("Gure .arff instantzia kopurua: "+data.numInstances());
+
+        ConverterUtils.DataSink dataSink = new ConverterUtils.DataSink(berriaPath);
+        dataSink.write(data);
     }
 
     public static void arffGoiburuaEzarri (String[] instantzien_lista, String path) throws IOException {
@@ -44,7 +80,7 @@ public class getARFF {
         FileWriter myWriter = new FileWriter(path, true);
         myWriter.append("\n");
         myWriter.append("@data");
-        for (int i = 0; i < 10000; i++){
+        for (int i = 0; i < instantzien_matrizea.length; i++){
             //LERRO BAKOITZEKO TESTUA ETA KLASEA IDATZI
             myWriter.append("\n" + instantzien_matrizea[i][1] + " " + instantzien_matrizea[i][2]);
         }

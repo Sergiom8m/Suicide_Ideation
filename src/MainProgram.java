@@ -17,22 +17,31 @@ public class MainProgram {
         System.out.println("---------------------------------------------------");
         System.out.println("DATUAK KARGATUKO DIRA ARFF FORMATUAN");
         System.out.println("---------------------------------------------------");
-        getARFF.getArff("Suicide_Detection.csv", "cleanData.arff");
+        //getARFF.getArff("Suicide_Detection.csv", "cleanData.arff");
 
         System.out.println("---------------------------------------------------");
         System.out.println("BoW SORTUKO DA");
         System.out.println("---------------------------------------------------");
-        getBowArff.main("cleanData.arff", "hiztegia.txt", "trainBoW.arff", "test.arff");
+        //getBowArff.main("cleanData.arff", "hiztegia.txt", "trainBoW.arff", "test.arff");
 
         System.out.println("---------------------------------------------------");
         System.out.println("BoW SORTUKO DA");
         System.out.println("---------------------------------------------------");
-        Baseline.baseline("trainBoW.arff");
+        //Baseline.baseline("trainBoW.arff");
 
         System.out.println("---------------------------------------------------");
-        System.out.println("BoW SORTUKO DA");
+        System.out.println("BoW TRAIN FSS SORTUKO DA");
         System.out.println("---------------------------------------------------");
-        fssInfoGain.fssInfoGain("trainBOW.arff","FSS.arff");
+        //fssInfoGain.fssInfoGain("trainBOW.arff","trainBowFSS.arff");
 
+        System.out.println("---------------------------------------------------");
+        System.out.println("BoW TEST FSS SORTUKO DA");
+        System.out.println("---------------------------------------------------");
+        //testBateragarriaEgin.main(new String[]{});
+
+        System.out.println("---------------------------------------------------");
+        System.out.println("EBALUAZIOA BURUTUKO DA");
+        System.out.println("---------------------------------------------------");
+        Ebaluazioa.main("FSS.arff", new int[]{200,26,16,50}, "test_predictions.txt");
     }
 }

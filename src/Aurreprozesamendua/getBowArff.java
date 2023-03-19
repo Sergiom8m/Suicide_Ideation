@@ -1,16 +1,20 @@
 package Aurreprozesamendua;
 
+import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.RemoveByName;
+import weka.filters.unsupervised.attribute.RemoveUseless;
 import weka.filters.unsupervised.attribute.Reorder;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 import weka.filters.unsupervised.instance.Randomize;
 import weka.filters.unsupervised.instance.RemovePercentage;
 import weka.filters.unsupervised.instance.SparseToNonSparse;
 
-import java.io.File;
+import java.io.*;
+import java.util.HashMap;
 
 public class getBowArff {
     public static void main(String cleanDataArffPath, String hiztegiPath, String trainBoWArffPath, String testPath) {
@@ -77,6 +81,15 @@ public class getBowArff {
             //BoW ARFF-AN GORDE
             datuakGorde(trainBoWArffPath, trainBoW);
 
+            ezabatuUselessAttributes(trainBoWArffPath);
+
+            //FSS hiztegia sortu eta gorde
+            source = new ConverterUtils.DataSource(trainBoWArffPath);
+            Instances trainBow = source.getDataSet();
+            trainBow.setClassIndex(trainBow.numAttributes()-1);
+            HashMap<String, Integer> hiztegiaFinal = hiztegiaSortu("hiztegia.txt",trainBow);
+            hiztegiaGorde(hiztegiaFinal,"hiztegiaFinal.txt",trainBoW);
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -112,5 +125,63 @@ public class getBowArff {
         return nonSparseData;
     }
 
+    private static void ezabatuUselessAttributes(String path) throws Exception {
+        ConverterUtils.DataSource source = new ConverterUtils.DataSource(path);
+        Instances data = source.getDataSet();
+        data.setClassIndex(data.numAttributes()-1);
 
+        RemoveByName remove = new RemoveByName();
+        remove.setExpression(".*[a-zA-Z0-9]+.*");
+        remove.setInvertSelection(true);
+        remove.setInputFormat(data);
+        data = Filter.useFilter(data, remove);
+
+        ConverterUtils.DataSink ds = new ConverterUtils.DataSink(path);
+        ds.write(data);
+    }
+
+    public static void hiztegiaGorde(HashMap<String, Integer> hiztegia, String path, Instances data) throws IOException {
+        FileWriter fw = new FileWriter(path);
+        fw.write("@@@numDocs="+data.numInstances()+"@@@\n"); //Beharrezkoa TF·IDF bihurketa egiteko
+
+        for(int i=0; i<data.numAttributes()-1;i++){
+            String atributua = data.attribute(i).name();
+            if(hiztegia.containsKey(atributua)){
+                fw.write(atributua+","+hiztegia.get(atributua)+"\n");
+            }
+        }
+        fw.close();
+    }
+
+    public static HashMap<String,Integer> hiztegiaSortu(String pathRaw, Instances data) throws IOException {
+        HashMap<String, Integer> hiztegia = new HashMap();
+
+        for(int i=0;i<data.numAttributes()-1;i++) {
+            Attribute attrib = data.attribute(i);
+            hiztegia.put(attrib.name(),1);
+        }
+
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader(pathRaw));
+            String contentLine = br.readLine();     // @numDocs=numinstances kendu
+            contentLine = br.readLine();
+            while (contentLine != null) {
+
+                String[] lerroa = contentLine.split(",");
+                String atributua = lerroa[0];
+                Integer maiztasuna = Integer.parseInt(lerroa[1]);
+
+                if(hiztegia.containsKey(atributua)){
+                    hiztegia.put(atributua,maiztasuna);
+                }
+
+                contentLine = br.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+        return hiztegia;
+    }
 }
