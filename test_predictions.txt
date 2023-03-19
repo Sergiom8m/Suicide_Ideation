@@ -1,0 +1,75 @@
+
+=============================================================
+EBALUAZIO EZ ZINTZOA:
+
+Correctly Classified Instances        5635               89.4728 %
+Incorrectly Classified Instances       663               10.5272 %
+Kappa statistic                          0.789 
+Mean absolute error                      0.1915
+Root mean squared error                  0.2788
+Relative absolute error                 38.3474 %
+Root relative squared error             55.7947 %
+Total Number of Instances             6298     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0,878    0,090    0,901      0,878    0,889      0,789    0,966     0,963     suicide
+                 0,910    0,122    0,890      0,910    0,900      0,789    0,966     0,965     non-suicide
+Weighted Avg.    0,895    0,106    0,895      0,895    0,895      0,789    0,966     0,964     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 2664  369 |    a = suicide
+  294 2971 |    b = non-suicide
+
+=============================================================
+K-FOLD CROSS EBALUAZIOA:
+
+Correctly Classified Instances        5422               86.0908 %
+Incorrectly Classified Instances       876               13.9092 %
+Kappa statistic                          0.7211
+Mean absolute error                      0.2224
+Root mean squared error                  0.3246
+Relative absolute error                 44.5385 %
+Root relative squared error             64.962  %
+Total Number of Instances             6298     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0,840    0,120    0,867      0,840    0,853      0,721    0,926     0,915     suicide
+                 0,880    0,160    0,856      0,880    0,868      0,721    0,926     0,916     non-suicide
+Weighted Avg.    0,861    0,141    0,861      0,861    0,861      0,721    0,926     0,916     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 2549  484 |    a = suicide
+  392 2873 |    b = non-suicide
+
+=============================================================
+STRATIFIED 50 REPEATED HOLD OUT (%80):
+
+Correctly Classified Instances       53450               84.8413 %
+Incorrectly Classified Instances      9550               15.1587 %
+Kappa statistic                          0.696 
+Mean absolute error                      0.2319
+Root mean squared error                  0.333 
+Relative absolute error                 46.4605 %
+Root relative squared error             66.6842 %
+Total Number of Instances            63000     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0,838    0,142    0,842      0,838    0,840      0,696    0,919     0,898     suicide
+                 0,858    0,162    0,854      0,858    0,856      0,696    0,919     0,916     non-suicide
+Weighted Avg.    0,848    0,153    0,848      0,848    0,848      0,696    0,919     0,907     
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+ 25050  4850 |     a = suicide
+  4700 28400 |     b = non-suicide

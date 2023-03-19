@@ -86,7 +86,7 @@ public class getBowArff {
             Instances trainBow = source.getDataSet();
             trainBow.setClassIndex(trainBow.numAttributes()-1);
             HashMap<String, Integer> hiztegiaFinal = hiztegiaSortu("hiztegia.txt",trainBow);
-            hiztegiaGorde(hiztegiaFinal,"hiztegia.txt",trainBoW);
+            hiztegiaGorde(hiztegiaFinal,"hiztegiaFSS.txt",trainBoW);
 
         }catch (Exception e){
             e.printStackTrace();

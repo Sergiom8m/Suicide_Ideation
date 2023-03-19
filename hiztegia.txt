@@ -1498,6 +1498,8 @@ your,542
 youre,80
 yourself,106
 youtube,76
+“,40
+”,71
 above,12
 abt,15
 active,11
@@ -1955,3 +1957,11 @@ yelled,9
 yo,22
 youtu,33
 zoom,11
+​‌‌‍‎‏,1
+‍,6
+‎,3
+‎‎‎‎‎,1
+‎‏‏‎,1
+ㅤ,3
+︎,2
+️,24

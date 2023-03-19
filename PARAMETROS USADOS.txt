@@ -1,0 +1,4 @@
+INSTANCIAS AL 5%
+ATRIBUTOS 1500
+NUM TO SELECT -> for(int n = 1; n < data.numAttributes()-1; n+=50){
+THRESHOLD -> for(double t = Long.MIN_VALUE; t <1; t +=Long.MAX_VALUE/4){
