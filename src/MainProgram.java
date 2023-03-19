@@ -42,6 +42,6 @@ public class MainProgram {
         System.out.println("---------------------------------------------------");
         System.out.println("EBALUAZIOA BURUTUKO DA");
         System.out.println("---------------------------------------------------");
-        Ebaluazioa.main("FSS.arff", new int[]{200,26,16,50}, "test_predictions.txt");
+        Ebaluazioa.main("trainFSS.arff", new int[]{200,26,16,50}, "test_predictions.txt");
     }
 }
