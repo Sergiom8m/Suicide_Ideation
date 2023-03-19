@@ -59,7 +59,7 @@ public class fssInfoGain {
             double taux = 0.0; //THRESHOLD
             double fmax = 0.0; //F-MEASURE
             System.out.println(data.numAttributes());
-            for(int n = 0; n < data.numAttributes()-1; n+=50){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU
+            for(int n = 0; n < data.numAttributes()-1; n+=50){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU                   TODO TRAINFSS actual esta hecho con n+=500
                 ranker.setNumToSelect(n);
                 System.out.println(n);
                 for(double t = 0.0; t <1.01; t +=0.1){ //THRESHOLD OPTIMOA LORTU
@@ -113,12 +113,6 @@ public class fssInfoGain {
     }
 
     private static void datuakGorde(String path, Instances data) throws Exception {
-
-        //INSTANTZIAK ORDENATU
-        Reorder reorder = new Reorder();
-        reorder.setInputFormat(data);
-        data = Filter.useFilter(data, reorder);
-
         //INSTANTZIAK GORDE
         ArffSaver s = new ArffSaver();
         s.setInstances(data);

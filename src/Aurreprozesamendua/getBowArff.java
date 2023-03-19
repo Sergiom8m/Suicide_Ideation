@@ -73,10 +73,8 @@ public class getBowArff {
             trainBoW = nonSparse(trainBoW);
 
             //TrainBOW GORDE
-            Reorder reorder = new Reorder();
-            reorder.setAttributeIndices("2-last,1"); //KLASEA AZKEN POSIZIOAN AGER DADIN
-            reorder.setInputFormat(trainBoW);
-            trainBoW = Filter.useFilter(trainBoW, reorder);
+
+            trainBoW = reorder(trainBoW);
 
             //BoW ARFF-AN GORDE
             datuakGorde(trainBoWArffPath, trainBoW);
@@ -88,11 +86,19 @@ public class getBowArff {
             Instances trainBow = source.getDataSet();
             trainBow.setClassIndex(trainBow.numAttributes()-1);
             HashMap<String, Integer> hiztegiaFinal = hiztegiaSortu("hiztegia.txt",trainBow);
-            hiztegiaGorde(hiztegiaFinal,"hiztegiaFinal.txt",trainBoW);
+            hiztegiaGorde(hiztegiaFinal,"hiztegia.txt",trainBoW);
 
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private static Instances reorder(Instances test) throws Exception {
+        Reorder filterR = new Reorder();
+        filterR.setAttributeIndices("2-"+ test.numAttributes()+",1"); //2-atributu kop, 1.  2-atributu kop bitarteko atributuak goian jarriko dira eta 1 atributua (klasea dena) amaieran.
+        filterR.setInputFormat(test);
+        test = Filter.useFilter(test,filterR);
+        return test;
     }
 
     private static void datuakGorde(String path, Instances data) throws Exception {

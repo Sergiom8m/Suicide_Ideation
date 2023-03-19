@@ -25,23 +25,23 @@ public class MainProgram {
         //getBowArff.main("cleanData.arff", "hiztegia.txt", "trainBoW.arff", "test.arff");
 
         System.out.println("---------------------------------------------------");
-        System.out.println("BoW SORTUKO DA");
+        System.out.println("BASELINE SORTUKO DA");
         System.out.println("---------------------------------------------------");
         //Baseline.baseline("trainBoW.arff");
 
         System.out.println("---------------------------------------------------");
         System.out.println("BoW TRAIN FSS SORTUKO DA");
         System.out.println("---------------------------------------------------");
-        //fssInfoGain.fssInfoGain("trainBOW.arff","trainBowFSS.arff");
+        //fssInfoGain.fssInfoGain("trainBOW.arff","trainFSS.arff");
 
         System.out.println("---------------------------------------------------");
         System.out.println("BoW TEST FSS SORTUKO DA");
         System.out.println("---------------------------------------------------");
-        //testBateragarriaEgin.main(new String[]{});
+        //getDevFSS.main("trainFSS.arff","test.arff","testFSS.arff");
 
         System.out.println("---------------------------------------------------");
         System.out.println("EBALUAZIOA BURUTUKO DA");
         System.out.println("---------------------------------------------------");
-        Ebaluazioa.main("FSS.arff", new int[]{200,26,16,50}, "test_predictions.txt");
+        //Ebaluazioa.main("FSS.arff", new int[]{200,26,16,50}, "test_predictions.txt");
     }
 }
