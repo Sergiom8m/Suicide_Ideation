@@ -37,7 +37,7 @@ public class MainProgram {
         System.out.println("---------------------------------------------------");
         System.out.println("BoW TEST FSS SORTUKO DA");
         System.out.println("---------------------------------------------------");
-        //getDevFSS.main("trainFSS.arff","test.arff","testFSS.arff");
+        Aurreprozesamendua.getDevFSS.main("test.arff","testFSS.arff");
 
         System.out.println("---------------------------------------------------");
         System.out.println("EBALUAZIOA BURUTUKO DA");
