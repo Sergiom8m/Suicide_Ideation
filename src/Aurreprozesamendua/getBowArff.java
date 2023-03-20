@@ -48,7 +48,7 @@ public class getBowArff {
 
             //TEST MULTZOA LORTU
             RemovePercentage removeFilter = new RemovePercentage();
-            removeFilter.setPercentage(66);
+            removeFilter.setPercentage(70);
             removeFilter.setInputFormat(randomData);
             Instances test = Filter.useFilter(randomData, removeFilter);
             test.setClassIndex(data.numAttributes() - 1);
