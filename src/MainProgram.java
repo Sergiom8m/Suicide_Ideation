@@ -1,3 +1,4 @@
+import Aurreprozesamendua.fssInfoGain;
 import Aurreprozesamendua.getTestFSS;
 import Aurreprozesamendua.getARFF;
 import Aurreprozesamendua.getBowArff;

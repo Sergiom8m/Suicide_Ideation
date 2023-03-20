@@ -80,12 +80,12 @@ public class getBowArff {
 
             ezabatuUselessAttributes(trainBoWArffPath);
 
-            //FSS hiztegia sortu eta gorde
+            //HIZTEGIA EGOKITU
             source = new ConverterUtils.DataSource(trainBoWArffPath);
             Instances trainBow = source.getDataSet();
             trainBow.setClassIndex(trainBow.numAttributes()-1);
             HashMap<String, Integer> hiztegiaFinal = hiztegiaSortu("hiztegia.txt",trainBow);
-            hiztegiaGorde(hiztegiaFinal,"hiztegiaFSS.txt",trainBoW);
+            hiztegiaGorde(hiztegiaFinal,"hiztegia.txt",trainBoW);
 
         }catch (Exception e){
             e.printStackTrace();

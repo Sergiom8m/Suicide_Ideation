@@ -114,7 +114,7 @@ public class fssInfoGain {
 
             // HIZTEGIA SORTU ETA GORDE
             HashMap<String, Integer> hiztegia = hiztegiaSortu("hiztegia.txt",filteredData);
-            hiztegiaGorde(hiztegia,"hiztegiaFSSMALO.txt",filteredData);
+            hiztegiaGorde(hiztegia,"hiztegiaFSS.txt",filteredData);
 
         }catch (Exception e){e.printStackTrace();}
     }
