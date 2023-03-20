@@ -17,3 +17,10 @@ LORTU DEN F-MEASURE MAXIMOA:0.8696687636412554
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+INSTANCIAS AL 30%
+ATRIBUTOS 1500
+NUM TO SELECT -> for(int n = 1; n <  data.numAttributes()*(0.75); n+=100){
+THRESHOLD -> Long.MIN_VALUE
+PARAMETRO EKORKETAREN EMAITZAK:
+NumToSelect: 301
+LORTU DEN F-MEASURE MAXIMOA:0.8742249794075659
