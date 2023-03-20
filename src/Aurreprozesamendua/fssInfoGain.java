@@ -54,55 +54,50 @@ public class fssInfoGain {
             Ranker ranker = new Ranker();
             AttributeSelection as = new AttributeSelection();
             as.setEvaluator(new InfoGainAttributeEval());
+            ranker.setThreshold(Long.MIN_VALUE);
             as.setSearch(ranker);
             as.setInputFormat(train);
 
+
             int numaux = -1; //KONTSERBATUKO DIREN ATRIBUTU KOPURUA (-1 = GUZTIAK MANTENDU)
-            double taux = 0.0; //THRESHOLD
             double fmax = 0.0; //F-MEASURE
             System.out.println(data.numAttributes());
-            for(int n = 1; n < data.numAttributes()-1; n+=50){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU                   TODO TRAINFSS actual esta hecho con n+=500
+            for(int n = 1; n < data.numAttributes()-1; n+=45){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU                   TODO TRAINFSS actual esta hecho con n+=500
                 ranker.setNumToSelect(n);
-                System.out.println(n);
-                for(double t = Long.MIN_VALUE; t <1; t +=Long.MAX_VALUE/4){ //THRESHOLD OPTIMOA LORTU
-                    ranker.setThreshold(t);
-                    as.setSearch(ranker);
-                    as.setInputFormat(train);
+                as.setSearch(ranker);
+                as.setInputFormat(train);
 
-                    //ERABILIKO DEN OINARRIZKO CLASSIFIER-A (TRAIN MULTZOA ERABILIZ)
-                    RandomForest rf = new RandomForest();
-                    rf.buildClassifier(train);
+                //ERABILIKO DEN OINARRIZKO CLASSIFIER-A (TRAIN MULTZOA ERABILIZ)
+                RandomForest rf = new RandomForest();
+                rf.buildClassifier(train);
 
-                    //ATRIBUTUAK FILTRATUKO DITEN CLASSIFIER-A SORTU (TEST EGOKITZEN DU)
-                    FilteredClassifier fc = new FilteredClassifier();
-                    fc.setClassifier(rf);
-                    fc.setFilter(as);
-                    fc.buildClassifier(train);
+                //ATRIBUTUAK FILTRATUKO DITEN CLASSIFIER-A SORTU (TEST EGOKITZEN DU)
+                FilteredClassifier fc = new FilteredClassifier();
+                fc.setClassifier(rf);
+                fc.setFilter(as);
+                fc.buildClassifier(train);
 
-                    //EBALUAZIOA EGIN FILTERED CLASSIFIER-A ERABILIZ
-                    Evaluation evaluation = new Evaluation(train);
-                    evaluation.evaluateModel(fc, test);
-                    //SORTUTAKO MODELOAREN KALITATEA AZTERTZEKO F-MEASURE METRIKA AZTERTUKO DA
-                    double fMeasure= evaluation.weightedFMeasure();
-
-                    //F-MEASURE MAXIMOA EGUNRETZEA
-                    if(fmax < fMeasure){
-                        System.out.println("Fmax berria: "+fMeasure);
-                        fmax = fMeasure;
-                        numaux = n;
-                        taux = t;
-                    }
+                //EBALUAZIOA EGIN FILTERED CLASSIFIER-A ERABILIZ
+                Evaluation evaluation = new Evaluation(train);
+                evaluation.evaluateModel(fc, test);
+                //SORTUTAKO MODELOAREN KALITATEA AZTERTZEKO F-MEASURE METRIKA AZTERTUKO DA
+                double fMeasure= evaluation.weightedFMeasure();
+                System.out.println(n+" lortutako f: "+fMeasure);
+                //F-MEASURE MAXIMOA EGUNRETZEA
+                if(fmax < fMeasure){
+                    System.out.println("Fmax berria: "+fMeasure);
+                    fmax = fMeasure;
+                    numaux = n;
                 }
             }
             System.out.println("\nPARAMETRO EKORKETAREN EMAITZAK:" +
-                    "\nNumToSelect: " + numaux +
-                    "\nThreshold: "+ taux);
+                    "\nNumToSelect: " + numaux);
             System.out.println("LORTU DEN F-MEASURE MAXIMOA:"+ fmax);
 
 
             //LORTUTAKO PARAMETROEKIN DATUAK FILTRATU ETA MULTZO BERRIA LORTU
             ranker.setNumToSelect(numaux);
-            ranker.setThreshold(taux);
+            ranker.setThreshold(Long.MIN_VALUE);
             as.setSearch(ranker);
             as.setInputFormat(data);
             Instances filteredData= Filter.useFilter(data, as);

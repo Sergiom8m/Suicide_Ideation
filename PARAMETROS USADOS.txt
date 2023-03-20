@@ -1,4 +1,19 @@
 INSTANCIAS AL 5%
 ATRIBUTOS 1500
-NUM TO SELECT -> for(int n = 1; n < data.numAttributes()-1; n+=50){
-THRESHOLD -> for(double t = Long.MIN_VALUE; t <1; t +=Long.MAX_VALUE/4){
+NUM TO SELECT -> for(int n = 1; n < data.numAttributes()-1; n+=50) -> 151
+THRESHOLD -> for(double t = Long.MIN_VALUE; t <1; t +=Long.MAX_VALUE/4) -> Long.MIN_VALUE
+LORTU DEN F-MEASURE MAXIMOA: 0.86323372283
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+INSTANCIAS AL 5%
+ATRIBUTOS 1500
+NUM TO SELECT -> for(int n = 151; n < data.numAttributes()-1; n+=51)
+THRESHOLD -> for(double t = Long.MIN_VALUE; t <Long.MIN_VALUE-Long.MIN_VALUE/3; t +=Long.MAX_VALUE/8)
+PARAMETRO EKORKETAREN EMAITZAK:
+NumToSelect: 406
+Threshold: -9.223372036854776E18
+LORTU DEN F-MEASURE MAXIMOA:0.8696687636412554
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
