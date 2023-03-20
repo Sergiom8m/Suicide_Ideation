@@ -1,6 +1,5 @@
 package Aurreprozesamendua;
 
-import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils;
@@ -10,9 +9,8 @@ import weka.filters.unsupervised.attribute.Reorder;
 import weka.filters.unsupervised.instance.SparseToNonSparse;
 
 import java.io.*;
-import java.util.HashMap;
 
-public class getDevFSS {
+public class getTestFSS {
     public static void main(String devPath, String devFSSPath) {
         try {
 
