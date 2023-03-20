@@ -4,6 +4,7 @@ package Aurreprozesamendua;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
+import weka.filters.supervised.instance.StratifiedRemoveFolds;
 import weka.filters.unsupervised.instance.Resample;
 
 import java.io.FileWriter;
@@ -28,6 +29,7 @@ public class getARFF {
         arffGoiburuaEzarri(instantzien_lista, pathOsoa);
         instantziakSartuArff(instantzienMatrizea, pathOsoa);
 
+
         sortuErabiltzekoArff(pathOsoa, arffPath);
     }
 
@@ -51,12 +53,14 @@ public class getARFF {
         resample.setInvertSelection(false);
         resample.setSampleSizePercent(5);
         resample.setInputFormat(data);
-        data = Filter.useFilter(data, resample);
+        Instances dataGurea = Filter.useFilter(data, resample);
 
-        System.out.println("Gure .arff instantzia kopurua: "+data.numInstances());
+        System.out.println("Gure .arff instantzia kopurua: "+dataGurea.numInstances());
 
         ConverterUtils.DataSink dataSink = new ConverterUtils.DataSink(berriaPath);
-        dataSink.write(data);
+        dataSink.write(dataGurea);
+
+
     }
 
     public static void arffGoiburuaEzarri (String[] instantzien_lista, String path) throws IOException {

@@ -2,6 +2,7 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
+import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
 import weka.filters.unsupervised.instance.Resample;
@@ -44,5 +45,6 @@ public class Baseline {
 
         //F-MEASURE INPRIMATU
         System.out.println(evaluator.weightedFMeasure());
+
     }
 }

@@ -61,8 +61,7 @@ public class getBowArff {
             train.setClassIndex(data.numAttributes() - 1);
             System.out.println("Train instantziak: " + train.numInstances());
 
-            //TEST GORDE
-
+            // TEST GORDE
             datuakGorde(testPath,test);
 
             //StringToWordVector APLIKATU

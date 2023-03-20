@@ -1,5 +1,6 @@
 import Aurreprozesamendua.getTestFSS;
-
+import Aurreprozesamendua.getARFF;
+import Aurreprozesamendua.getBowArff;
 public class MainProgram {
     public static void main(String[] args) throws Exception {
 
@@ -16,7 +17,7 @@ public class MainProgram {
         System.out.println("---------------------------------------------------");
         System.out.println("BASELINE SORTUKO DA");
         System.out.println("---------------------------------------------------");
-        Baseline.baseline("trainBoW.arff");
+        //Baseline.baseline("trainBoW.arff");
 
         System.out.println("---------------------------------------------------");
         System.out.println("BoW TRAIN FSS SORTUKO DA");
@@ -32,5 +33,12 @@ public class MainProgram {
         System.out.println("EBALUAZIOA BURUTUKO DA");
         System.out.println("---------------------------------------------------");
         //Ebaluazioa.main("trainFSS.arff", new int[]{200,26,16,50}, "test_predictions.txt");
+
+        System.out.println("---------------------------------------------------");
+        System.out.println("IRAGARPENAK BURUTUKO DIRA");
+        System.out.println("---------------------------------------------------");
+        //Iragarpenak.main("RF.model","testFSS.arff","iragarpenak.txt");
+
+
     }
 }

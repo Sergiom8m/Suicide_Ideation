@@ -1,6 +1,7 @@
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
+import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
 import weka.filters.unsupervised.instance.Randomize;
@@ -31,6 +32,10 @@ public class Ebaluazioa {
             randomForest.setBagSizePercent(parametroak[2]);
             randomForest.setMaxDepth(parametroak[3]);
             randomForest.buildClassifier(data);
+
+            //.MODEL GORDE
+            SerializationHelper.write("RF.model",randomForest);
+
 
             FileWriter f = new FileWriter(emaitzak);
             BufferedWriter bf = new BufferedWriter(f);
@@ -100,6 +105,8 @@ public class Ebaluazioa {
             bf.append(evaluation.toMatrixString());
 
             bf.close();
+
+
         }catch (Exception e){e.printStackTrace();}
     }
 }
