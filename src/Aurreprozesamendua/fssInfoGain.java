@@ -41,6 +41,7 @@ public class fssInfoGain {
             Instances train = Filter.useFilter(data, resample);
             train.setClassIndex(train.numAttributes()-1);
 
+
             //TEST MULTZOA LORTU
             resample.setRandomSeed(42);
             resample.setInvertSelection(true);
@@ -61,8 +62,11 @@ public class fssInfoGain {
 
             int numaux = -1; //KONTSERBATUKO DIREN ATRIBUTU KOPURUA (-1 = GUZTIAK MANTENDU)
             double fmax = 0.0; //F-MEASURE
-            System.out.println(data.numAttributes());
-            for(int n = 1; n < data.numAttributes()-1; n+=45){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU                   TODO TRAINFSS actual esta hecho con n+=500
+            int max = data.numAttributes();
+            System.out.println(max);
+            System.out.println(max*(0.75));
+            for(int n = 1; n < max*(0.75); n+=100){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU                   TODO TRAINFSS actual esta hecho con n+=500
+                System.out.println(n);
                 ranker.setNumToSelect(n);
                 as.setSearch(ranker);
                 as.setInputFormat(train);
