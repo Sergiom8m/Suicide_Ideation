@@ -1,16 +1,3 @@
-import Aurreprozesamendua.fssInfoGain;
-import Aurreprozesamendua.getARFF;
-import Aurreprozesamendua.getBowArff;
-import weka.core.Instances;
-import weka.core.converters.ArffSaver;
-import weka.core.converters.ConverterUtils;
-import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.FixedDictionaryStringToWordVector;
-import weka.filters.unsupervised.attribute.Reorder;
-import weka.filters.unsupervised.instance.SparseToNonSparse;
-
-import java.io.File;
-
 public class MainProgram {
     public static void main(String[] args) throws Exception {
 
