@@ -13,6 +13,7 @@ public class MainProgram {
         System.out.println("Sartu fitxategien path-a (soilik karpeta, adib: /home/lsi/): ");
         Scanner scanner = new Scanner(System.in);
         String path = scanner.next();
+        //path="";
         do{
             System.out.println("Sartu zenbaki bat segun eta zer egin nahi duzun:\n" +
                     "0 -> IRTEN\n"+
