@@ -115,7 +115,7 @@ public class getBowArff {
         stringToWordVector.setIDFTransform(false);
         stringToWordVector.setTFTransform(false);
         stringToWordVector.setDictionaryFileToSaveTo(hiztegia); //HIZTEGIA GORDETZEKO FITXATEGIA EZARRI
-        stringToWordVector.setWordsToKeep(1500);  //ATRIBUTU KOPURUA (BEKTOREAREN DIMENTSIOA), MAIZTASUN HANDIENEKO X ATRIBUTUAK GORDETZEN DITU
+        //stringToWordVector.setWordsToKeep(1500);  //ATRIBUTU KOPURUA (BEKTOREAREN DIMENTSIOA), MAIZTASUN HANDIENEKO X ATRIBUTUAK GORDETZEN DITU
         stringToWordVector.setOutputWordCounts(false); //MATRIZE BITARRA: FALSE ETA MATRIZEA MAIZTASUNEKIN: TRUE
         stringToWordVector.setInputFormat(train);
         Instances trainBOW= Filter.useFilter(train,stringToWordVector);

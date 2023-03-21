@@ -51,7 +51,7 @@ public class getARFF {
         resample.setRandomSeed(42);
         resample.setNoReplacement(true);
         resample.setInvertSelection(false);
-        resample.setSampleSizePercent(30);
+        resample.setSampleSizePercent(100);
         resample.setInputFormat(data);
         Instances dataGurea = Filter.useFilter(data, resample);
 

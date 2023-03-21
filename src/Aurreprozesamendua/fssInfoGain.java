@@ -59,21 +59,18 @@ public class fssInfoGain {
             as.setSearch(ranker);
             as.setInputFormat(train);
 
+            //ERABILIKO DEN OINARRIZKO CLASSIFIER-A (TRAIN MULTZOA ERABILIZ)
+            RandomForest rf = new RandomForest();
+            rf.buildClassifier(train);
 
             int numaux = -1; //KONTSERBATUKO DIREN ATRIBUTU KOPURUA (-1 = GUZTIAK MANTENDU)
             double fmax = 0.0; //F-MEASURE
             int max = data.numAttributes();
-            System.out.println(max);
-            System.out.println(max*(0.75));
-            for(int n = 1; n < max*(0.75); n+=100){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU                   TODO TRAINFSS actual esta hecho con n+=500
+            for(int n = 301; n < 502; n+=5){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU                   TODO TRAINFSS actual esta hecho con n+=500
                 System.out.println(n);
                 ranker.setNumToSelect(n);
                 as.setSearch(ranker);
                 as.setInputFormat(train);
-
-                //ERABILIKO DEN OINARRIZKO CLASSIFIER-A (TRAIN MULTZOA ERABILIZ)
-                RandomForest rf = new RandomForest();
-                rf.buildClassifier(train);
 
                 //ATRIBUTUAK FILTRATUKO DITEN CLASSIFIER-A SORTU (TEST EGOKITZEN DU)
                 FilteredClassifier fc = new FilteredClassifier();
@@ -84,6 +81,7 @@ public class fssInfoGain {
                 //EBALUAZIOA EGIN FILTERED CLASSIFIER-A ERABILIZ
                 Evaluation evaluation = new Evaluation(train);
                 evaluation.evaluateModel(fc, test);
+
                 //SORTUTAKO MODELOAREN KALITATEA AZTERTZEKO F-MEASURE METRIKA AZTERTUKO DA
                 double fMeasure= evaluation.weightedFMeasure();
                 System.out.println(n+" lortutako f: "+fMeasure);
@@ -94,7 +92,8 @@ public class fssInfoGain {
                     numaux = n;
                 }
             }
-            System.out.println("\nPARAMETRO EKORKETAREN EMAITZAK:" +
+            FileWriter f = new FileWriter("FSSRESULTADOS.csv");
+            System.out.append("\nPARAMETRO EKORKETAREN EMAITZAK:" +
                     "\nNumToSelect: " + numaux);
             System.out.println("LORTU DEN F-MEASURE MAXIMOA:"+ fmax);
 
@@ -114,7 +113,7 @@ public class fssInfoGain {
             // HIZTEGIA SORTU ETA GORDE
             HashMap<String, Integer> hiztegia = hiztegiaSortu("hiztegia.txt",filteredData);
             hiztegiaGorde(hiztegia,"hiztegiaFSS.txt",filteredData);
-
+            f.close();
         }catch (Exception e){e.printStackTrace();}
     }
 

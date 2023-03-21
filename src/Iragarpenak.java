@@ -42,7 +42,6 @@ public class Iragarpenak {
                 double pred = randomForest.classifyInstance(testBlind.instance(i));
                 pw.println((i+1)+".instantziaren iragarpena:"+ testBlind.classAttribute().value((int) pred));
             }
-            pw.close();
 
             //IRAGARPENEN ASMATZEAK
             int kont=0;
@@ -57,7 +56,11 @@ public class Iragarpenak {
             System.out.println("INSTANTIZIA TOTALAK: "+test.numInstances());
             System.out.println("BAT DATOZ: "+kont);
 
+            pw.append("\n\n\n///////////////////////////////////////////////////////////////////////////////////");
+            pw.append("INSTANTIZIA TOTALAK: "+test.numInstances());
+            pw.append("BAT DATOZ: "+kont);
 
+            pw.close();
 
         }catch (Exception e){
             e.printStackTrace();
