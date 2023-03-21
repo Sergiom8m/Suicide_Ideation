@@ -66,7 +66,7 @@ public class fssInfoGain {
             int numaux = -1; //KONTSERBATUKO DIREN ATRIBUTU KOPURUA (-1 = GUZTIAK MANTENDU)
             double fmax = 0.0; //F-MEASURE
             int max = data.numAttributes();
-            for(int n = 301; n < 502; n+=5){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU                   TODO TRAINFSS actual esta hecho con n+=500
+            for(int n = 301; n < data.numAttributes(); n+=5){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU                   TODO TRAINFSS actual esta hecho con n+=500
                 System.out.println(n);
                 ranker.setNumToSelect(n);
                 as.setSearch(ranker);

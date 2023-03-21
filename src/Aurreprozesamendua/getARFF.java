@@ -18,7 +18,7 @@ import static com.vdurmont.emoji.EmojiParser.parseToAliases;
 
 public class getARFF {
 
-    public static void getArff(String csvPath, String arffPath) throws Exception {
+    public static void getArff(String csvPath, String arffPath, int ehuneko) throws Exception {
 
         String pathOsoa = arffPath.split("\\.")[0]+"_Osoa.arff";
         //INSTANTZIEN IRAKURKETA:
@@ -30,10 +30,10 @@ public class getARFF {
         instantziakSartuArff(instantzienMatrizea, pathOsoa);
 
 
-        sortuErabiltzekoArff(pathOsoa, arffPath);
+        sortuErabiltzekoArff(pathOsoa, arffPath, ehuneko);
     }
 
-    public static void sortuErabiltzekoArff(String dagoenaPath, String berriaPath) throws Exception {
+    public static void sortuErabiltzekoArff(String dagoenaPath, String berriaPath, int ehuneko) throws Exception {
         /*Resample setSampleSizePercent
         * %50 ->  95426 instantzia
         * %40 ->  76340 instantzia
@@ -51,7 +51,7 @@ public class getARFF {
         resample.setRandomSeed(42);
         resample.setNoReplacement(true);
         resample.setInvertSelection(false);
-        resample.setSampleSizePercent(100);
+        resample.setSampleSizePercent(ehuneko);
         resample.setInputFormat(data);
         Instances dataGurea = Filter.useFilter(data, resample);
 
