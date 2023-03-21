@@ -103,7 +103,7 @@ public class getBowArff {
         }
 
         stringToWordVector.setAttributeIndices("first-last");
-        stringToWordVector.setWordsToKeep(3500);    //defektuz 1000 TODO 2000
+        stringToWordVector.setWordsToKeep(2000);    //defektuz 1000 TODO 2000
         stringToWordVector.setPeriodicPruning(-1.0);
 
         stringToWordVector.setLowerCaseTokens(true); //MAYUS ETA MINUS ARTEKO BEREIZKETARIK EZ TRUE BADAGO
