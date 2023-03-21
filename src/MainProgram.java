@@ -73,7 +73,7 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("RANDOM FOREST SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    parametroak = RandomForestOptimoa.main(new String[]{path+"trainFSS.arff",path});
+                    parametroak = RandomForestOptimoa.main(new String[]{path+"trainFSS.arff",path+"."});
                     break;
 
                 case 7:
