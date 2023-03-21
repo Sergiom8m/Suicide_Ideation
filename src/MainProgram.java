@@ -78,7 +78,9 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("IRAGARPENAK BURUTUKO DIRA");
                     System.out.println("---------------------------------------------------");
-                    Iragarpenak.main("RF.model","testFSS.arff","iragarpenak.txt");
+                    System.out.println("Modeloaren path-a sartu (.model): ");
+                    String path = scanner.next();
+                    Iragarpenak.main(path,"testFSS.arff","iragarpenak.txt");
                     break;
                 default:
                     System.out.println("Sartu baliozko zenbakia");

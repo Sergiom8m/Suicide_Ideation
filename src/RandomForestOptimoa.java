@@ -99,7 +99,7 @@ public class RandomForestOptimoa {
         ev_method = numfolds + "-fCV";
         min_depth = 10;
         max_depth = 15;
-        min_num_features = 25;
+        min_num_features = 5; //TODO ponia 25 pero el max me da 17
         max_num_features = (int) Math.sqrt(data.numAttributes());
         min_num_iterations = 25;
         max_num_iterations = 125;
