@@ -67,7 +67,7 @@ public class fssInfoGain {
 
             int numaux = -1; //KONTSERBATUKO DIREN ATRIBUTU KOPURUA (-1 = GUZTIAK MANTENDU)
             double fmax = 0.0; //F-MEASURE
-            for(int n = 201; n < 500; n+=25){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU
+            for(int n = 201; n < 202; n+=25){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU
                 System.out.println(n);
                 ranker.setNumToSelect(n);
                 as.setSearch(ranker);

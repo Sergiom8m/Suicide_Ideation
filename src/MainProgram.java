@@ -20,7 +20,8 @@ public class MainProgram {
                     "5 -> FSS aplikatu dev multzoari\n"+
                     "6 -> Random Forest modeloa sortu\n"+
                     "7 -> Ebaluazioa egin\n"+
-                    "8 -> Iragarpenak egin\n");
+                    "8 -> FSS aplikatu test multzoari\n"+
+                    "9 -> Iragarpenak egin\n");
 
             Scanner scanner = new Scanner(System.in);
             int aukera = scanner.nextInt();
@@ -35,7 +36,7 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Sartu hartzeko instantzien ehunekoa: ");
                     int ehuneko = scanner.nextInt();
-                    getARFF.getArff("Suicide_Detection.csv", "cleanData.arff", ehuneko,"dev.arff");
+                    getARFF.getArff("Suicide_Detection.csv", "cleanData.arff", ehuneko,"test.arff");
                     break;
                 case 2:
                     System.out.println("---------------------------------------------------");
@@ -46,7 +47,7 @@ public class MainProgram {
                     System.out.println("Sartu 0 --> Sparse edo 1 --> NonSparse");
                     int sparse = scanner.nextInt();
                     // hoberena bektorea=0 eta sparse=1 da
-                    getBowArff.main("cleanData.arff",bektorea,sparse, "hiztegia.txt", "trainBoW.arff");
+                    getBowArff.main("cleanData.arff",bektorea,sparse, "hiztegia.txt", "trainBoW.arff","dev.arff");
                     break;
                 case 3:
                     System.out.println("---------------------------------------------------");
@@ -62,9 +63,14 @@ public class MainProgram {
                     break;
                 case 5:
                     System.out.println("---------------------------------------------------");
-                    System.out.println("BoW DEV FSS SORTUKO DA");
+                    System.out.println("DEV FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    getTestFSS.main("dev.arff","devFSS.arff",0,1);
+                    System.out.println("Sartu 0 --> BoW edo 1 --> TF-IDF");
+                    bektorea = scanner.nextInt();
+                    System.out.println("Sartu 0 --> Sparse edo 1 --> NonSparse");
+                    sparse = scanner.nextInt();
+                    // hoberena bektorea=0 eta sparse=1 da
+                    getTestFSS.main("dev.arff","devFSS.arff",bektorea,sparse);
                     break;
                 case 6:
                     System.out.println("---------------------------------------------------");
@@ -81,11 +87,23 @@ public class MainProgram {
                     break;
                 case 8:
                     System.out.println("---------------------------------------------------");
+                    System.out.println("TEST FFS SORTUKO DA");
+                    System.out.println("---------------------------------------------------");
+                    System.out.println("Sartu 0 --> BoW edo 1 --> TF-IDF");
+                    bektorea = scanner.nextInt();
+                    System.out.println("Sartu 0 --> Sparse edo 1 --> NonSparse");
+                    sparse = scanner.nextInt();
+                    // hoberena bektorea=0 eta sparse=1 da
+                    getTestFSS.main("test.arff","testFSS.arff",bektorea,sparse);
+
+                    break;
+                case 9:
+                    System.out.println("---------------------------------------------------");
                     System.out.println("IRAGARPENAK BURUTUKO DIRA");
                     System.out.println("---------------------------------------------------");
                     System.out.println("Modeloaren path-a sartu (.model): ");
                     String path = scanner.next();
-                    Iragarpenak.main(path,"devFSS.arff","iragarpenak.txt");
+                    Iragarpenak.main(path,"testFSS.arff","iragarpenak.txt"); //todo
                     break;
                 default:
                     System.out.println("Sartu baliozko zenbakia");

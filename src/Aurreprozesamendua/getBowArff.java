@@ -17,7 +17,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class getBowArff {
-    public static void main(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWArffPath) {
+    public static void main(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWPath,String devPath) {
 
         try{
             //String[] args = new String[]{"Suicide_Detection.arff", "hiztegia.txt", "trainBOW.arff", "test.arff"};
@@ -33,14 +33,39 @@ public class getBowArff {
 
             //DATUAK LORTU
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(cleanDataArffPath);
-            Instances train = source.getDataSet();
-            train.setClassIndex(train.numAttributes()-1);
+            Instances data = source.getDataSet();
+            data.setClassIndex(data.numAttributes()-1);
 
 
             //IZENA ALDATU BEHAR ZAIO KLASEARI StringToWordVector EGIN AHAL IZATEKO
-            train.renameAttribute(train.numAttributes()-1, "klasea");
-            train.setClassIndex(train.numAttributes()-1);
+            data.renameAttribute(data.numAttributes()-1, "klasea");
+            data.setClassIndex(data.numAttributes()-1);
 
+            //HOLD OUT
+
+            //DATUAK RANDOMIZATU
+            Randomize randomFilter = new Randomize();
+            randomFilter.setRandomSeed(42);
+            randomFilter.setInputFormat(data);
+            Instances randomData = Filter.useFilter(data, randomFilter);
+
+            //TEST MULTZOA LORTU
+            RemovePercentage removeFilter = new RemovePercentage();
+            removeFilter.setPercentage(70);
+            removeFilter.setInputFormat(randomData);
+            Instances dev = Filter.useFilter(randomData, removeFilter);
+            dev.setClassIndex(data.numAttributes() - 1);
+            System.out.println("Test instantziak: " + dev.numInstances());
+
+            //TRAIN MULTZOA LORTU
+            removeFilter.setInvertSelection(true);
+            removeFilter.setInputFormat(randomData);
+            Instances train = Filter.useFilter(randomData, removeFilter);
+            train.setClassIndex(data.numAttributes() - 1);
+            System.out.println("Train instantziak: " + train.numInstances());
+
+            // TEST GORDE
+            datuakGorde(devPath,dev);
 
             //StringToWordVector APLIKATU
             File hiztegia = new File(hiztegiPath); //HIZTEGIAREN FITXATEGIA SORTU
@@ -57,11 +82,11 @@ public class getBowArff {
             trainBoW = ezabatuUselessAttributes(trainBoW);
 
             //BoW ARFF-AN GORDE
-            datuakGorde(trainBoWArffPath, trainBoW);
+            datuakGorde(trainBoWPath, trainBoW);
 
 
             //HIZTEGIA EGOKITU
-            source = new ConverterUtils.DataSource(trainBoWArffPath);
+            source = new ConverterUtils.DataSource(trainBoWPath);
             Instances trainBow = source.getDataSet();
             trainBow.setClassIndex(trainBow.numAttributes()-1);
             HashMap<String, Integer> hiztegiaFinal = hiztegiaSortu("hiztegia.txt",trainBow);

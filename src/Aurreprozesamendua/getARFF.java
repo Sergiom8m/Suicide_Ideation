@@ -61,14 +61,14 @@ public class getARFF {
         dataSink.write(dataGurea);
 
 
-        //IRAGARPENETARAKO TEST %95
+        //IRAGARPENETARAKO TEST %100-ehunekoa
         resample.setRandomSeed(42);
         resample.setNoReplacement(true);
         resample.setInvertSelection(true);
         resample.setInputFormat(data);
         Instances test95 = Filter.useFilter(data, resample);
 
-        //IRAGARPENERAKO TEST %5
+        //IRAGARPENERAKO TEST %ehunekoa
         resample = new Resample();
         resample.setRandomSeed(42);
         resample.setNoReplacement(true);
