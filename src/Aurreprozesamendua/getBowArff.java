@@ -54,10 +54,11 @@ public class getBowArff {
             //TrainBOW GORDE
             trainBoW = reorder(trainBoW);
 
+            trainBoW = ezabatuUselessAttributes(trainBoW);
+
             //BoW ARFF-AN GORDE
             datuakGorde(trainBoWArffPath, trainBoW);
 
-            ezabatuUselessAttributes(trainBoWArffPath);
 
             //HIZTEGIA EGOKITU
             source = new ConverterUtils.DataSource(trainBoWArffPath);
@@ -102,7 +103,7 @@ public class getBowArff {
         }
 
         stringToWordVector.setAttributeIndices("first-last");
-        stringToWordVector.setWordsToKeep(2000);    //defektuz 1000
+        stringToWordVector.setWordsToKeep(3500);    //defektuz 1000 TODO 2000
         stringToWordVector.setPeriodicPruning(-1.0);
 
         stringToWordVector.setLowerCaseTokens(true); //MAYUS ETA MINUS ARTEKO BEREIZKETARIK EZ TRUE BADAGO
@@ -120,19 +121,14 @@ public class getBowArff {
         return nonSparseData;
     }
 
-    private static void ezabatuUselessAttributes(String path) throws Exception {
-        ConverterUtils.DataSource source = new ConverterUtils.DataSource(path);
-        Instances data = source.getDataSet();
-        data.setClassIndex(data.numAttributes()-1);
-
+    private static Instances ezabatuUselessAttributes(Instances data) throws Exception {
         RemoveByName remove = new RemoveByName();
         remove.setExpression(".*[a-zA-Z0-9]+.*");
         remove.setInvertSelection(true);
         remove.setInputFormat(data);
         data = Filter.useFilter(data, remove);
 
-        ConverterUtils.DataSink ds = new ConverterUtils.DataSink(path);
-        ds.write(data);
+        return data;
     }
 
     public static void hiztegiaGorde(HashMap<String, Integer> hiztegia, String path, Instances data) throws IOException {

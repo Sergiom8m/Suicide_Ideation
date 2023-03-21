@@ -62,10 +62,12 @@ public class fssInfoGain {
             //ERABILIKO DEN OINARRIZKO CLASSIFIER-A (TRAIN MULTZOA ERABILIZ)
             RandomForest rf = new RandomForest();
             rf.buildClassifier(train);
+            int max=data.numAttributes();
+            System.out.println(max);
 
             int numaux = -1; //KONTSERBATUKO DIREN ATRIBUTU KOPURUA (-1 = GUZTIAK MANTENDU)
             double fmax = 0.0; //F-MEASURE
-            for(int n = 301; n < data.numAttributes(); n+=5){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU
+            for(int n = 201; n < 500; n+=25){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU
                 System.out.println(n);
                 ranker.setNumToSelect(n);
                 as.setSearch(ranker);
