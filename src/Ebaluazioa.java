@@ -12,9 +12,10 @@ import java.io.FileWriter;
 import java.util.Random;
 
 public class Ebaluazioa {
-    public static void main(String trainPath, int[] parametroak, String emaitzak) { //TODO blind test gehitu?
+    public static void main(String trainPath,String devPath, int[] parametroak, String emaitzak) { //TODO blind test gehitu?
         /**
          * trainPath    ->  trainBowFSS.arff
+         * devPath    ->  devFSS.arff
          * parametroak  ->  RandomForest parametro ekorketatik ateratakoak
          * emaitzak     ->  test_predictions.txt
          */
@@ -72,21 +73,13 @@ public class Ebaluazioa {
             evaluation = new Evaluation(data);
 
             for(int i = 0; i<50; i++){
-                Resample resample = new Resample();
-                resample.setRandomSeed(42);
-                resample.setSampleSizePercent(80);
-                resample.setInvertSelection(false);
-                resample.setNoReplacement(true);
-                resample.setInputFormat(data);
-                Instances train = Filter.useFilter(data, resample);
+
+                source = new ConverterUtils.DataSource(trainPath);
+                Instances train = source.getDataSet();
                 train.setClassIndex(train.numAttributes()-1);
 
-                resample.setRandomSeed(42);
-                resample.setSampleSizePercent(80);
-                resample.setInvertSelection(true);
-                resample.setNoReplacement(true);
-                resample.setInputFormat(data);
-                Instances test = Filter.useFilter(data, resample);
+                source = new ConverterUtils.DataSource(devPath);
+                Instances test = source.getDataSet();
                 test.setClassIndex(test.numAttributes()-1);
 
                 randomForest = new RandomForest();

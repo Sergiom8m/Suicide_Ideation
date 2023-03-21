@@ -81,7 +81,7 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("EBALUAZIOA BURUTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    Ebaluazioa.main(path+"trainFSS.arff", new int[]{parametroak[1],parametroak[2],16,parametroak[0]}, path+"test_predictions.txt");
+                    Ebaluazioa.main(path+"trainFSS.arff","devFSS.arff", new int[]{parametroak[1],parametroak[2],16,parametroak[0]}, path+"test_predictions.txt");
                     break;
                 case 8:
                     System.out.println("---------------------------------------------------");
