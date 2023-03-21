@@ -21,14 +21,13 @@ import java.util.Random;
  * Hau egiteko, oso komenigarria da RandomForest nola funtzionatzen duen jakitea.
  * RandomForest sailkatzaileak erabiltzen dituen atributuak:
  * <ul>
- *     <li>Zuhaitz bakoitzaren sakonera, <b>setMaxDepth</b>: RandomForest erabiltzen dituen zuhaitzen sakonera ezarritzen duen parametroa
+ *     <li><b>setMaxDepth</b>, zuhaitz bakoitzaren sakonera: RandomForest erabiltzen dituen zuhaitzen sakonera ezarritzen duen parametroa
  *     da. 'int' motako balioak har ditzake. 0 balioa ematen bazaio, limiterik gabeko zuhaitzak egingo ditu</li>
- *     <li>Zuhaitz bakoitza eraikitzeko erabiltzen duen atributu kopurua, <b>setNumFeatures</b>: "Azalpen bideoa" bideoan,
+ *     <li><b>setNumFeatures</b>, zuhaitz bakoitza eraikitzeko erabiltzen duen atributu kopurua: "Azalpen bideoa" bideoan,
  *     atributu kopuruaren erro karratua zenbaki egoki bat dela adierazten da.</li>
+ *     <li><b>setNumIterations</b>: Bootstraping egitean (laginak jaso), hartuko diren lagin kopurua. >0 izan behar da</li>
  *     <li><b>setBagSizePercent</b> (Bootstraping + Aggregation): Bootstraping egitean hartutako lagin bakoitza zenbatekoa
  *     den adierazteko erabili da. Weka-k eskaintzen duen metodoa </li>
- *     <li><b>setNumIterations</b>: Bootstraping egitean (laginak jaso), hartuko diren lagin kopurua. >0 izan behar da</li>
- *     <li><b>setNumDecimalPlaces??</b></li>
  * </ul>
  *
  * <p><a href="https://weka.sourceforge.io/doc.dev/weka/classifiers/trees/RandomForest.html">RandomForest (weka-doc)</a></p>
@@ -72,6 +71,15 @@ public class RandomForestOptimoa {
      * <ul>
      *     <li>args[0]: DataSet</li>
      *     <li>args[1]: emaitzen direktorioa</li>
+     *     <li>args[2]: </li>
+     *     <li>args[3]: </li>
+     *     <li>args[4]: </li>
+     *     <li>args[5]: </li>
+     *     <li>args[6]: </li>
+     *     <li>args[7]: </li>
+     *     <li>args[8]: </li>
+     *     <li>args[9]: </li>
+     *     <li>args[10]: </li>
      * </ul>
      */
     public static void main(String[] args) {
@@ -161,7 +169,6 @@ public class RandomForestOptimoa {
                         randomForest.setMaxDepth(depth);
                         randomForest.setNumFeatures(num_features);
                         randomForest.setNumIterations(num_iterations);
-                        //randomForest.setNumDecimalPlaces();
                         //randomForest.setBagSizePercent();
                         randomForest.buildClassifier(data);
 
@@ -180,7 +187,7 @@ public class RandomForestOptimoa {
                         iteration++;
                     }
                 }
-                if (depth == 0) depth = min_depth-1;
+                if (depth == 0) depth = min_depth-jump_depth;
             }
             optimoaGorde(best_depth, best_num_features, best_num_iterations);
         } catch (Exception e){
