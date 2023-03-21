@@ -17,7 +17,7 @@ public class MainProgram {
                     "2 -> BoW fitxategia sortu\n"+
                     "3 -> Baseline atera\n"+
                     "4 -> FSS aplikatu train multzoari\n"+
-                    "5 -> FSS aplikatu test multzoari\n"+
+                    "5 -> FSS aplikatu dev multzoari\n"+
                     "6 -> Random Forest modeloa sortu\n"+
                     "7 -> Ebaluazioa egin\n"+
                     "8 -> Iragarpenak egin\n");
@@ -35,13 +35,18 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Sartu hartzeko instantzien ehunekoa: ");
                     int ehuneko = scanner.nextInt();
-                    getARFF.getArff("Suicide_Detection.csv", "cleanData.arff", ehuneko);
+                    getARFF.getArff("Suicide_Detection.csv", "cleanData.arff", ehuneko,"dev.arff");
                     break;
                 case 2:
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    getBowArff.main("cleanData.arff", "hiztegia.txt", "trainBoW.arff", "test.arff");
+                    System.out.println("Sartu 0 --> BoW edo 1 --> TF-IDF");
+                    int bektorea = scanner.nextInt();
+                    System.out.println("Sartu 0 --> Sparse edo 1 --> NonSparse");
+                    int sparse = scanner.nextInt();
+                    // hoberena bektorea=0 eta sparse=1 da
+                    getBowArff.main("cleanData.arff",bektorea,sparse, "hiztegia.txt", "trainBoW.arff");
                     break;
                 case 3:
                     System.out.println("---------------------------------------------------");
@@ -57,9 +62,9 @@ public class MainProgram {
                     break;
                 case 5:
                     System.out.println("---------------------------------------------------");
-                    System.out.println("BoW TEST FSS SORTUKO DA");
+                    System.out.println("BoW DEV FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    getTestFSS.main("test.arff","testFSS.arff");
+                    getTestFSS.main("dev.arff","devFSS.arff",0,1);
                     break;
                 case 6:
                     System.out.println("---------------------------------------------------");
@@ -80,7 +85,7 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Modeloaren path-a sartu (.model): ");
                     String path = scanner.next();
-                    Iragarpenak.main(path,"testFSS.arff","iragarpenak.txt");
+                    Iragarpenak.main(path,"devFSS.arff","iragarpenak.txt");
                     break;
                 default:
                     System.out.println("Sartu baliozko zenbakia");

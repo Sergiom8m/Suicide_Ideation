@@ -11,37 +11,46 @@ import weka.filters.unsupervised.instance.SparseToNonSparse;
 import java.io.*;
 
 public class getTestFSS {
-    public static void main(String devPath, String devFSSPath) {
+    public static void main(String testPath, String testFSSPath,int errepresentazioBektoriala,int sparse) {
         try {
 
             //TEST FSS EGIN
-            ConverterUtils.DataSource source= new ConverterUtils.DataSource(devPath);
+            ConverterUtils.DataSource source= new ConverterUtils.DataSource(testPath);
             Instances dev = source.getDataSet();
             dev.setClassIndex(dev.numAttributes() - 1);
 
-            Instances devFSS= fixedDictionaryStringToWordVector("hiztegiaFSS.txt",dev);
+            Instances testFSS= fixedDictionaryStringToWordVector("hiztegiaFSS.txt",dev,errepresentazioBektoriala);
 
-            devFSS=nonSparse(devFSS);
 
-            devFSS=reorder(devFSS);
+            // SPARSE/NONSPARSE
+            if(sparse==1){
+                testFSS = SparseToNonSparse(testFSS);
+            }
 
-            datuakGorde(devFSSPath,devFSS);
+            testFSS=reorder(testFSS);
+
+            datuakGorde(testFSSPath,testFSS);
 
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-    private static Instances fixedDictionaryStringToWordVector(String hiztegia, Instances data) throws Exception {
+    private static Instances fixedDictionaryStringToWordVector(String hiztegia, Instances data, int bektorea) throws Exception {
         FixedDictionaryStringToWordVector fixedDict= new FixedDictionaryStringToWordVector();
+        if(bektorea==1){
+            fixedDict.setOutputWordCounts(true);
+            fixedDict.setIDFTransform(true);
+            fixedDict.setTFTransform(true);
+        }
+        else{
+            fixedDict.setOutputWordCounts(false);
+        }
+        fixedDict.setAttributeIndices("first-last");
         fixedDict.setLowerCaseTokens(true);
-        fixedDict.setIDFTransform(false);
-        fixedDict.setTFTransform(false);
         fixedDict.setDictionaryFile(new File(hiztegia));
-        //fixedDict.setWordsToKeep(100);
-        fixedDict.setOutputWordCounts(false);
         fixedDict.setInputFormat(data);
-        Instances testBowFSS= Filter.useFilter(data,fixedDict);
-        return testBowFSS;
+        Instances dataFSS= Filter.useFilter(data,fixedDict);
+        return dataFSS;
     }
 
     private static Instances reorder(Instances test) throws Exception {
@@ -58,7 +67,7 @@ public class getTestFSS {
         s.setFile(new File(path));
         s.writeBatch();
     }
-    private static Instances nonSparse(Instances data) throws Exception{
+    private static Instances SparseToNonSparse(Instances data) throws Exception{
         SparseToNonSparse filterNonSparse = new SparseToNonSparse();
         filterNonSparse.setInputFormat(data);
         Instances nonSparseData = Filter.useFilter(data,filterNonSparse);

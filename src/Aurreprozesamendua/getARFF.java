@@ -18,7 +18,7 @@ import static com.vdurmont.emoji.EmojiParser.parseToAliases;
 
 public class getARFF {
 
-    public static void getArff(String csvPath, String arffPath, int ehuneko) throws Exception {
+    public static void getArff(String csvPath, String arffPath, int ehuneko,String testPath) throws Exception {
 
         String pathOsoa = arffPath.split("\\.")[0]+"_Osoa.arff";
         //INSTANTZIEN IRAKURKETA:
@@ -30,10 +30,10 @@ public class getARFF {
         instantziakSartuArff(instantzienMatrizea, pathOsoa);
 
 
-        sortuErabiltzekoArff(pathOsoa, arffPath, ehuneko);
+        sortuErabiltzekoArff(pathOsoa, arffPath, ehuneko,testPath);
     }
 
-    public static void sortuErabiltzekoArff(String dagoenaPath, String berriaPath, int ehuneko) throws Exception {
+    public static void sortuErabiltzekoArff(String dagoenaPath, String berriaPath, int ehuneko,String testPath) throws Exception {
         /*Resample setSampleSizePercent
         * %50 ->  95426 instantzia
         * %40 ->  76340 instantzia
@@ -59,6 +59,28 @@ public class getARFF {
 
         ConverterUtils.DataSink dataSink = new ConverterUtils.DataSink(berriaPath);
         dataSink.write(dataGurea);
+
+
+        //IRAGARPENETARAKO TEST %95
+        resample.setRandomSeed(42);
+        resample.setNoReplacement(true);
+        resample.setInvertSelection(true);
+        resample.setInputFormat(data);
+        Instances test95 = Filter.useFilter(data, resample);
+
+        //IRAGARPENERAKO TEST %5
+        resample = new Resample();
+        resample.setRandomSeed(42);
+        resample.setNoReplacement(true);
+        resample.setInvertSelection(false);
+        resample.setSampleSizePercent(ehuneko);
+        resample.setInputFormat(test95);
+        Instances test = Filter.useFilter(test95, resample);
+        System.out.println("Test.arff instantzia kopurua: "+test.numInstances());
+
+        dataSink = new ConverterUtils.DataSink(testPath);
+        dataSink.write(test);
+
 
 
     }

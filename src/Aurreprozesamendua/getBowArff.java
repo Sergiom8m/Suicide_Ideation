@@ -17,62 +17,41 @@ import java.io.*;
 import java.util.HashMap;
 
 public class getBowArff {
-    public static void main(String cleanDataArffPath, String hiztegiPath, String trainBoWArffPath, String testPath) {
+    public static void main(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWArffPath) {
 
         try{
             //String[] args = new String[]{"Suicide_Detection.arff", "hiztegia.txt", "trainBOW.arff", "test.arff"};
             /*
                 0. parametroa: .arff fitxategia
-                1. parametroa: Hiztegia gordetzeko .txt
-                2. parametroa: Train-ren BOW gordetzeko. arff
-                3. parametroa: test.arff
+                1. parametroa: 0 --> bow, 1 --> tfidf
+                2. parametroa: 0 --> sparse, 1 --> nonsparse
+                3. parametroa: Hiztegia gordetzeko .txt
+                4. parametroa: Train-ren BOW gordetzeko. arff
+                5. parametroa: test.arff
              */
+
 
             //DATUAK LORTU
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(cleanDataArffPath);
-            Instances data = source.getDataSet();
-            data.setClassIndex(data.numAttributes()-1);
+            Instances train = source.getDataSet();
+            train.setClassIndex(train.numAttributes()-1);
 
 
             //IZENA ALDATU BEHAR ZAIO KLASEARI StringToWordVector EGIN AHAL IZATEKO
-            data.renameAttribute(data.numAttributes()-1, "klasea");
-            data.setClassIndex(data.numAttributes()-1);
+            train.renameAttribute(train.numAttributes()-1, "klasea");
+            train.setClassIndex(train.numAttributes()-1);
 
-            //HOLD OUT
-
-            //DATUAK RANDOMIZATU
-            Randomize randomFilter = new Randomize();
-            randomFilter.setRandomSeed(42);
-            randomFilter.setInputFormat(data);
-            Instances randomData = Filter.useFilter(data, randomFilter);
-
-            //TEST MULTZOA LORTU
-            RemovePercentage removeFilter = new RemovePercentage();
-            removeFilter.setPercentage(70);
-            removeFilter.setInputFormat(randomData);
-            Instances test = Filter.useFilter(randomData, removeFilter);
-            test.setClassIndex(data.numAttributes() - 1);
-            System.out.println("Test instantziak: " + test.numInstances());
-
-            //TRAIN MULTZOA LORTU
-            removeFilter.setInvertSelection(true);
-            removeFilter.setInputFormat(randomData);
-            Instances train = Filter.useFilter(randomData, removeFilter);
-            train.setClassIndex(data.numAttributes() - 1);
-            System.out.println("Train instantziak: " + train.numInstances());
-
-            // TEST GORDE
-            datuakGorde(testPath,test);
 
             //StringToWordVector APLIKATU
             File hiztegia = new File(hiztegiPath); //HIZTEGIAREN FITXATEGIA SORTU
-            Instances trainBoW= stringToWordVector(train, hiztegia); //TRAIN MULTZOAREN HIZTEGIA SORTU
+            Instances trainBoW= stringToWordVector(train, hiztegia,errepresentazioBektoriala); //TRAIN MULTZOAREN HIZTEGIA SORTU
 
-            //NonSparse APLIKATU (MATRIZE BITARRA: 0 EZ BADO ETA 1 BALDIN BADAGO)
-            trainBoW = nonSparse(trainBoW);
+            // SPARSE/NONSPARSE
+            if(sparse==1){
+                trainBoW = SparseToNonSparse(trainBoW);
+            }
 
             //TrainBOW GORDE
-
             trainBoW = reorder(trainBoW);
 
             //BoW ARFF-AN GORDE
@@ -108,21 +87,32 @@ public class getBowArff {
         saver.writeBatch();
     }
 
-    private static Instances stringToWordVector(Instances train, File hiztegia) throws Exception {
+    private static Instances stringToWordVector(Instances train, File hiztegia, int bektorea) throws Exception {
 
         StringToWordVector stringToWordVector= new StringToWordVector();
+
+        if(bektorea==1){
+            stringToWordVector.setOutputWordCounts(true);
+            stringToWordVector.setIDFTransform(true);
+            stringToWordVector.setTFTransform(true);
+
+        }
+        else{
+            stringToWordVector.setOutputWordCounts(false);
+        }
+
+        stringToWordVector.setAttributeIndices("first-last");
+        stringToWordVector.setWordsToKeep(2000);    //defektuz 1000
+        stringToWordVector.setPeriodicPruning(-1.0);
+
         stringToWordVector.setLowerCaseTokens(true); //MAYUS ETA MINUS ARTEKO BEREIZKETARIK EZ TRUE BADAGO
-        stringToWordVector.setIDFTransform(false);
-        stringToWordVector.setTFTransform(false);
         stringToWordVector.setDictionaryFileToSaveTo(hiztegia); //HIZTEGIA GORDETZEKO FITXATEGIA EZARRI
-        //stringToWordVector.setWordsToKeep(1500);  //ATRIBUTU KOPURUA (BEKTOREAREN DIMENTSIOA), MAIZTASUN HANDIENEKO X ATRIBUTUAK GORDETZEN DITU
-        stringToWordVector.setOutputWordCounts(false); //MATRIZE BITARRA: FALSE ETA MATRIZEA MAIZTASUNEKIN: TRUE
         stringToWordVector.setInputFormat(train);
         Instances trainBOW= Filter.useFilter(train,stringToWordVector);
         return trainBOW;
     }
 
-    private static Instances nonSparse(Instances data) throws Exception{
+    private static Instances SparseToNonSparse(Instances data) throws Exception{
 
         SparseToNonSparse filterNonSparse = new SparseToNonSparse();
         filterNonSparse.setInputFormat(data);
