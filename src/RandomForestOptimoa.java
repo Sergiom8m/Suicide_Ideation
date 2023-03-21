@@ -4,6 +4,7 @@ import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -45,21 +46,24 @@ public class RandomForestOptimoa {
     private static String storeDir;
     private static Instances data;
     private static String date;
+    private static double exekuzioDenbora;
     private static RandomForest randomForest_optimo;
     private static int numfolds;
     private static String ev_method;
     private static int min_depth; // probar siempre con 0
+    private static int jump_depth;
     private static int max_depth;
     private static int min_num_features; // >20 segun resultados
+    private static int jump_num_features;
     private static int max_num_features; // En el video de la descrición de la clase, se menciona que la raiz cuadrada de la cantidad de atributos es un buen número. >25
     private static int min_num_iterations;
+    private static int jump_num_iterations;
     private static int max_num_iterations;
-    private static boolean bukle_mota; // true --> harabiatua; false --> serializatua
     private static double best_fMeasure;
     // private static int bagging_percent; //TODO
-    //private static HashMap<Integer, int[]> depth_values;
-    //private static HashMap<Integer, int[]> num_features_values;
-    //private static HashMap<Integer, int[]> num_iterations_values;
+    private static HashMap<Integer, ArrayList<Double>> depth_values = new HashMap<>();
+    private static HashMap<Integer, ArrayList<Double>> num_features_values = new HashMap<>();
+    private static HashMap<Integer, ArrayList<Double>> num_iterations_values = new HashMap<>();
 
 
     /**
@@ -71,15 +75,30 @@ public class RandomForestOptimoa {
      * </ul>
      */
     public static void main(String[] args) {
-        sourceArff = args[0];
-        storeDir = args[1];
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd-Hms");
-        date = simpleDateFormat.format(new Date());
+        if(args.length == 11) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd-HHmmss");
+            date = simpleDateFormat.format(new Date());
 
-        datuakKargatu(args);
-        ezarpenak();
-        ekorketa();
-        emaitzak();
+            ezarpenak(args);
+            datuakKargatu(args);
+            ekorketa();
+            emaitzak();
+            buildCSV();
+        }
+        else{
+            System.out.println("Programak 11 argumentu behar ditu:");
+            System.out.println("1. .arff fitxategiaren path");
+            System.out.println("2. emaitzak gordeko den direktorioaren path (azkenena \\ barik)");
+            System.out.println("3. min_depth (int)");
+            System.out.println("4. jump_depth (int)");
+            System.out.println("5. max_depth (int)");
+            System.out.println("6. min_num_features (int)");
+            System.out.println("7. jump_num_features (int)");
+            System.out.println("8. max_num_features (int)");
+            System.out.println("9. min_num_iterations (int)");
+            System.out.println("10. jump_num_iterations (int)");
+            System.out.println("11. max_num_iterations (int)");
+        }
     }
     private static void datuakKargatu(String[] args){
         try{
@@ -93,28 +112,28 @@ public class RandomForestOptimoa {
         }
     }
 
-    private static void ezarpenak(){
+    private static void ezarpenak(String[] args){
+        sourceArff = args[0];
+        storeDir = args[1];
         numfolds = 2;
         ev_method = numfolds + "-fCV";
-        min_depth = 10;
-        max_depth = 15;
-        min_num_features = 25;
-        max_num_features = (int) Math.sqrt(data.numAttributes());
-        min_num_iterations = 25;
-        max_num_iterations = 125;
-        bukle_mota = true;
+        min_depth = Integer.parseInt(args[2]); // 10
+        jump_depth = Integer.parseInt(args[3]);
+        max_depth = Integer.parseInt(args[4]); // 15
+        min_num_features = Integer.parseInt(args[5]); // 25
+        jump_num_features = Integer.parseInt(args[6]);
+        max_num_features = Integer.parseInt(args[7]); // sqrt(data.numAttributes()) = 38
+        min_num_iterations = Integer.parseInt(args[8]); // 25
+        jump_num_iterations = Integer.parseInt(args[9]);
+        max_num_iterations = Integer.parseInt(args[10]); // 125
     }
 
     private static void ekorketa(){
         try{
             long hasiera = System.currentTimeMillis();
-
-            if (bukle_mota) ekoreketaHarabiatua();
-            else ekorketaSerializatua();
-
+            ekoreketaHarabiatua();
             long amaiera = System.currentTimeMillis();
-            double denbora = (double) ((amaiera - hasiera)/1000);
-            System.out.println("\nExekuzio denbora: " + denbora + " segundo");
+            exekuzioDenbora = (double) ((amaiera - hasiera)/1000);
         } catch (Exception e){
             System.out.println("Errorea ekorketa egiterakoan");
         }
@@ -129,10 +148,12 @@ public class RandomForestOptimoa {
             int best_num_iterations = 0;
             int iteration = 1;
 
+            int sum_iterations = (((max_depth-min_depth)/jump_depth)+2) * (((max_num_features-min_num_features)/jump_num_features)+1) * (((max_num_iterations-min_num_iterations)/jump_num_iterations)+1);
+            System.out.println("Exekuzioak izango dituen iterazio kopurua: " + sum_iterations);
             randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors()); // prozesadore gehiago erabili dezan (buklerak azkarrago)
-            for (int depth = 0; depth <= max_depth; depth++) {
-                for (int num_features = min_num_features; num_features <= max_num_features; num_features+=2){
-                    for (int num_iterations = min_num_iterations; num_iterations <= max_num_iterations; num_iterations+=25){
+            for (int depth = 0; depth <= max_depth; depth+=jump_depth) {
+                for (int num_features = min_num_features; num_features <= max_num_features; num_features+=jump_num_features){
+                    for (int num_iterations = min_num_iterations; num_iterations <= max_num_iterations; num_iterations+=jump_num_iterations){
                         System.out.println("------ " + iteration + ". iterazioa ------");
                         System.out.println("depth: " + depth);
                         System.out.println("num_features: " + num_features);
@@ -149,6 +170,7 @@ public class RandomForestOptimoa {
 
                         double fMeasure = evaluation.weightedFMeasure();
                         System.out.println(iteration + ". iterazioko f-measure: " + fMeasure);
+                        balioakGorde(depth, num_features, num_iterations, fMeasure);
                         if (fMeasure > best_fMeasure) {
                             best_fMeasure = fMeasure;
                             best_depth = depth;
@@ -166,77 +188,29 @@ public class RandomForestOptimoa {
         }
     }
 
-    private static void ekorketaSerializatua(){
-        try{
-            RandomForest randomForest = new RandomForest();
-            int best_depth = 0;
-            int best_num_features = 0;
-            best_fMeasure = 0;
-            int best_num_iterations = 0;
-            int iteration = 1;
+    private static void balioakGorde(int depth, int num_features, int num_iterations, double fmeas){
+        if (depth_values.get(depth) != null) {
+            depth_values.get(depth).add(fmeas);
+        } else{
+            ArrayList<Double> list = new ArrayList<>();
+            list.add(fmeas);
+            depth_values.put(depth, list);
+        }
 
-            for (int depth = 0; depth <= max_depth; depth++) {
-                System.out.println("--- depth " + depth);
-                randomForest.setMaxDepth(depth);
-                randomForest.buildClassifier(data);
+        if (num_features_values.get(num_features) != null){
+            num_features_values.get(num_features).add(fmeas);
+        } else {
+            ArrayList<Double> list = new ArrayList<>();
+            list.add(fmeas);
+            num_features_values.put(num_features, list);
+        }
 
-                Evaluation evaluation = new Evaluation(data);
-                evaluation.crossValidateModel(randomForest, data, numfolds, new Random());
-
-                double fMeasure = evaluation.weightedFMeasure();
-                System.out.println("fMeasure " + fMeasure);
-                if (fMeasure > best_fMeasure){
-                    best_fMeasure = fMeasure;
-                    best_depth = depth;
-                }
-            }
-
-            best_fMeasure = 0;
-
-            for (int num_features = 0; num_features <= max_num_features; num_features+=2) {
-                System.out.println("--- numFeatures " + num_features);
-                randomForest.setNumFeatures(num_features);
-                randomForest.buildClassifier(data);
-
-                Evaluation evaluation = new Evaluation(data);
-                evaluation.crossValidateModel(randomForest, data, numfolds, new Random(1));
-
-                double fMeasure = evaluation.weightedFMeasure();
-                System.out.println("fMeasure " + fMeasure);
-                if (fMeasure > best_fMeasure) {
-                    best_fMeasure = fMeasure;
-                    best_num_features = num_features;
-                }
-            }
-
-            best_fMeasure = 0;
-
-            for (int num_iterations = 25; num_iterations <= max_num_iterations; num_iterations+=25){
-                System.out.println("--- numItertions " + num_iterations);
-                randomForest.setNumIterations(num_iterations);
-                randomForest.buildClassifier(data);
-
-                Evaluation evaluation = new Evaluation(data);
-                evaluation.crossValidateModel(randomForest, data, numfolds, new Random(1));
-
-                double fMeasure = evaluation.weightedFMeasure();
-                System.out.println("fMeasure " + fMeasure);
-                if (fMeasure > best_fMeasure) {
-                    best_fMeasure = fMeasure;
-                    best_num_iterations = num_iterations;
-                }
-            }
-
-            randomForest.setMaxDepth(best_depth);
-            randomForest.setNumIterations(best_num_iterations);
-            randomForest.setNumFeatures(best_num_features);
-            randomForest.buildClassifier(data);
-            Evaluation evaluation = new Evaluation(data);
-            evaluation.crossValidateModel(randomForest, data, numfolds, new Random(1));
-            best_fMeasure = evaluation.weightedFMeasure();
-            optimoaGorde(best_depth, best_num_features, best_num_iterations);
-        } catch (Exception e){
-            e.printStackTrace();
+        if (num_iterations_values.get(num_iterations) != null){
+            num_iterations_values.get(num_iterations).add(fmeas);
+        } else {
+            ArrayList<Double> list = new ArrayList<>();
+            list.add(fmeas);
+            num_iterations_values.put(num_iterations, list);
         }
     }
 
@@ -247,7 +221,7 @@ public class RandomForestOptimoa {
             randomForest_optimo.setNumFeatures(best_num_features);
             randomForest_optimo.setNumIterations(best_num_iterations);
             randomForest_optimo.buildClassifier(data);
-            SerializationHelper.write(storeDir + "\\" + date +"RF_optimoa.model", randomForest_optimo);
+            SerializationHelper.write(storeDir + File.separator + date +"RF_optimoa.model", randomForest_optimo);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -255,21 +229,58 @@ public class RandomForestOptimoa {
 
     private static void emaitzak(){
         try{
-            FileWriter myWriter = new FileWriter(storeDir + "\\" + date +"RF_optimo_ema.txt");
+            FileWriter myWriter = new FileWriter(storeDir + File.separator + date +"RF_optimo_ema.txt");
             myWriter.write(date + "\n");
-            myWriter.write(".arff file " + sourceArff + " with " + data.numInstances() + " instances \n");
+            myWriter.write(".arff file " + sourceArff + " with " + data.numInstances() + " instances and " + data.numAttributes() + "\n" );
             myWriter.write("Evaluazio eskema: " + ev_method + "\n");
             myWriter.write("Ebaluazio metrika 'fMeasure': " + best_fMeasure + "\n");
-            if (bukle_mota) myWriter.write("Bukle harabiatua\n");
-            else myWriter.write("Bukle serializatua\n");
             myWriter.write("Random Forest optimum parameters:\n");
-            myWriter.write(" · MaxDepth: " + randomForest_optimo.getMaxDepth() + " (" + min_depth + " --> " + max_depth + ")" + "\n");
-            myWriter.write(" · NumFeatures: " + randomForest_optimo.getNumFeatures() + " (" + min_num_features + " --> " + max_num_features + ")" + "\n");
-            myWriter.write(" · NumIterations: " + randomForest_optimo.getNumIterations() + " (" + min_num_iterations + " --> " + max_num_iterations + ")" + "\n");
+            myWriter.write(" · MaxDepth: " + randomForest_optimo.getMaxDepth() + " (" + min_depth + " --> " + max_depth + " +" + jump_depth + ")" + "\n");
+            myWriter.write(" · NumFeatures: " + randomForest_optimo.getNumFeatures() + " (" + min_num_features + " --> " + max_num_features + " +" + jump_num_features + ")" + "\n");
+            myWriter.write(" · NumIterations: " + randomForest_optimo.getNumIterations() + " (" + min_num_iterations + " --> " + max_num_iterations + " +" + jump_num_iterations + ")" + "\n");
             myWriter.write(" . BagSizePrecent: " + randomForest_optimo.getBagSizePercent() + "\n");
+            myWriter.write("Exekuzio denbora: " + exekuzioDenbora + " segundo\n");
             myWriter.close();
         } catch (IOException e){
             e.printStackTrace();
+        }
+    }
+
+    public static void buildCSV() {
+        try{
+            // 1. depth values
+            FileWriter myWriter = new FileWriter(storeDir + File.separator + date + "RF_depth.csv");
+            myWriter.write("depth,value\n");
+            depth_values.forEach(
+                    (k,v) -> writeInCSV(myWriter, k + "," + v + "\n")
+            );
+            myWriter.close();
+
+            // 2. numFeatures values
+            FileWriter myWriter1 = new FileWriter(storeDir + File.separator + date + "RF_numFeatures.csv");
+            myWriter1.write("numFeatures,value\n");
+            num_features_values.forEach(
+                    (k,v) -> writeInCSV(myWriter1, k + "," + v + "\n")
+            );
+            myWriter1.close();
+
+            // 3. numIterations values
+            FileWriter myWriter2 = new FileWriter(storeDir + File.separator + date + "RF_numIterations.csv");
+            myWriter2.write("numIterations,value\n");
+            num_iterations_values.forEach(
+                    (k,v) -> writeInCSV(myWriter2, k + "," + v + "\n")
+            );
+            myWriter2.close();
+        } catch (Exception e){
+            System.out.println("Errorea CSV-a gordetzean");
+        }
+    }
+
+    public static void writeInCSV(FileWriter myWriter, String toWrite){
+        try{
+            myWriter.write(toWrite);
+        } catch (IOException e){
+            System.out.println("Errorea CSV-a gordetzean");
         }
     }
 }
