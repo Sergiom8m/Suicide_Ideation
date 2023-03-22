@@ -54,6 +54,7 @@ public class getARFF {
         resample.setSampleSizePercent(ehuneko);
         resample.setInputFormat(data);
         Instances dataGurea = Filter.useFilter(data, resample);
+        dataGurea.setClassIndex(dataGurea.numAttributes()-1);
 
         System.out.println("Gure .arff instantzia kopurua: "+dataGurea.numInstances());
 
@@ -67,12 +68,20 @@ public class getARFF {
         resample.setInvertSelection(true);
         resample.setInputFormat(data);
         Instances test= Filter.useFilter(data, resample);
+        test.setClassIndex(test.numAttributes()-1);
+
+        resample=new Resample();
+        resample.setRandomSeed(42);
+        resample.setNoReplacement(true);
+        resample.setInvertSelection(false);
+        resample.setSampleSizePercent((int)(ehuneko/3));
+        resample.setInputFormat(test);
+        test= Filter.useFilter(test, resample);
+        test.setClassIndex(test.numAttributes()-1);
         System.out.println("Iragarpenak egiteko test instantzia kopurua: "+test.numInstances());
 
         dataSink = new ConverterUtils.DataSink(testPath);
         dataSink.write(test);
-
-
 
     }
 

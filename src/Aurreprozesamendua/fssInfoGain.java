@@ -12,6 +12,7 @@ import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
 import weka.filters.supervised.attribute.AttributeSelection;
 import weka.filters.supervised.instance.Resample;
+import weka.filters.unsupervised.attribute.RemoveByName;
 import weka.filters.unsupervised.attribute.Reorder;
 
 import java.io.*;
@@ -29,6 +30,9 @@ public class fssInfoGain {
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(trainBowPath);
             Instances train = source.getDataSet();
             train.setClassIndex(train.numAttributes() - 1);
+
+            System.out.println("ATRIBUTUKO`PURUAAAAAAAAAAAAAA"+train.numAttributes());
+            train = ezabatuUselessAttributes(train);
 
             AttributeSelection filterSelect = new AttributeSelection();
             InfoGainAttributeEval evalInfoGain = new InfoGainAttributeEval();
@@ -104,5 +108,20 @@ public class fssInfoGain {
         s.setInstances(data);
         s.setFile(new File(path));
         s.writeBatch();
+    }
+
+    private static Instances ezabatuUselessAttributes(Instances data) throws Exception {
+        System.out.println("////////////////////////////////AURRETIK////////////////////////////////");
+        for(int i =data.numAttributes()-40; i<data.numAttributes(); i++){System.out.println(data.attribute(i));}
+        RemoveByName remove = new RemoveByName();
+        remove.setExpression(".*[a-zA-Z0-9]+.*");
+        remove.setInvertSelection(true);
+        remove.setInputFormat(data);
+        data = Filter.useFilter(data, remove);
+
+        System.out.println("////////////////////////////////OSTEAN////////////////////////////////");
+        for(int i =data.numAttributes()-40; i<data.numAttributes(); i++){System.out.println(data.attribute(i));}
+
+        return data;
     }
 }

@@ -42,7 +42,6 @@ public class getBowArff {
             data.renameAttribute(data.numAttributes()-1, "klasea");
             data.setClassIndex(data.numAttributes()-1);
 
-            data = ezabatuUselessAttributes(data);
 
 
             //TRAIN MULTZOA LORTU
@@ -134,15 +133,6 @@ public class getBowArff {
         return nonSparseData;
     }
 
-    private static Instances ezabatuUselessAttributes(Instances data) throws Exception {
-        RemoveByName remove = new RemoveByName();
-        remove.setExpression(".*[a-zA-Z0-9]+.*");
-        remove.setInvertSelection(true);
-        remove.setInputFormat(data);
-        data = Filter.useFilter(data, remove);
-
-        return data;
-    }
 
     public static void hiztegiaGorde(HashMap<String, Integer> hiztegia, String path, Instances data) throws IOException {
         FileWriter fw = new FileWriter(path);
