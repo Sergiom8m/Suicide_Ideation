@@ -1,5 +1,5 @@
 import Aurreprozesamendua.fssInfoGain;
-import Aurreprozesamendua.getTestFSS;
+import Aurreprozesamendua.MakeComp;
 import Aurreprozesamendua.getARFF;
 import Aurreprozesamendua.getBowArff;
 
@@ -9,19 +9,19 @@ import static java.lang.System.exit;
 
 public class MainProgram {
     public static void main(String[] args) throws Exception {
-        int parametroak[] = new int[]{0, 37, 125};
+        int parametroak[] = new int[]{40, 125, 100,58};
         System.out.println("Sartu fitxategien path-a (soilik karpeta, adib: /home/lsi/): ");
         Scanner scanner = new Scanner(System.in);
         String path = scanner.next();
-        //path="";
+        path="";
         do{
             System.out.println("Sartu zenbaki bat segun eta zer egin nahi duzun:\n" +
                     "0 -> IRTEN\n"+
                     "1 -> .arff nagusia sortu\n"+
                     "2 -> BoW fitxategia sortu\n"+
-                    "3 -> Baseline atera\n"+
-                    "4 -> FSS aplikatu train multzoari\n"+
-                    "5 -> FSS aplikatu dev multzoari\n"+
+                    "3 -> FSS aplikatu train multzoari\n"+
+                    "4 -> FSS aplikatu dev multzoari\n"+
+                    "5 -> Baseline atera\n"+
                     "6 -> Random Forest modeloa sortu\n"+
                     "7 -> Ebaluazioa egin\n"+
                     "8 -> Iragarpenak egin\n"+
@@ -39,7 +39,7 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Sartu hartzeko instantzien ehunekoa: ");
                     int ehuneko = scanner.nextInt();
-                    getARFF.getArff(path+"Suicide_Detection.csv", path+"cleanData.arff", ehuneko,path+"dev.arff");
+                    getARFF.getArff(path+"Suicide_Detection.csv", path+"DataRAW.arff", ehuneko,path+"TestRAW.arff");
                     break;
                 case 2:
                     System.out.println("---------------------------------------------------");
@@ -50,25 +50,25 @@ public class MainProgram {
                     System.out.println("Sartu 0 --> Sparse edo 1 --> NonSparse");
                     int sparse = scanner.nextInt();
                     // hoberena bektorea=0 eta sparse=1 da
-                    getBowArff.main(path+"cleanData.arff",bektorea,sparse, path+"hiztegia.txt", path+"trainBoW.arff", path+"devBoW.arff");
+                    getBowArff.main(path+"DataRAW.arff",bektorea,sparse, path+"hiztegia.txt", path+"trainBoW.arff", path+"devRAW.arff");
                     break;
                 case 3:
-                    System.out.println("---------------------------------------------------");
-                    System.out.println("BASELINE SORTUKO DA");
-                    System.out.println("---------------------------------------------------");
-                    Baseline.baseline(path+"trainBoW.arff");
-                    break;
-                case 4:
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW TRAIN FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
                     fssInfoGain.fssInfoGain(path+"trainBOW.arff",path+"trainFSS.arff");
                     break;
-                case 5:
+                case 4:
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW DEV FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    getTestFSS.main(path+"dev.arff",path+"devFSS.arff",0,1);
+                    MakeComp.main(path+"devRAW.arff",path+"devFSS.arff",0,1);
+                    break;
+                case 5:
+                    System.out.println("---------------------------------------------------");
+                    System.out.println("BASELINE SORTUKO DA");
+                    System.out.println("---------------------------------------------------");
+                    Baseline.baseline(path+"trainFSS.arff","BaselineEmaitzak.txt");
                     break;
                 case 6:
                     System.out.println("---------------------------------------------------");

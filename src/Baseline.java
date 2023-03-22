@@ -1,50 +1,94 @@
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
-import weka.filters.unsupervised.instance.Resample;
+import weka.filters.supervised.instance.Resample;
+import weka.filters.unsupervised.instance.Randomize;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.Random;
 
 public class Baseline {
 
-    public static void baseline(String bowArff) throws Exception {
+    public static void baseline(String bowArff, String emaitzak) throws Exception {
 
         //DATUAK DITUEN FITXATEGIA KARGATU
-        ConverterUtils.DataSource source = new ConverterUtils.DataSource("trainBOW.arff");
+        ConverterUtils.DataSource source = new ConverterUtils.DataSource(bowArff);
         Instances data = source.getDataSet();
         data.setClassIndex(data.numAttributes() - 1);
 
-
-        //TRAIN ETA TEST MULTZOAK LORTU
-        Resample resample=new Resample();
-        resample.setInputFormat(data);
-        resample.setSampleSizePercent(80);
-        resample.setInvertSelection(true);
-        resample.setNoReplacement(true);
-        Instances test= Filter.useFilter(data, resample);
-
-        resample.setInputFormat(data);
-        resample.setNoReplacement(true);
-        resample.setSampleSizePercent(80);
-        Instances train=Filter.useFilter(data, resample);
-
-        train.setClassIndex(data.numAttributes() - 1);
-        test.setClassIndex(data.numAttributes() - 1);
-
-
         //NAIVE BAYES CLASSIFIER SORTU
         NaiveBayes klasifikadore = new NaiveBayes();
-        klasifikadore.buildClassifier(train);
+        klasifikadore.buildClassifier(data);
+
+        //.MODEL GORDE
+        SerializationHelper.write("Baseline.model",klasifikadore);
 
 
-        //EBALUAZIOA EGIN
-        Evaluation evaluator = new Evaluation(train);
-        evaluator.evaluateModel(klasifikadore,test);
+        FileWriter f = new FileWriter(emaitzak);
+        BufferedWriter bf = new BufferedWriter(f);
 
-        //F-MEASURE INPRIMATU
-        System.out.println(evaluator.weightedFMeasure());
+        //3. EBALUAZIO EZ ZINTZOA
+        System.out.println("Ebaluazio ez zintzoa burutzen...");
+        bf.append("\n=============================================================\n");
+        bf.append("EBALUAZIO EZ ZINTZOA:\n");
+
+        Evaluation evaluation = new Evaluation(data);
+        evaluation.evaluateModel(klasifikadore, data);
+
+        bf.append(evaluation.toSummaryString()+"\n");
+        bf.append(evaluation.toClassDetailsString()+"\n");
+        bf.append(evaluation.toMatrixString());
+
+
+        //4. K-FOLD CROSS EBALUAZIOA
+        System.out.println("K-Fold cross ebaluazioa burutzen...");
+        bf.append("\n=============================================================\n");
+        bf.append("K-FOLD CROSS EBALUAZIOA:\n");
+
+        evaluation = new Evaluation(data);
+        evaluation.crossValidateModel(klasifikadore, data, 10, new Random(1));
+
+        bf.append(evaluation.toSummaryString()+"\n");
+        bf.append(evaluation.toClassDetailsString()+"\n");
+        bf.append(evaluation.toMatrixString());
+
+
+        //5. STRATIFIED HOLD OUT
+        System.out.println("Hold out ebaluazioa burutzen...");
+        bf.append("\n=============================================================\n");
+        bf.append("STRATIFIED 50 REPEATED HOLD OUT (%80):\n");
+
+        evaluation = new Evaluation(data);
+
+        for(int i = 0; i<50; i++){
+
+            source = new ConverterUtils.DataSource(bowArff);
+            Instances train = source.getDataSet();
+            train.setClassIndex(train.numAttributes()-1);
+
+            source = new ConverterUtils.DataSource("devFSS.arff");
+            Instances test = source.getDataSet();
+            test.setClassIndex(test.numAttributes()-1);
+
+
+            klasifikadore = new NaiveBayes();
+            klasifikadore.buildClassifier(train);
+
+            evaluation.evaluateModel(klasifikadore, test);
+        }
+
+        bf.append(evaluation.toSummaryString()+"\n");
+        bf.append(evaluation.toClassDetailsString()+"\n");
+        bf.append(evaluation.toMatrixString());
+
+        bf.close();
+
 
     }
 }

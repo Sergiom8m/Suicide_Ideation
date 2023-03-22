@@ -27,94 +27,29 @@ public class fssInfoGain {
 
             //DATUAK LORTU
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(trainBowPath);
-            Instances data = source.getDataSet();
-            data.setClassIndex(data.numAttributes() - 1);
+            Instances train = source.getDataSet();
+            train.setClassIndex(train.numAttributes() - 1);
 
-
-            //TRAIN MULTZOA LORTU
-            Resample resample = new Resample();
-            resample.setRandomSeed(42);
-            resample.setInvertSelection(false);
-            resample.setNoReplacement(true);
-            resample.setSampleSizePercent(66);
-            resample.setInputFormat(data);
-            Instances train = Filter.useFilter(data, resample);
-            train.setClassIndex(train.numAttributes()-1);
-
-
-            //TEST MULTZOA LORTU
-            resample.setRandomSeed(42);
-            resample.setInvertSelection(true);
-            resample.setNoReplacement(true);
-            resample.setSampleSizePercent(66);
-            resample.setInputFormat(data);
-            Instances test = Filter.useFilter(data, resample);
-            test.setClassIndex(test.numAttributes()-1);
-
-            //ATRIBUTUEN AUKERAKETA
+            AttributeSelection filterSelect = new AttributeSelection();
+            InfoGainAttributeEval evalInfoGain = new InfoGainAttributeEval();
             Ranker ranker = new Ranker();
-            AttributeSelection as = new AttributeSelection();
-            as.setEvaluator(new InfoGainAttributeEval());
-            ranker.setThreshold(Long.MIN_VALUE);
-            as.setSearch(ranker);
-            as.setInputFormat(train);
-
-            //ERABILIKO DEN OINARRIZKO CLASSIFIER-A (TRAIN MULTZOA ERABILIZ)
-            RandomForest rf = new RandomForest();
-            rf.buildClassifier(train);
-            int max=data.numAttributes();
-            System.out.println(max);
-
-            int numaux = -1; //KONTSERBATUKO DIREN ATRIBUTU KOPURUA (-1 = GUZTIAK MANTENDU)
-            double fmax = 0.0; //F-MEASURE
-            for(int n = 201; n < 202; n+=25){ //MANTENDUKO DIREN ATRIBUTU KOPURU OPTIMOA LORTU
-                System.out.println(n);
-                ranker.setNumToSelect(n);
-                as.setSearch(ranker);
-                as.setInputFormat(train);
-
-                //ATRIBUTUAK FILTRATUKO DITEN CLASSIFIER-A SORTU (TEST EGOKITZEN DU)
-                FilteredClassifier fc = new FilteredClassifier();
-                fc.setClassifier(rf);
-                fc.setFilter(as);
-                fc.buildClassifier(train);
-
-                //EBALUAZIOA EGIN FILTERED CLASSIFIER-A ERABILIZ
-                Evaluation evaluation = new Evaluation(train);
-                evaluation.evaluateModel(fc, test);
-
-                //SORTUTAKO MODELOAREN KALITATEA AZTERTZEKO F-MEASURE METRIKA AZTERTUKO DA
-                double fMeasure= evaluation.weightedFMeasure();
-                System.out.println(n+" lortutako f: "+fMeasure);
-                //F-MEASURE MAXIMOA EGUNRETZEA
-                if(fmax < fMeasure){
-                    System.out.println("Fmax berria: "+fMeasure);
-                    fmax = fMeasure;
-                    numaux = n;
-                }
-            }
-            FileWriter f = new FileWriter("FSSRESULTADOS.csv");
-            System.out.append("\nPARAMETRO EKORKETAREN EMAITZAK:" +
-                    "\nNumToSelect: " + numaux);
-            System.out.println("LORTU DEN F-MEASURE MAXIMOA:"+ fmax);
+            ranker.setNumToSelect(2000);
+            ranker.setThreshold(0.001);
+            filterSelect.setInputFormat(train);
+            filterSelect.setEvaluator(evalInfoGain);
+            filterSelect.setSearch(ranker);
+            Instances trainFSS = Filter.useFilter(train, filterSelect);
 
 
-            //LORTUTAKO PARAMETROEKIN DATUAK FILTRATU ETA MULTZO BERRIA LORTU
-            ranker.setNumToSelect(numaux);
-            ranker.setThreshold(Long.MIN_VALUE);
-            as.setSearch(ranker);
-            as.setInputFormat(data);
-            Instances filteredData= Filter.useFilter(data, as);
-            filteredData.setClassIndex(filteredData.numAttributes()-1);
 
             //DATUAK GORDE
-            datuakGorde(FSSArffPath, filteredData);
+            datuakGorde(FSSArffPath, trainFSS);
 
 
             // HIZTEGIA SORTU ETA GORDE
-            HashMap<String, Integer> hiztegia = hiztegiaSortu("hiztegia.txt",filteredData);
-            hiztegiaGorde(hiztegia,"hiztegiaFSS.txt",filteredData);
-            f.close();
+            HashMap<String, Integer> hiztegia = hiztegiaSortu("hiztegia.txt",trainFSS);
+            hiztegiaGorde(hiztegia,"hiztegiaFSS.txt",trainFSS);
+
         }catch (Exception e){e.printStackTrace();}
     }
 

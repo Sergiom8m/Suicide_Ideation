@@ -10,17 +10,20 @@ import weka.filters.unsupervised.instance.SparseToNonSparse;
 
 import java.io.*;
 
-public class getTestFSS {
-    public static void main(String testPath, String testFSSPath,int errepresentazioBektoriala,int sparse) {
+public class MakeComp {
+    public static void main(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse) {
         try {
 
             //TEST FSS EGIN
-            ConverterUtils.DataSource source= new ConverterUtils.DataSource(testPath);
-            Instances dev = source.getDataSet();
-            dev.setClassIndex(dev.numAttributes() - 1);
+            ConverterUtils.DataSource source= new ConverterUtils.DataSource(inputPath);
+            Instances data = source.getDataSet();
+            data.setClassIndex(data.numAttributes() - 1);
 
-            Instances testFSS= fixedDictionaryStringToWordVector("hiztegiaFSS.txt",dev,errepresentazioBektoriala);
+            //IZENA ALDATU BEHAR ZAIO KLASEARI StringToWordVector EGIN AHAL IZATEKO
+            data.renameAttribute(data.numAttributes()-1, "klasea");
+            data.setClassIndex(data.numAttributes()-1);
 
+            Instances testFSS= fixedDictionaryStringToWordVector("hiztegiaFSS.txt",data,errepresentazioBektoriala);
 
             // SPARSE/NONSPARSE
             if(sparse==1){
@@ -29,7 +32,7 @@ public class getTestFSS {
 
             testFSS=reorder(testFSS);
 
-            datuakGorde(testFSSPath,testFSS);
+            datuakGorde(outputFSSPath,testFSS);
 
         }catch (Exception e){
             e.printStackTrace();

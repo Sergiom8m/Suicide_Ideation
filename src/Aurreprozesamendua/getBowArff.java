@@ -11,6 +11,7 @@ import weka.filters.unsupervised.attribute.Reorder;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 import weka.filters.unsupervised.instance.Randomize;
 import weka.filters.unsupervised.instance.RemovePercentage;
+import weka.filters.unsupervised.instance.Resample;
 import weka.filters.unsupervised.instance.SparseToNonSparse;
 
 import java.io.*;
@@ -41,28 +42,24 @@ public class getBowArff {
             data.renameAttribute(data.numAttributes()-1, "klasea");
             data.setClassIndex(data.numAttributes()-1);
 
-            //HOLD OUT
-
-            //DATUAK RANDOMIZATU
-            Randomize randomFilter = new Randomize();
-            randomFilter.setRandomSeed(42);
-            randomFilter.setInputFormat(data);
-            Instances randomData = Filter.useFilter(data, randomFilter);
-
-            //TEST MULTZOA LORTU
-            RemovePercentage removeFilter = new RemovePercentage();
-            removeFilter.setPercentage(70);
-            removeFilter.setInputFormat(randomData);
-            Instances dev = Filter.useFilter(randomData, removeFilter);
-            dev.setClassIndex(data.numAttributes() - 1);
-            System.out.println("Test instantziak: " + dev.numInstances());
 
             //TRAIN MULTZOA LORTU
-            removeFilter.setInvertSelection(true);
-            removeFilter.setInputFormat(randomData);
-            Instances train = Filter.useFilter(randomData, removeFilter);
-            train.setClassIndex(data.numAttributes() - 1);
+            Resample resample = new Resample();
+            resample.setRandomSeed(42);
+            resample.setNoReplacement(true);
+            resample.setInvertSelection(false);
+            resample.setSampleSizePercent(70);
+            resample.setInputFormat(data);
+            Instances train=Filter.useFilter(data,resample);
             System.out.println("Train instantziak: " + train.numInstances());
+
+            //DEV MULTZOA LORTU
+            resample.setRandomSeed(42);
+            resample.setNoReplacement(true);
+            resample.setInvertSelection(true);
+            resample.setInputFormat(data);
+            Instances dev= Filter.useFilter(data, resample);
+            System.out.println("Dev instantziak: " + dev.numInstances());
 
             // TEST GORDE
             datuakGorde(devPath,dev);
@@ -128,7 +125,7 @@ public class getBowArff {
         }
 
         stringToWordVector.setAttributeIndices("first-last");
-        stringToWordVector.setWordsToKeep(2000);    //defektuz 1000 TODO 2000
+        stringToWordVector.setWordsToKeep(5000);    //defektuz 1000 TODO 2000
         stringToWordVector.setPeriodicPruning(-1.0);
 
         stringToWordVector.setLowerCaseTokens(true); //MAYUS ETA MINUS ARTEKO BEREIZKETARIK EZ TRUE BADAGO

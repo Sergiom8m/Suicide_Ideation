@@ -20,6 +20,7 @@ public class Ebaluazioa {
          * emaitzak     ->  test_predictions.txt
          */
         try {
+
             //1. DATUAK KARGATU
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(trainPath);
             Instances data = source.getDataSet();
@@ -40,6 +41,7 @@ public class Ebaluazioa {
 
             FileWriter f = new FileWriter(emaitzak);
             BufferedWriter bf = new BufferedWriter(f);
+            /*
 
             //3. EBALUAZIO EZ ZINTZOA
             System.out.println("Ebaluazio ez zintzoa burutzen...");
@@ -53,26 +55,30 @@ public class Ebaluazioa {
             bf.append(evaluation.toClassDetailsString()+"\n");
             bf.append(evaluation.toMatrixString());
 
+
             //4. K-FOLD CROSS EBALUAZIOA
             System.out.println("K-Fold cross ebaluazioa burutzen...");
             bf.append("\n=============================================================\n");
             bf.append("K-FOLD CROSS EBALUAZIOA:\n");
 
             evaluation = new Evaluation(data);
-            evaluation.crossValidateModel(randomForest, data, 10, new Random(1));
+            evaluation.crossValidateModel(randomForest, data, 5, new Random(1));
 
             bf.append(evaluation.toSummaryString()+"\n");
             bf.append(evaluation.toClassDetailsString()+"\n");
             bf.append(evaluation.toMatrixString());
+
+
+             */
 
             //5. STRATIFIED HOLD OUT
             System.out.println("Hold out ebaluazioa burutzen...");
             bf.append("\n=============================================================\n");
             bf.append("STRATIFIED 50 REPEATED HOLD OUT (%80):\n");
 
-            evaluation = new Evaluation(data);
+            Evaluation evaluation = new Evaluation(data);
 
-            for(int i = 0; i<50; i++){
+            for(int i = 0; i<2; i++){
 
                 source = new ConverterUtils.DataSource(trainPath);
                 Instances train = source.getDataSet();
@@ -96,6 +102,8 @@ public class Ebaluazioa {
             bf.append(evaluation.toSummaryString()+"\n");
             bf.append(evaluation.toClassDetailsString()+"\n");
             bf.append(evaluation.toMatrixString());
+
+
 
             bf.close();
 
