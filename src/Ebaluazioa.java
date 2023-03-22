@@ -12,7 +12,7 @@ import java.io.FileWriter;
 import java.util.Random;
 
 public class Ebaluazioa {
-    public static void main(String trainPath,String devPath, int[] parametroak, String emaitzak) { //TODO blind test gehitu?
+    public static void main(String trainPath,String devPath,String dataPath, int[] parametroak, String emaitzak) { //TODO blind test gehitu?
         /**
          * trainPath    ->  trainBowFSS.arff
          * devPath    ->  devFSS.arff
@@ -22,7 +22,7 @@ public class Ebaluazioa {
         try {
 
             //1. DATUAK KARGATU
-            ConverterUtils.DataSource source = new ConverterUtils.DataSource(trainPath);
+            ConverterUtils.DataSource source = new ConverterUtils.DataSource(dataPath);
             Instances data = source.getDataSet();
             data.setClassIndex(data.numAttributes()-1);
 
@@ -41,7 +41,7 @@ public class Ebaluazioa {
 
             FileWriter f = new FileWriter(emaitzak);
             BufferedWriter bf = new BufferedWriter(f);
-            /*
+
 
             //3. EBALUAZIO EZ ZINTZOA
             System.out.println("Ebaluazio ez zintzoa burutzen...");
@@ -69,25 +69,24 @@ public class Ebaluazioa {
             bf.append(evaluation.toMatrixString());
 
 
-             */
 
             //5. STRATIFIED HOLD OUT
             System.out.println("Hold out ebaluazioa burutzen...");
             bf.append("\n=============================================================\n");
             bf.append("STRATIFIED 50 REPEATED HOLD OUT (%80):\n");
 
-            Evaluation evaluation = new Evaluation(data);
+            //TRAINFSS ETA TESTFSS LORTU
+            source = new ConverterUtils.DataSource(trainPath);
+            Instances train = source.getDataSet();
+            train.setClassIndex(train.numAttributes()-1);
+
+            source = new ConverterUtils.DataSource(devPath);
+            Instances test = source.getDataSet();
+            test.setClassIndex(test.numAttributes()-1);
+
+            evaluation = new Evaluation(data);
 
             for(int i = 0; i<2; i++){
-
-                source = new ConverterUtils.DataSource(trainPath);
-                Instances train = source.getDataSet();
-                train.setClassIndex(train.numAttributes()-1);
-
-                source = new ConverterUtils.DataSource(devPath);
-                Instances test = source.getDataSet();
-                test.setClassIndex(test.numAttributes()-1);
-
                 randomForest = new RandomForest();
                 randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors());
                 randomForest.setNumFeatures(parametroak[0]);
@@ -102,8 +101,6 @@ public class Ebaluazioa {
             bf.append(evaluation.toSummaryString()+"\n");
             bf.append(evaluation.toClassDetailsString()+"\n");
             bf.append(evaluation.toMatrixString());
-
-
 
             bf.close();
 

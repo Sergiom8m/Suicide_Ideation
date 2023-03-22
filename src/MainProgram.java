@@ -20,12 +20,14 @@ public class MainProgram {
                     "1 -> .arff nagusia sortu\n"+
                     "2 -> BoW fitxategia sortu\n"+
                     "3 -> FSS aplikatu train multzoari\n"+
-                    "4 -> FSS aplikatu dev multzoari\n"+
-                    "5 -> Baseline atera\n"+
-                    "6 -> Random Forest modeloa sortu\n"+
-                    "7 -> Ebaluazioa egin\n"+
-                    "8 -> Iragarpenak egin\n"+
-                    "9 -> Path aldatu\n");
+                    "4 -> DevFSS egin\n"+
+                    "5 -> TestFSS egin\n"+
+                    "6 -> DataFSS egin\n"+
+                    "7 -> Baseline atera\n"+
+                    "8 -> Random Forest modeloa sortu\n"+
+                    "9 -> Ebaluazioa egin\n"+
+                    "10 -> Iragarpenak egin\n"+
+                    "11 -> Path aldatu\n");
 
             int aukera = scanner.nextInt();
 
@@ -66,24 +68,36 @@ public class MainProgram {
                     break;
                 case 5:
                     System.out.println("---------------------------------------------------");
-                    System.out.println("BASELINE SORTUKO DA");
+                    System.out.println("BoW TEST FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    Baseline.baseline(path+"trainFSS.arff","BaselineEmaitzak.txt");
+                    MakeComp.main(path+"TestRAW.arff",path+"testFSS.arff",0,1);
                     break;
                 case 6:
                     System.out.println("---------------------------------------------------");
-                    System.out.println("RANDOM FOREST SORTUKO DA");
+                    System.out.println("BoW DATA FSS SORTUKO DA");
+                    System.out.println("---------------------------------------------------");
+                    MakeComp.main(path+"DataRAW.arff",path+"dataFSS.arff",0,1);
+                    break;
+                case 7:
+                    System.out.println("---------------------------------------------------");
+                    System.out.println("BASELINE SORTUKO DA");      //TODO
+                    System.out.println("---------------------------------------------------");
+                    Baseline.baseline(path+"trainFSS.arff","BaselineEmaitzak.txt");
+                    break;
+                case 8:
+                    System.out.println("---------------------------------------------------");
+                    System.out.println("RANDOM FOREST SORTUKO DA"); //TODO
                     System.out.println("---------------------------------------------------");
                     parametroak = RandomForestOptimoa.main(new String[]{path+"trainFSS.arff",path+"."});
                     break;
 
-                case 7:
+                case 9:
                     System.out.println("---------------------------------------------------");
                     System.out.println("EBALUAZIOA BURUTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    Ebaluazioa.main(path+"trainFSS.arff","devFSS.arff", new int[]{parametroak[1],parametroak[2],16,parametroak[0]}, path+"test_predictions.txt");
+                    Ebaluazioa.main(path+"trainFSS.arff","devFSS.arff","dataFSS.arff", parametroak, path+"test_predictions.txt");
                     break;
-                case 8:
+                case 10:
                     System.out.println("---------------------------------------------------");
                     System.out.println("IRAGARPENAK BURUTUKO DIRA");
                     System.out.println("---------------------------------------------------");
@@ -91,7 +105,7 @@ public class MainProgram {
                     String pathModel = scanner.next();
                     Iragarpenak.main(pathModel,path+"devFSS.arff",path+"iragarpenak.txt");
                     break;
-                case 9:
+                case 11:
                     System.out.println("Sartu fitxategien path-a (soilik karpeta, adib: /home/lsi/): ");
                     path = scanner.next();
                     break;

@@ -42,6 +42,8 @@ public class getBowArff {
             data.renameAttribute(data.numAttributes()-1, "klasea");
             data.setClassIndex(data.numAttributes()-1);
 
+            data = ezabatuUselessAttributes(data);
+
 
             //TRAIN MULTZOA LORTU
             Resample resample = new Resample();
@@ -73,21 +75,11 @@ public class getBowArff {
                 trainBoW = SparseToNonSparse(trainBoW);
             }
 
-            //TrainBOW GORDE
             trainBoW = reorder(trainBoW);
-
-            trainBoW = ezabatuUselessAttributes(trainBoW);
-
             //BoW ARFF-AN GORDE
             datuakGorde(trainBoWPath, trainBoW);
 
 
-            //HIZTEGIA EGOKITU
-            source = new ConverterUtils.DataSource(trainBoWPath);
-            Instances trainBow = source.getDataSet();
-            trainBow.setClassIndex(trainBow.numAttributes()-1);
-            HashMap<String, Integer> hiztegiaFinal = hiztegiaSortu("hiztegia.txt",trainBow);
-            hiztegiaGorde(hiztegiaFinal,"hiztegia.txt",trainBoW);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -118,14 +110,13 @@ public class getBowArff {
             stringToWordVector.setOutputWordCounts(true);
             stringToWordVector.setIDFTransform(true);
             stringToWordVector.setTFTransform(true);
-
         }
         else{
             stringToWordVector.setOutputWordCounts(false);
         }
 
         stringToWordVector.setAttributeIndices("first-last");
-        stringToWordVector.setWordsToKeep(5000);    //defektuz 1000 TODO 2000
+        stringToWordVector.setWordsToKeep(5000);                //defektuz 1000
         stringToWordVector.setPeriodicPruning(-1.0);
 
         stringToWordVector.setLowerCaseTokens(true); //MAYUS ETA MINUS ARTEKO BEREIZKETARIK EZ TRUE BADAGO

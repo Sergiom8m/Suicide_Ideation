@@ -25,6 +25,7 @@ public class MakeComp {
 
             Instances testFSS= fixedDictionaryStringToWordVector("hiztegiaFSS.txt",data,errepresentazioBektoriala);
 
+
             // SPARSE/NONSPARSE
             if(sparse==1){
                 testFSS = SparseToNonSparse(testFSS);
