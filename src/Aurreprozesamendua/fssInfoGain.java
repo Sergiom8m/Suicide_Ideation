@@ -31,7 +31,6 @@ public class fssInfoGain {
             Instances train = source.getDataSet();
             train.setClassIndex(train.numAttributes() - 1);
 
-            System.out.println("ATRIBUTUKO`PURUAAAAAAAAAAAAAA"+train.numAttributes());
             train = ezabatuUselessAttributes(train);
 
             AttributeSelection filterSelect = new AttributeSelection();
