@@ -86,17 +86,17 @@ public class Ebaluazioa {
 
             evaluation = new Evaluation(data);
 
-            for(int i = 0; i<2; i++){
-                randomForest = new RandomForest();
-                randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors());
-                randomForest.setNumFeatures(parametroak[0]);
-                randomForest.setNumIterations(parametroak[1]);
-                randomForest.setBagSizePercent(parametroak[2]);
-                randomForest.setMaxDepth(parametroak[3]);
-                randomForest.buildClassifier(train);
 
-                evaluation.evaluateModel(randomForest, test);
-            }
+            randomForest = new RandomForest();
+            randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors());
+            randomForest.setNumFeatures(parametroak[0]);
+            randomForest.setNumIterations(parametroak[1]);
+            randomForest.setBagSizePercent(parametroak[2]);
+            randomForest.setMaxDepth(parametroak[3]);
+            randomForest.buildClassifier(train);
+
+            evaluation.evaluateModel(randomForest, test);
+
 
             bf.append(evaluation.toSummaryString()+"\n");
             bf.append(evaluation.toClassDetailsString()+"\n");

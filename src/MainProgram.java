@@ -80,7 +80,7 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("BASELINE SORTUKO DA");      //TODO
                     System.out.println("---------------------------------------------------");
-                    Baseline.baseline("trainFSS.arff","BaselineEmaitzak.txt");
+                    Baseline.baseline("dataFSS.arff", "trainFSS.arff", "devFSS.arff", "BaselineEmaitzak.txt");
                     break;
                 case 8:
                     System.out.println("---------------------------------------------------");

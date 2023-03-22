@@ -15,12 +15,20 @@ import java.util.Random;
 
 public class Baseline {
 
-    public static void baseline(String bowArff, String emaitzak) throws Exception {
+    public static void baseline(String dataPath, String trainPath, String devPath, String emaitzak) throws Exception {
 
         //DATUAK DITUEN FITXATEGIA KARGATU
-        ConverterUtils.DataSource source = new ConverterUtils.DataSource(bowArff);
+        ConverterUtils.DataSource source = new ConverterUtils.DataSource(dataPath);
         Instances data = source.getDataSet();
         data.setClassIndex(data.numAttributes() - 1);
+
+        source = new ConverterUtils.DataSource(trainPath);
+        Instances train = source.getDataSet();
+        train.setClassIndex(train.numAttributes() - 1);
+
+        source = new ConverterUtils.DataSource(devPath);
+        Instances dev = source.getDataSet();
+        dev.setClassIndex(dev.numAttributes() - 1);
 
         //NAIVE BAYES CLASSIFIER SORTU
         NaiveBayes klasifikadore = new NaiveBayes();
@@ -29,11 +37,10 @@ public class Baseline {
         //.MODEL GORDE
         SerializationHelper.write("Baseline.model",klasifikadore);
 
-
         FileWriter f = new FileWriter(emaitzak);
         BufferedWriter bf = new BufferedWriter(f);
 
-        //3. EBALUAZIO EZ ZINTZOA
+        //1. EBALUAZIO EZ ZINTZOA
         System.out.println("Ebaluazio ez zintzoa burutzen...");
         bf.append("\n=============================================================\n");
         bf.append("EBALUAZIO EZ ZINTZOA:\n");
@@ -46,49 +53,36 @@ public class Baseline {
         bf.append(evaluation.toMatrixString());
 
 
-        //4. K-FOLD CROSS EBALUAZIOA
+        //2. K-FOLD CROSS EBALUAZIOA
         System.out.println("K-Fold cross ebaluazioa burutzen...");
         bf.append("\n=============================================================\n");
         bf.append("K-FOLD CROSS EBALUAZIOA:\n");
 
         evaluation = new Evaluation(data);
-        evaluation.crossValidateModel(klasifikadore, data, 10, new Random(1));
+        evaluation.crossValidateModel(klasifikadore, data, 5, new Random(1));
 
         bf.append(evaluation.toSummaryString()+"\n");
         bf.append(evaluation.toClassDetailsString()+"\n");
         bf.append(evaluation.toMatrixString());
 
 
-        //5. STRATIFIED HOLD OUT
+        //3. STRATIFIED HOLD OUT
         System.out.println("Hold out ebaluazioa burutzen...");
         bf.append("\n=============================================================\n");
         bf.append("STRATIFIED 50 REPEATED HOLD OUT (%80):\n");
 
         evaluation = new Evaluation(data);
 
-        for(int i = 0; i<50; i++){
+        klasifikadore = new NaiveBayes();
+        klasifikadore.buildClassifier(train);
 
-            source = new ConverterUtils.DataSource(bowArff);
-            Instances train = source.getDataSet();
-            train.setClassIndex(train.numAttributes()-1);
-
-            source = new ConverterUtils.DataSource("devFSS.arff");
-            Instances test = source.getDataSet();
-            test.setClassIndex(test.numAttributes()-1);
-
-
-            klasifikadore = new NaiveBayes();
-            klasifikadore.buildClassifier(train);
-
-            evaluation.evaluateModel(klasifikadore, test);
-        }
+        evaluation.evaluateModel(klasifikadore, dev);
 
         bf.append(evaluation.toSummaryString()+"\n");
         bf.append(evaluation.toClassDetailsString()+"\n");
         bf.append(evaluation.toMatrixString());
 
         bf.close();
-
 
     }
 }

@@ -111,16 +111,11 @@ public class fssInfoGain {
     }
 
     private static Instances ezabatuUselessAttributes(Instances data) throws Exception {
-        System.out.println("////////////////////////////////AURRETIK////////////////////////////////");
-        for(int i =data.numAttributes()-40; i<data.numAttributes(); i++){System.out.println(data.attribute(i));}
         RemoveByName remove = new RemoveByName();
         remove.setExpression(".*[a-zA-Z0-9]+.*");
         remove.setInvertSelection(true);
         remove.setInputFormat(data);
         data = Filter.useFilter(data, remove);
-
-        System.out.println("////////////////////////////////OSTEAN////////////////////////////////");
-        for(int i =data.numAttributes()-40; i<data.numAttributes(); i++){System.out.println(data.attribute(i));}
 
         return data;
     }
