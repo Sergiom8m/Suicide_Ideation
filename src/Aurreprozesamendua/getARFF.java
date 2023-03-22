@@ -131,7 +131,7 @@ public class getARFF {
 
         testua = testua.replaceAll("[\\u2800-\\u28FF]", ""); //BRAILLE TESTUA EZABATU
 
-        testua = parseToAliases(testua); //EZABATU EMOJIAK
+        testua = parseToAliases(testua); //EMOJIAK TESTURA PASATU
         testua = puntuazioMarkaKendu(testua); //PUNTUAZIO MARKAK EZABATU
 
         testua = testua.replaceAll("[0-9]", ""); //ZENBAKIAK EZABATU
@@ -146,7 +146,14 @@ public class getARFF {
             testua = testua.replace( matcher.group(), "");
         }
 
-        testua = testua.replaceAll("\\b\\w{1}\\b", ""); //KARAKTERE BAKARREKO HITZAK EZABATU
+        regex = "\\b\\w{1}\\b";
+        pattern = Pattern.compile(regex);
+        matcher = pattern.matcher(testua);
+        if (matcher.find()) {
+            testua = testua.replace( matcher.group(), "");
+        }
+
+        //testua = testua.replaceAll("\\b\\w{1}\\b", ""); //KARAKTERE BAKARREKO HITZAK EZABATU
 
         //ZENBAKIAK EDO LETRAK EZ DIREN ELEMENTU DENAK KENDU
         if(!testua.matches(".*[a-zA-Z0-9]+.*")){
@@ -164,10 +171,8 @@ public class getARFF {
         for(String[] UnekoInstantzia : mat){
             if(UnekoInstantzia[2].equals("\'suicide\'") || UnekoInstantzia[2].equals("\'non-suicide\'")){
                 if(70<UnekoInstantzia[1].length() && UnekoInstantzia[1].length()<1500){ //TESTUAREN LUZEERA FILTRATU
-                    if(!UnekoInstantzia[1].matches("[^a-zA-Z0-9 ]")){ //KARAKTERE BEREZIAK SOILIK DITUZEN INSTANTZIAK EZABATU
-                        aux[i] = UnekoInstantzia;
-                        i++;
-                    }
+                    aux[i] = UnekoInstantzia;
+                    i++;
                 }
             }
         }
