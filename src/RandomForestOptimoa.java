@@ -58,11 +58,14 @@ public class RandomForestOptimoa {
     private static int min_num_iterations;
     private static int jump_num_iterations;
     private static int max_num_iterations;
+    private static int min_bag_size;
+    private static int jump_bag_size;
+    private static int max_bag_size;
     private static double best_fMeasure;
-    // private static int bagging_percent; //TODO
     private static HashMap<Integer, ArrayList<Double>> depth_values = new HashMap<>();
     private static HashMap<Integer, ArrayList<Double>> num_features_values = new HashMap<>();
     private static HashMap<Integer, ArrayList<Double>> num_iterations_values = new HashMap<>();
+    private static HashMap<Integer, ArrayList<Double>> bag_size_values = new HashMap<>();
 
 
     /**
@@ -80,10 +83,13 @@ public class RandomForestOptimoa {
      *     <li>args[8]: </li>
      *     <li>args[9]: </li>
      *     <li>args[10]: </li>
+     *     <li>args[11]: </li>
+     *     <li>args[12]: </li>
+     *     <li>args[13]: </li>
      * </ul>
      */
     public static void main(String[] args) {
-        if(args.length == 11) {
+        if(args.length == 14) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd-HHmmss");
             date = simpleDateFormat.format(new Date());
 
@@ -106,6 +112,9 @@ public class RandomForestOptimoa {
             System.out.println("9. min_num_iterations (int)");
             System.out.println("10. jump_num_iterations (int)");
             System.out.println("11. max_num_iterations (int)");
+            System.out.println("12. min_bag_size (int)");
+            System.out.println("13. jump_bag_size (int)");
+            System.out.println("14. max_bag_size (int)");
         }
     }
     private static void datuakKargatu(String[] args){
@@ -134,6 +143,9 @@ public class RandomForestOptimoa {
         min_num_iterations = Integer.parseInt(args[8]); // 25
         jump_num_iterations = Integer.parseInt(args[9]);
         max_num_iterations = Integer.parseInt(args[10]); // 125
+        min_bag_size = Integer.parseInt(args[11]);
+        jump_bag_size = Integer.parseInt(args[12]);
+        max_bag_size = Integer.parseInt(args[13]);
     }
 
     private static void ekorketa(){
@@ -150,52 +162,60 @@ public class RandomForestOptimoa {
     private static void ekoreketaHarabiatua(){
         try{
             RandomForest randomForest = new RandomForest();
+            best_fMeasure = 0;
             int best_depth = 0;
             int best_num_features = 0;
-            best_fMeasure = 0;
             int best_num_iterations = 0;
+            int best_bag_size = 0;
             int iteration = 1;
 
-            int sum_iterations = (((max_depth-min_depth)/jump_depth)+2) * (((max_num_features-min_num_features)/jump_num_features)+1) * (((max_num_iterations-min_num_iterations)/jump_num_iterations)+1);
+            int sum_iterations = (((max_depth-min_depth)/jump_depth)+2) *
+                                 (((max_num_features-min_num_features)/jump_num_features)+1) *
+                                 (((max_num_iterations-min_num_iterations)/jump_num_iterations)+1) *
+                                 (((max_bag_size-min_bag_size)/jump_bag_size)+1);
             System.out.println("Exekuzioak izango dituen iterazio kopurua: " + sum_iterations);
             randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors()); // prozesadore gehiago erabili dezan (buklerak azkarrago)
             for (int depth = 0; depth <= max_depth; depth+=jump_depth) {
                 for (int num_features = min_num_features; num_features <= max_num_features; num_features+=jump_num_features){
                     for (int num_iterations = min_num_iterations; num_iterations <= max_num_iterations; num_iterations+=jump_num_iterations){
-                        System.out.println("------ " + iteration + ". iterazioa ------");
-                        System.out.println("depth: " + depth);
-                        System.out.println("num_features: " + num_features);
-                        System.out.println("num_iterations: " + num_iterations);
-                        randomForest.setMaxDepth(depth);
-                        randomForest.setNumFeatures(num_features);
-                        randomForest.setNumIterations(num_iterations);
-                        //randomForest.setBagSizePercent();
-                        randomForest.buildClassifier(data);
+                        for (int bag_size = min_bag_size; bag_size <= max_bag_size; bag_size+=jump_bag_size){
+                            System.out.println("------ " + iteration + ". iterazioa ------");
+                            System.out.println("depth: " + depth);
+                            System.out.println("num_features: " + num_features);
+                            System.out.println("num_iterations: " + num_iterations);
+                            System.out.println("bag_size: " + bag_size);
+                            randomForest.setMaxDepth(depth);
+                            randomForest.setNumFeatures(num_features);
+                            randomForest.setNumIterations(num_iterations);
+                            randomForest.setBagSizePercent(bag_size);
+                            randomForest.buildClassifier(data);
 
-                        Evaluation evaluation = new Evaluation(data);
-                        evaluation.crossValidateModel(randomForest, data, numfolds, new Random(1));
+                            Evaluation evaluation = new Evaluation(data);
+                            evaluation.crossValidateModel(randomForest, data, numfolds, new Random(1));
 
-                        double fMeasure = evaluation.weightedFMeasure();
-                        System.out.println(iteration + ". iterazioko f-measure: " + fMeasure);
-                        balioakGorde(depth, num_features, num_iterations, fMeasure);
-                        if (fMeasure > best_fMeasure) {
-                            best_fMeasure = fMeasure;
-                            best_depth = depth;
-                            best_num_features = num_features;
-                            best_num_iterations = num_iterations;
+                            double fMeasure = evaluation.weightedFMeasure();
+                            System.out.println(iteration + ". iterazioko f-measure: " + fMeasure);
+                            balioakGorde(depth, num_features, num_iterations, bag_size, fMeasure);
+                            if (fMeasure > best_fMeasure) {
+                                best_fMeasure = fMeasure;
+                                best_depth = depth;
+                                best_num_features = num_features;
+                                best_num_iterations = num_iterations;
+                                best_bag_size = bag_size;
+                            }
+                            iteration++;
                         }
-                        iteration++;
                     }
                 }
                 if (depth == 0) depth = min_depth-jump_depth;
             }
-            optimoaGorde(best_depth, best_num_features, best_num_iterations);
+            optimoaGorde(best_depth, best_num_features, best_num_iterations, best_bag_size);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    private static void balioakGorde(int depth, int num_features, int num_iterations, double fmeas){
+    private static void balioakGorde(int depth, int num_features, int num_iterations, int bag_size, double fmeas){
         if (depth_values.get(depth) != null) {
             depth_values.get(depth).add(fmeas);
         } else{
@@ -219,14 +239,23 @@ public class RandomForestOptimoa {
             list.add(fmeas);
             num_iterations_values.put(num_iterations, list);
         }
+
+        if (bag_size_values.get(bag_size) != null){
+            bag_size_values.get(bag_size).add(fmeas);
+        } else {
+            ArrayList<Double> list = new ArrayList<>();
+            list.add(fmeas);
+            bag_size_values.put(bag_size, list);
+        }
     }
 
-    private static void optimoaGorde(int best_depth, int best_num_features, int best_num_iterations){
+    private static void optimoaGorde(int best_depth, int best_num_features, int best_num_iterations, int best_bag_size){
         try{
             randomForest_optimo = new RandomForest();
             randomForest_optimo.setMaxDepth(best_depth);
             randomForest_optimo.setNumFeatures(best_num_features);
             randomForest_optimo.setNumIterations(best_num_iterations);
+            randomForest_optimo.setBagSizePercent(best_bag_size);
             randomForest_optimo.buildClassifier(data);
             SerializationHelper.write(storeDir + File.separator + date +"RF_optimoa.model", randomForest_optimo);
         } catch (Exception e){
@@ -245,7 +274,7 @@ public class RandomForestOptimoa {
             myWriter.write(" · MaxDepth: " + randomForest_optimo.getMaxDepth() + " (" + min_depth + " --> " + max_depth + " +" + jump_depth + ")" + "\n");
             myWriter.write(" · NumFeatures: " + randomForest_optimo.getNumFeatures() + " (" + min_num_features + " --> " + max_num_features + " +" + jump_num_features + ")" + "\n");
             myWriter.write(" · NumIterations: " + randomForest_optimo.getNumIterations() + " (" + min_num_iterations + " --> " + max_num_iterations + " +" + jump_num_iterations + ")" + "\n");
-            myWriter.write(" . BagSizePrecent: " + randomForest_optimo.getBagSizePercent() + "\n");
+            myWriter.write(" . BagSizePrecent: " + randomForest_optimo.getBagSizePercent() + " (" + min_bag_size + " --> " + max_bag_size + " +" + jump_bag_size + ")" + "\n");
             myWriter.write("Exekuzio denbora: " + exekuzioDenbora + " segundo\n");
             myWriter.close();
         } catch (IOException e){
@@ -278,6 +307,14 @@ public class RandomForestOptimoa {
                     (k,v) -> writeInCSV(myWriter2, k + "," + v + "\n")
             );
             myWriter2.close();
+
+            // 4. bagSize values
+            FileWriter myWriter3 = new FileWriter(storeDir + File.separator + date + "RF_bagSize.csv");
+            myWriter3.write("bagSize,value\n");
+            bag_size_values.forEach(
+                    (k,v) -> writeInCSV(myWriter3, k + "," + v + "\n")
+            );
+            myWriter3.close();
         } catch (Exception e){
             System.out.println("Errorea CSV-a gordetzean");
         }
