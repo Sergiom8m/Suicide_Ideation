@@ -15,6 +15,14 @@ import java.util.Random;
 
 public class Baseline {
 
+    public static void main (String[] args){
+        try {
+            baseline (args[0], args[1], args[2], args[3]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void baseline(String dataPath, String trainPath, String devPath, String emaitzak) throws Exception {
 
         //DATUAK DITUEN FITXATEGIA KARGATU
