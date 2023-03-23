@@ -12,6 +12,12 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 
 public class Iragarpenak {
+
+    public static void main (String[] args){
+
+        main(args[0], args[1], args[2]);
+
+    }
     public static void main(String modelPath,String testPath, String iragarpenakPath){
         try{
             Classifier randomForest= (Classifier) SerializationHelper.read(modelPath);

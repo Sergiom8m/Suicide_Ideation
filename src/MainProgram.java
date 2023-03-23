@@ -56,7 +56,7 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW TRAIN FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    fssInfoGain.fssInfoGain("trainBOW.arff","trainFSS.arff");
+                    fssInfoGain.fssInfoGain("trainBOW.arff","trainFSS.arff", "hiztegia.txt","hiztegiaFSS.txt");
                     break;
                 case 4:
                     System.out.println("---------------------------------------------------");
@@ -93,7 +93,7 @@ public class MainProgram {
                     System.out.println("---------------------------------------------------");
                     System.out.println("EBALUAZIOA BURUTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    Ebaluazioa.main("trainFSS.arff","devFSS.arff","dataFSS.arff", parametroak, "test_predictions.txt");
+
                     break;
                 case 10:
                     System.out.println("---------------------------------------------------");

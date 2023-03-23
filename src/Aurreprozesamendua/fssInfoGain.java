@@ -19,7 +19,14 @@ import java.io.*;
 import java.util.HashMap;
 
 public class fssInfoGain {
-    public static void fssInfoGain(String trainBowPath, String FSSArffPath) {
+
+    public static void main (String[] args){
+
+        fssInfoGain(args[0], args[1], args[2], args[3]);
+
+
+    }
+    public static void fssInfoGain(String trainBowPath, String FSSArffPath, String hiztegiPath, String hiztegiFSSpath) {
         try {
             /*
                0. parametroa: .arff fitxategia (atributu guztiekin)
@@ -50,8 +57,8 @@ public class fssInfoGain {
 
 
             // HIZTEGIA SORTU ETA GORDE
-            HashMap<String, Integer> hiztegia = hiztegiaSortu("hiztegia.txt",trainFSS);
-            hiztegiaGorde(hiztegia,"hiztegiaFSS.txt",trainFSS);
+            HashMap<String, Integer> hiztegia = hiztegiaSortu(hiztegiPath,trainFSS);
+            hiztegiaGorde(hiztegia,hiztegiFSSpath,trainFSS);
 
         }catch (Exception e){e.printStackTrace();}
     }

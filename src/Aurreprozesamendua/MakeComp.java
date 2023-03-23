@@ -11,6 +11,12 @@ import weka.filters.unsupervised.instance.SparseToNonSparse;
 import java.io.*;
 
 public class MakeComp {
+
+    public static void main (String[] args){
+
+        main(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+
+    }
     public static void main(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse) {
         try {
 

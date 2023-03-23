@@ -12,7 +12,16 @@ import java.io.FileWriter;
 import java.util.Random;
 
 public class Ebaluazioa {
-    public static void main(String trainPath,String devPath,String dataPath, int[] parametroak, String emaitzak) { //TODO blind test gehitu?
+
+    public static void main (String[] args){
+
+        main (args[0], args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[3]), Integer.parseInt(args[3]), Integer.parseInt(args[3]), args[5]);
+
+
+    }
+
+
+    public static void main(String trainPath,String devPath,String dataPath, int p1, int p2, int p3, int p4, String emaitzak) { //TODO blind test gehitu?
         /**
          * trainPath    ->  trainBowFSS.arff
          * devPath    ->  devFSS.arff
@@ -29,10 +38,10 @@ public class Ebaluazioa {
             //2. RANDOM FOREST PARAMETROAK KARGATU
             RandomForest randomForest = new RandomForest();
             randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors());
-            randomForest.setNumFeatures(parametroak[0]);
-            randomForest.setNumIterations(parametroak[1]);
-            randomForest.setBagSizePercent(parametroak[2]);
-            randomForest.setMaxDepth(parametroak[3]);
+            randomForest.setNumFeatures(p1);
+            randomForest.setNumIterations(p2);
+            randomForest.setBagSizePercent(p3);
+            randomForest.setMaxDepth(p4);
             randomForest.buildClassifier(data);
 
             //.MODEL GORDE
@@ -89,10 +98,10 @@ public class Ebaluazioa {
 
             randomForest = new RandomForest();
             randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors());
-            randomForest.setNumFeatures(parametroak[0]);
-            randomForest.setNumIterations(parametroak[1]);
-            randomForest.setBagSizePercent(parametroak[2]);
-            randomForest.setMaxDepth(parametroak[3]);
+            randomForest.setNumFeatures(p1);
+            randomForest.setNumIterations(p2);
+            randomForest.setBagSizePercent(p3);
+            randomForest.setMaxDepth(p4);
             randomForest.buildClassifier(train);
 
             evaluation.evaluateModel(randomForest, test);

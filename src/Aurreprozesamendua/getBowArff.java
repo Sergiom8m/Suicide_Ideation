@@ -18,6 +18,12 @@ import java.io.*;
 import java.util.HashMap;
 
 public class getBowArff {
+
+    public static void main(String[] args){
+
+        main(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3], args[4], args[5]);
+
+    }
     public static void main(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWPath,String devPath) {
 
         try{
