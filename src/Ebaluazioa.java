@@ -15,7 +15,7 @@ public class Ebaluazioa {
 
     public static void main (String[] args){
 
-        main (args[0], args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[3]), Integer.parseInt(args[3]), Integer.parseInt(args[3]), args[5]);
+        main (args[0], args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7]);
 
 
     }
@@ -93,7 +93,7 @@ public class Ebaluazioa {
             Instances test = source.getDataSet();
             test.setClassIndex(test.numAttributes()-1);
 
-            evaluation = new Evaluation(data);
+            evaluation = new Evaluation(train);
 
 
             randomForest = new RandomForest();

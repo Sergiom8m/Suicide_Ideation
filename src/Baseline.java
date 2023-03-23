@@ -71,7 +71,7 @@ public class Baseline {
         bf.append("\n=============================================================\n");
         bf.append("STRATIFIED 50 REPEATED HOLD OUT (%80):\n");
 
-        evaluation = new Evaluation(data);
+        evaluation = new Evaluation(train);
 
         klasifikadore = new NaiveBayes();
         klasifikadore.buildClassifier(train);
