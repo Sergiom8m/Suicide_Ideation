@@ -180,13 +180,13 @@ public class RandomForestOptimoa {
             int best_bag_size = 0;
             int iteration = 1;
 
-            int sum_iterations = (((max_depth-min_depth)/jump_depth)+2) *
+            int sum_iterations = (((max_depth-min_depth)/jump_depth)+1) *
                     (((max_num_features-min_num_features)/jump_num_features)+1) *
                     (((max_num_iterations-min_num_iterations)/jump_num_iterations)+1) *
                     (((max_bag_size-min_bag_size)/jump_bag_size)+1);
             System.out.println("\nExekuzioak izango dituen iterazio kopurua: " + sum_iterations);
             randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors()); // prozesadore gehiago erabili dezan (bukleak azkarrago)
-            for (int depth = 0; depth <= max_depth; depth+=jump_depth) {
+            for (int depth = min_depth; depth <= max_depth; depth+=jump_depth) {
                 for (int num_features = min_num_features; num_features <= max_num_features; num_features+=jump_num_features){
                     for (int num_iterations = min_num_iterations; num_iterations <= max_num_iterations; num_iterations+=jump_num_iterations){
                         for (int bag_size = min_bag_size; bag_size <= max_bag_size; bag_size+=jump_bag_size){
@@ -218,7 +218,7 @@ public class RandomForestOptimoa {
                         }
                     }
                 }
-                if (depth == 0) depth = min_depth-jump_depth;
+                // if (depth == 0) depth = min_depth-jump_depth;
             }
             optimoaGorde(best_depth, best_num_features, best_num_iterations, best_bag_size);
             long amaiera = System.currentTimeMillis();
