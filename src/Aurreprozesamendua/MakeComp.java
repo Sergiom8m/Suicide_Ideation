@@ -20,6 +20,8 @@ public class MakeComp {
     public static void main(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse) {
         try {
 
+            System.out.println("ONDORENGO FITXATEGIA KONPATIBLEA BIHURTUKO DA (FSS): " + inputPath + "\n");
+
             //TEST FSS EGIN
             ConverterUtils.DataSource source= new ConverterUtils.DataSource(inputPath);
             Instances data = source.getDataSet();
@@ -40,6 +42,7 @@ public class MakeComp {
             testFSS=reorder(testFSS);
 
             datuakGorde(outputFSSPath,testFSS);
+
 
         }catch (Exception e){
             e.printStackTrace();

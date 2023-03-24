@@ -28,10 +28,8 @@ public class fssInfoGain {
     }
     public static void fssInfoGain(String trainBowPath, String FSSArffPath, String hiztegiPath, String hiztegiFSSpath) {
         try {
-            /*
-               0. parametroa: .arff fitxategia (atributu guztiekin)
-               1. parametroa: TrainBOW-ren bertsio berria gordetzeko. arff
-             */
+
+            System.out.println("TRAIN MULTZOAREN GAINEAN ATRIBUTU HAUTAPENA GARATZEN ARI DA..." + "\n");
 
             //DATUAK LORTU
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(trainBowPath);
@@ -40,6 +38,7 @@ public class fssInfoGain {
 
             train = ezabatuUselessAttributes(train);
 
+            //ATRIBUTUEN HAUTAPENA EGIN
             AttributeSelection filterSelect = new AttributeSelection();
             InfoGainAttributeEval evalInfoGain = new InfoGainAttributeEval();
             Ranker ranker = new Ranker();
@@ -50,11 +49,8 @@ public class fssInfoGain {
             filterSelect.setSearch(ranker);
             Instances trainFSS = Filter.useFilter(train, filterSelect);
 
-
-
             //DATUAK GORDE
             datuakGorde(FSSArffPath, trainFSS);
-
 
             // HIZTEGIA SORTU ETA GORDE
             HashMap<String, Integer> hiztegia = hiztegiaSortu(hiztegiPath,trainFSS);

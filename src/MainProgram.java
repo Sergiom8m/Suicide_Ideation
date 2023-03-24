@@ -3,7 +3,7 @@ import Aurreprozesamendua.*;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
-
+/*
 public class MainProgram {
     public static void main(String[] args) throws Exception {
         int parametroak[] = new int[]{40, 125, 100,58};
@@ -110,3 +110,5 @@ public class MainProgram {
         }while(true);
     }
 }
+
+ */

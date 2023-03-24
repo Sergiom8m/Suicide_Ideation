@@ -15,20 +15,17 @@ public class Ebaluazioa {
 
     public static void main (String[] args){
 
-        main (args[0], args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7]);
+        ebaluazioa(args[0], args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7]);
 
 
     }
 
 
-    public static void main(String trainPath,String devPath,String dataPath, int p1, int p2, int p3, int p4, String emaitzak) { //TODO blind test gehitu?
-        /**
-         * trainPath    ->  trainBowFSS.arff
-         * devPath    ->  devFSS.arff
-         * parametroak  ->  RandomForest parametro ekorketatik ateratakoak
-         * emaitzak     ->  test_predictions.txt
-         */
+    public static void ebaluazioa(String trainPath,String devPath,String dataPath, int p1, int p2, int p3, int p4, String emaitzak) { //TODO blind test gehitu?
+
         try {
+
+            System.out.println("TRAIN ETA DEV MULTZOAK ERABILITA SAILKATZAILEA EBALUATUKO DA" + "\n");
 
             //1. DATUAK KARGATU
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(dataPath);
@@ -53,7 +50,7 @@ public class Ebaluazioa {
 
 
             //3. EBALUAZIO EZ ZINTZOA
-            System.out.println("Ebaluazio ez zintzoa burutzen...");
+            System.out.println("EBALUAZIO EZ ZINTZOA BURUTZEN..." + "\n");
             bf.append("\n=============================================================\n");
             bf.append("EBALUAZIO EZ ZINTZOA:\n");
 
@@ -66,12 +63,12 @@ public class Ebaluazioa {
 
 
             //4. K-FOLD CROSS EBALUAZIOA
-            System.out.println("K-Fold cross ebaluazioa burutzen...");
+            System.out.println("K-FOLD CROSS VALIDATION BURUTZEN..." + "\n");
             bf.append("\n=============================================================\n");
             bf.append("K-FOLD CROSS EBALUAZIOA:\n");
 
             evaluation = new Evaluation(data);
-            evaluation.crossValidateModel(randomForest, data, 5, new Random(1));
+            evaluation.crossValidateModel(randomForest, data, 10, new Random(1));
 
             bf.append(evaluation.toSummaryString()+"\n");
             bf.append(evaluation.toClassDetailsString()+"\n");
@@ -80,9 +77,9 @@ public class Ebaluazioa {
 
 
             //5. STRATIFIED HOLD OUT
-            System.out.println("Hold out ebaluazioa burutzen...");
+            System.out.println("HOLD OUT BURUTZEN..." + "\n");
             bf.append("\n=============================================================\n");
-            bf.append("STRATIFIED 50 REPEATED HOLD OUT (%80):\n");
+            bf.append("STRATIFIED HOLD OUT (80%):\n");
 
             //TRAINFSS ETA TESTFSS LORTU
             source = new ConverterUtils.DataSource(trainPath);

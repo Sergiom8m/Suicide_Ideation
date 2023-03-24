@@ -25,6 +25,8 @@ public class Baseline {
 
     public static void baseline(String dataPath, String trainPath, String devPath, String emaitzak) throws Exception {
 
+        System.out.println("NAIVE BAYES ERABILIZ BASELINE BURUTUKO DA" + "\n");
+
         //DATUAK DITUEN FITXATEGIA KARGATU
         ConverterUtils.DataSource source = new ConverterUtils.DataSource(dataPath);
         Instances data = source.getDataSet();
@@ -49,7 +51,7 @@ public class Baseline {
         BufferedWriter bf = new BufferedWriter(f);
 
         //1. EBALUAZIO EZ ZINTZOA
-        System.out.println("Ebaluazio ez zintzoa burutzen...");
+        System.out.println("EBALUAZIO EZ ZINTZOA BURUTZEN..." + "\n");
         bf.append("\n=============================================================\n");
         bf.append("EBALUAZIO EZ ZINTZOA:\n");
 
@@ -62,12 +64,12 @@ public class Baseline {
 
 
         //2. K-FOLD CROSS EBALUAZIOA
-        System.out.println("K-Fold cross ebaluazioa burutzen...");
+        System.out.println("K-FOLD CROSS VALIDATION BURUTZEN..." + "\n");
         bf.append("\n=============================================================\n");
         bf.append("K-FOLD CROSS EBALUAZIOA:\n");
 
         evaluation = new Evaluation(data);
-        evaluation.crossValidateModel(klasifikadore, data, 5, new Random(1));
+        evaluation.crossValidateModel(klasifikadore, data, 10, new Random(1));
 
         bf.append(evaluation.toSummaryString()+"\n");
         bf.append(evaluation.toClassDetailsString()+"\n");
@@ -75,9 +77,9 @@ public class Baseline {
 
 
         //3. STRATIFIED HOLD OUT
-        System.out.println("Hold out ebaluazioa burutzen...");
+        System.out.println("HOLD OUT BURUTZEN..." + "\n");
         bf.append("\n=============================================================\n");
-        bf.append("STRATIFIED 50 REPEATED HOLD OUT (%80):\n");
+        bf.append("STRATIFIED HOLD OUT (%80):\n");
 
         evaluation = new Evaluation(train);
 

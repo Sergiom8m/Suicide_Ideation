@@ -25,6 +25,8 @@ public class getARFF {
     }
     public static void getArff(String csvPath, String arffPath, int ehuneko, String testPath) throws Exception {
 
+        System.out.println("CSV BATETIK ABIATUTA ARFF FITXATEGI GARBI BAT SORTUKO DA");
+
         String pathOsoa = arffPath.split("\\.")[0] + "_Osoa.arff";
         //INSTANTZIEN IRAKURKETA:
         String[] instantzien_lista = getInstantzienLista(csvPath);
@@ -38,32 +40,26 @@ public class getARFF {
         sortuErabiltzekoArff(pathOsoa, arffPath, ehuneko, testPath);
     }
 
-    public static void sortuErabiltzekoArff(String dagoenaPath, String berriaPath, int ehuneko, String testPath) throws Exception {
-        /*Resample setSampleSizePercent
-         * %50 ->  95426 instantzia
-         * %40 ->  76340 instantzia
-         * %25 ->  47713 instantzia
-         * %10 ->  19085 instantzia
-         * %6  ->  11451 instantzia
-         * %5  ->  9542  instantzia*/
-        ConverterUtils.DataSource source = new ConverterUtils.DataSource(dagoenaPath);
+    public static void sortuErabiltzekoArff(String originPath, String newPath, int ehunekoa, String testPath) throws Exception {
+        
+        ConverterUtils.DataSource source = new ConverterUtils.DataSource(originPath);
         Instances data = source.getDataSet();
         data.setClassIndex(data.numAttributes() - 1);
 
-        System.out.println(".arff osoaren instantzia kopurua: " + data.numInstances());
+        System.out.println("INSTANTZIA GUZTIEN KOPURUA: " + data.numInstances()+ "\n");
 
         Resample resample = new Resample();
         resample.setRandomSeed(42);
         resample.setNoReplacement(true);
         resample.setInvertSelection(false);
-        resample.setSampleSizePercent(ehuneko);
+        resample.setSampleSizePercent(ehunekoa);
         resample.setInputFormat(data);
         Instances dataGurea = Filter.useFilter(data, resample);
         dataGurea.setClassIndex(dataGurea.numAttributes() - 1);
 
-        System.out.println("Gure .arff instantzia kopurua: " + dataGurea.numInstances());
+        System.out.println("ENTRENAMENDUA EGITEKO ERABILIKO DIREN INSTANTZIA KOPURUA: " + dataGurea.numInstances()+ "\n");
 
-        ConverterUtils.DataSink dataSink = new ConverterUtils.DataSink(berriaPath);
+        ConverterUtils.DataSink dataSink = new ConverterUtils.DataSink(newPath);
         dataSink.write(dataGurea);
 
 
@@ -79,11 +75,11 @@ public class getARFF {
         resample.setRandomSeed(42);
         resample.setNoReplacement(true);
         resample.setInvertSelection(false);
-        resample.setSampleSizePercent(50);
+        resample.setSampleSizePercent(ehunekoa / 2);
         resample.setInputFormat(test);
         test = Filter.useFilter(test, resample);
         test.setClassIndex(test.numAttributes() - 1);
-        System.out.println("Iragarpenak egiteko test instantzia kopurua: " + test.numInstances());
+        System.out.println("IRAGARPENAK EGITEKO ERRESERBATUTAKO INSTANTZIA KOPURUA: " + test.numInstances() + "\n");
 
         dataSink = new ConverterUtils.DataSink(testPath);
         dataSink.write(test);
@@ -167,8 +163,6 @@ public class getARFF {
             testua = testua.replace(matcher.group(), "");
         }
 
-        //testua = testua.replaceAll("\\b\\w{1}\\b", ""); //KARAKTERE BAKARREKO HITZAK EZABATU
-
         //ZENBAKIAK EDO LETRAK EZ DIREN ELEMENTU DENAK KENDU
         if (!testua.matches(".*[a-zA-Z0-9]+.*")) {
             testua = " ";
@@ -179,7 +173,7 @@ public class getARFF {
 
     public static String[][] garbituInstantzienMatrizea(String[][] mat) {
 
-        System.out.println("GARBITU AURRETIK INSTANTZIA KOPURUA: " + mat.length);
+        System.out.println("GARBITU AURRETIK INSTANTZIA KOPURUA: " + mat.length+ "\n");
         String[][] aux = new String[mat.length][mat[0].length];
         int i = 0;
         for (String[] UnekoInstantzia : mat) {
@@ -194,7 +188,7 @@ public class getARFF {
         for (int j = 0; j < i; j++) {
             matrizeGarb[j] = aux[j];
         }
-        System.out.println("KARGATUTAKO INSTANTZIA KOPURUA: " + matrizeGarb.length);
+        System.out.println("GARBITU OSTEAN INSTANTZIA KOPURUA: " + matrizeGarb.length + "\n");
         return matrizeGarb;
 
     }

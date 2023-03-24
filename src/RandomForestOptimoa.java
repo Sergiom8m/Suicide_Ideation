@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
-/**
+/*
  * Klase hau, sailkatzailearen parametro ekorketa egiteko eraibliko da.
  * Erabiliko den datu sortan, klase atributua azken atributuan doa.
  * Erabiliko den sailkatzailea 'RandomForest' sailkatzailea da.
@@ -38,7 +38,7 @@ import java.util.Random;
  * <p>Ebaluaketa metodoa: k-fCV</p>
  *
  * <p>Optimizatzen saiatuko garen metrika <b>f-measure</b> izango da. </p>
- */
+
 public class RandomForestOptimoa {
 
     private static String sourceArff;
@@ -62,14 +62,14 @@ public class RandomForestOptimoa {
     //private static HashMap<Integer, int[]> num_iterations_values;
 
 
-    /**
+
      *
      * @param args
      * <ul>
      *     <li>args[0]: DataSet</li>
      *     <li>args[1]: emaitzen direktorioa</li>
      * </ul>
-     */
+
     public static int[] main(String[] args) {
         sourceArff = args[0];
         storeDir = args[1];
@@ -277,3 +277,4 @@ public class RandomForestOptimoa {
         }
     }
 }
+*/

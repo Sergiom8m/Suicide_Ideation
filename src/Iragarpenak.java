@@ -17,70 +17,62 @@ public class Iragarpenak {
 
     public static void main (String[] args){
 
-        main(args[0], args[1], args[2]);
+        iragarpenak(args[0], args[1], args[2]);
 
     }
-    public static void main(String modelPath,String testPath, String iragarpenakPath){
+    public static void iragarpenak(String modelPath,String testPath, String iragarpenakPath){
         try{
 
+            System.out.println("IRAGARPENAK EGINGO DIRA" + "\n");
+
+            //PARAMETRO EKORKETAN LORTUTAKO SAILKATZAILE OPTIMOA KARGATU
             Classifier randomForest= (Classifier) SerializationHelper.read(modelPath);
 
+            //IRAGARPENAK EGITEKO ERRESERBATUTAKO TEST KARGATU (ERABILTZEN DEN LEHENENGO ALDIA)
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(testPath);
             Instances test = source.getDataSet();
             test.setClassIndex(test.numAttributes() - 1);
 
-            /*
-            //TEST BLIND EGIN
-            ReplaceWithMissingValue replace=new ReplaceWithMissingValue();
-            replace.setIgnoreClass(true);
-            replace.setProbability(1);
-            replace.setAttributeIndicesArray(new int[]{test.classIndex()});
-            replace.setInputFormat(test);
-            Instances testBlind= Filter.useFilter(test, replace);
-
-            ArffSaver saver = new ArffSaver();
-            saver.setInstances(testBlind);
-            saver.setFile(new File("test_blind.arff"));
-            saver.writeBatch();
-            */
-
             FileWriter file = new FileWriter(iragarpenakPath);
             PrintWriter pw = new PrintWriter(file);
 
-            Double asm_tas_sum = 0.0;
+            Double asmatze_tasa_BB = 0.0;
 
-            for (int i=0 ; i<5; i++){
+            int i = 1;
+            while (i<=50){
 
-                int kont = 0; //Aciertos
+                int kont = 0; //ASMATUTAKO KOP
 
+                //IRAGARPENAK EGITEKO INSTANTZIEN ARTEAN BATZUK HARTUKO DIRA
                 Resample r = new Resample();
                 r.setNoReplacement(true);
                 r.setRandomSeed(i);
-                r.setSampleSizePercent(60);
+                r.setSampleSizePercent(30);
                 r.setInputFormat(test);
                 Instances partition = Filter.useFilter(test, r);
 
-                for (i = 0; i<partition.numInstances(); i++){
-                double pred = randomForest.classifyInstance(partition.instance(i));
-                pw.println((i+1)+".instantziaren iragarpena:"+ test.classAttribute().value((int) pred));
+                //LORTUTAKO PARTIKETAREN INSTANTZIAK IRAGARRI
+                for (int j = 0; i<partition.numInstances(); j++){
 
-                if(partition.instance(i).classValue()==pred){
-                    kont=kont+1;
+                    double pred = randomForest.classifyInstance(partition.instance(j));
+                    pw.println((j+1)+"INSTANTZIAREN IRAGARPENA:"+ test.classAttribute().value((int) pred));
+
+                    if(partition.instance(j).classValue()==pred){
+                        kont=kont+1;
+                    }
+
                 }
-                System.out.println("INSTANTIZIA TOTALAK: "+ partition.numInstances());
-                System.out.println("BAT DATOZ: "+ kont);
-                System.out.println("Asmatze tasa: " + kont/partition.numInstances());
+                System.out.println("ITERAZIOA: " + i + "\n");
+                System.out.println("INSTANTZIA TOTALAK: " + partition.numInstances() + "\n");
+                System.out.println("ASMATUTAKOAK: " + kont);
+                System.out.println("ASMATZE TASA: " + (kont/partition.numInstances()) + "\n");
 
 
-                asm_tas_sum = asm_tas_sum + kont/partition.numInstances();
-
-            }
-
-                System.out.println("AMATZE TASA BB:" + asm_tas_sum/i);
-
-
+                asmatze_tasa_BB = asmatze_tasa_BB + kont/partition.numInstances();
+                i++;
 
             }
+            System.out.println("ASMATZE TASA BATEZ BESTE:" + asmatze_tasa_BB/i + "\n");
 
 
         }catch (Exception e){

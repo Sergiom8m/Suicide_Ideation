@@ -21,34 +21,23 @@ public class getBowArff {
 
     public static void main(String[] args){
 
-        main(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3], args[4], args[5]);
+        getBowArff(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3], args[4], args[5]);
 
     }
-    public static void main(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWPath,String devPath) {
+    public static void getBowArff(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWPath,String devPath) {
 
         try{
-            //String[] args = new String[]{"Suicide_Detection.arff", "hiztegia.txt", "trainBOW.arff", "test.arff"};
-            /*
-                0. parametroa: .arff fitxategia
-                1. parametroa: 0 --> bow, 1 --> tfidf
-                2. parametroa: 0 --> sparse, 1 --> nonsparse
-                3. parametroa: Hiztegia gordetzeko .txt
-                4. parametroa: Train-ren BOW gordetzeko. arff
-                5. parametroa: test.arff
-             */
 
+            System.out.println("ARFF GARBITIK ABIATUTA BoW SORTUKO DA" + "\n");
 
             //DATUAK LORTU
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(cleanDataArffPath);
             Instances data = source.getDataSet();
             data.setClassIndex(data.numAttributes()-1);
 
-
             //IZENA ALDATU BEHAR ZAIO KLASEARI StringToWordVector EGIN AHAL IZATEKO
             data.renameAttribute(data.numAttributes()-1, "klasea");
             data.setClassIndex(data.numAttributes()-1);
-
-
 
             //TRAIN MULTZOA LORTU
             Resample resample = new Resample();
@@ -58,7 +47,7 @@ public class getBowArff {
             resample.setSampleSizePercent(70);
             resample.setInputFormat(data);
             Instances train=Filter.useFilter(data,resample);
-            System.out.println("Train instantziak: " + train.numInstances());
+            System.out.println("TRAIN INSTANTZIAK: " + train.numInstances() + "\n");
 
             //DEV MULTZOA LORTU
             resample.setRandomSeed(42);
@@ -66,7 +55,7 @@ public class getBowArff {
             resample.setInvertSelection(true);
             resample.setInputFormat(data);
             Instances dev= Filter.useFilter(data, resample);
-            System.out.println("Dev instantziak: " + dev.numInstances());
+            System.out.println("DEV INSTANTZIAK: " + dev.numInstances() + "\n");
 
             // TEST GORDE
             datuakGorde(devPath,dev);
