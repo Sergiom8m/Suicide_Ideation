@@ -79,7 +79,7 @@ public class getARFF {
         resample.setRandomSeed(42);
         resample.setNoReplacement(true);
         resample.setInvertSelection(false);
-        resample.setSampleSizePercent((int) (ehuneko / 3));
+        resample.setSampleSizePercent(50);
         resample.setInputFormat(test);
         test = Filter.useFilter(test, resample);
         test.setClassIndex(test.numAttributes() - 1);
