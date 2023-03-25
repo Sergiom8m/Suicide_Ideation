@@ -25,7 +25,7 @@ public class getARFF {
     }
     public static void getArff(String csvPath, String arffPath, int ehuneko, String testPath) throws Exception {
 
-        System.out.println("CSV BATETIK ABIATUTA ARFF FITXATEGI GARBI BAT SORTUKO DA");
+        System.out.println("CSV BATETIK ABIATUTA ARFF FITXATEGI GARBI BAT SORTUKO DA" + "\n");
 
         String pathOsoa = arffPath.split("\\.")[0] + "_Osoa.arff";
         //INSTANTZIEN IRAKURKETA:
@@ -75,7 +75,7 @@ public class getARFF {
         resample.setRandomSeed(42);
         resample.setNoReplacement(true);
         resample.setInvertSelection(false);
-        resample.setSampleSizePercent(ehunekoa / 2);
+        resample.setSampleSizePercent((100-ehunekoa)/2);
         resample.setInputFormat(test);
         test = Filter.useFilter(test, resample);
         test.setClassIndex(test.numAttributes() - 1);

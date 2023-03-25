@@ -79,7 +79,6 @@ public class Ebaluazioa {
             //5. STRATIFIED HOLD OUT
             System.out.println("HOLD OUT BURUTZEN..." + "\n");
             bf.append("\n=============================================================\n");
-            bf.append("STRATIFIED HOLD OUT (80%):\n");
 
             //TRAINFSS ETA TESTFSS LORTU
             source = new ConverterUtils.DataSource(trainPath);

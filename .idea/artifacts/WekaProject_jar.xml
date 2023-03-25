@@ -3,9 +3,9 @@
     <output-path>$PROJECT_DIR$/out/artifacts/WekaProject_jar</output-path>
     <root id="archive" name="WekaProject.jar">
       <element id="module-output" name="WekaProject" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/emojis/emoji-java-5.1.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/emojis/json-20170516.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Program Files/Weka-3-8-6/weka.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/emojis/emoji-java-5.1.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
