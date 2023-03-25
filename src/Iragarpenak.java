@@ -46,10 +46,10 @@ public class Iragarpenak {
                 }
 
             }
-
-            System.out.println("INSTANTZIA TOTALAK: " + test.numInstances() + "\n");
+            int numInst = test.numInstances();
+            System.out.println("INSTANTZIA TOTALAK: " + numInst);
             System.out.println("ASMATUTAKOAK: " + kont);
-            System.out.println("ASMATZE TASA: " + (kont/test.numInstances()) + "\n");
+            System.out.println("ASMATZE TASA: " + (double) kont/numInst + "\n");
 
 
         } catch (IOException ex) {

@@ -26,6 +26,7 @@ public class getARFF {
     public static void getArff(String csvPath, String arffPath, int ehuneko, String testPath) throws Exception {
 
         System.out.println("CSV BATETIK ABIATUTA ARFF FITXATEGI GARBI BAT SORTUKO DA" + "\n");
+        System.out.println(csvPath+" "+arffPath+" "+ehuneko+" "+testPath);
 
         String pathOsoa = arffPath.split("\\.")[0] + "_Osoa.arff";
         //INSTANTZIEN IRAKURKETA:
