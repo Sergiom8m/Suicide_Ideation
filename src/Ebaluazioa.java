@@ -49,7 +49,7 @@ public class Ebaluazioa {
             BufferedWriter bf = new BufferedWriter(f);
 
 
-            /*/3. EBALUAZIO EZ ZINTZOA
+            //3. EBALUAZIO EZ ZINTZOA
             System.out.println("EBALUAZIO EZ ZINTZOA BURUTZEN..." + "\n");
             bf.append("\n=============================================================\n");
             bf.append("EBALUAZIO EZ ZINTZOA:\n");
@@ -109,7 +109,7 @@ public class Ebaluazioa {
 
             bf.close();
 
-            */
+
         }catch (Exception e){e.printStackTrace();}
     }
 }
