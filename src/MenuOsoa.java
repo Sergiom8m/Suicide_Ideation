@@ -102,7 +102,7 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Modeloaren path-a sartu (.model): ");
                     String pathModel = scanner.next();
-                    Iragarpena.Iragarpenak.main(new String[]{pathModel,"devFSS.arff","iragarpenak.txt"});
+                    Iragarpena.Iragarpenak.main(new String[]{pathModel,"testFSS.arff","iragarpenak.txt"});
                     break;
                 default:
                     System.out.println("Sartu baliozko zenbakia");
