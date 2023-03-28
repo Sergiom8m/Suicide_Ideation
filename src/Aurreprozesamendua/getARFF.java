@@ -49,7 +49,7 @@ public class getARFF {
         System.out.println("INSTANTZIA GUZTIEN KOPURUA: " + data.numInstances()+ "\n");
 
         Resample resample = new Resample();
-        resample.setRandomSeed(42);
+        resample.setRandomSeed(1);
         resample.setNoReplacement(true);
         resample.setInvertSelection(false);
         resample.setSampleSizePercent(ehunekoa);
@@ -64,7 +64,7 @@ public class getARFF {
 
 
         //IRAGARPENETARAKO TEST %100-ehunekoa
-        resample.setRandomSeed(42);
+        resample.setRandomSeed(1);
         resample.setNoReplacement(true);
         resample.setInvertSelection(true);
         resample.setInputFormat(data);
@@ -72,10 +72,10 @@ public class getARFF {
         test.setClassIndex(test.numAttributes() - 1);
 
         resample = new Resample();
-        resample.setRandomSeed(42);
+        resample.setRandomSeed(1);
         resample.setNoReplacement(true);
         resample.setInvertSelection(false);
-        resample.setSampleSizePercent((100-ehunekoa)/2);
+        resample.setSampleSizePercent(30);
         resample.setInputFormat(test);
         test = Filter.useFilter(test, resample);
         test.setClassIndex(test.numAttributes() - 1);

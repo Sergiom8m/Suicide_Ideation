@@ -1,3 +1,5 @@
+package Iragarpena;
+
 import weka.classifiers.Classifier;
 import weka.classifiers.rules.PART;
 import weka.core.Instances;

@@ -1,3 +1,5 @@
+package Ebaluazioa;
+
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.J48;
@@ -45,7 +47,7 @@ public class Baseline {
         klasifikadore.buildClassifier(data);
 
         //.MODEL GORDE
-        SerializationHelper.write("Baseline.model",klasifikadore);
+        SerializationHelper.write("Ebaluazioa.Baseline.model",klasifikadore);
 
         FileWriter f = new FileWriter(emaitzak);
         BufferedWriter bf = new BufferedWriter(f);

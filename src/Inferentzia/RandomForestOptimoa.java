@@ -1,3 +1,5 @@
+package Inferentzia;
+
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
@@ -38,7 +40,7 @@ import java.util.Random;
  * <p>Ebaluaketa metodoa: k-fCV</p>
  *
  * <p>Optimizatzen saiatuko garen metrika <b>f-measure</b> izango da. </p>
-
+ */
 public class RandomForestOptimoa {
 
     private static String sourceArff;
@@ -63,12 +65,14 @@ public class RandomForestOptimoa {
 
 
 
-     *
+     /*
      * @param args
      * <ul>
      *     <li>args[0]: DataSet</li>
      *     <li>args[1]: emaitzen direktorioa</li>
      * </ul>
+
+     */
 
     public static int[] main(String[] args) {
         sourceArff = args[0];
@@ -277,4 +281,3 @@ public class RandomForestOptimoa {
         }
     }
 }
-*/

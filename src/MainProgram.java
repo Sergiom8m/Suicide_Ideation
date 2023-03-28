@@ -1,8 +1,10 @@
-import Aurreprozesamendua.*;
-
-import java.util.Scanner;
-
-import static java.lang.System.exit;
+import Aurreprozesamendua.MakeComp;
+import Aurreprozesamendua.fssInfoGain;
+import Aurreprozesamendua.getARFF;
+import Aurreprozesamendua.getBowArff;
+import Ebaluazioa.*;
+import Inferentzia.RandomForestOptimoa;
+import Iragarpena.Iragarpenak;
 
 public class MainProgram {
     public static void main(String[] args) throws Exception {
@@ -11,7 +13,7 @@ public class MainProgram {
             System.out.println("DATUAK KARGATUKO DIRA ARFF FORMATUAN");
             System.out.println("---------------------------------------------------");
             System.out.println("Sartu hartzeko instantzien ehunekoa: ");
-            getARFF.getArff("Suicide_Detection.csv", "dataRAW.arff", 29,"testRAW.arff");
+            getARFF.getArff("Suicide_Detection.csv", "dataRAW.arff", 8,"testRAW.arff");
 
             System.out.println("---------------------------------------------------");
             System.out.println("BoW SORTUKO DA");
@@ -40,12 +42,12 @@ public class MainProgram {
             MakeComp.main("dataRAW.arff","dataFSS.arff",0,1);
 
             System.out.println("---------------------------------------------------");
-            System.out.println("BASELINE SORTUKO DA");      //TODO
+            System.out.println("BASELINE SORTUKO DA");
             System.out.println("---------------------------------------------------");
             Baseline.baseline("dataFSS.arff", "trainFSS.arff", "devFSS.arff", "BaselineEmaitzak.txt");
 
             System.out.println("---------------------------------------------------");
-            System.out.println("RANDOM FOREST SORTUKO DA"); //TODO
+            System.out.println("RANDOM FOREST SORTUKO DA");
             System.out.println("---------------------------------------------------");
             System.out.println("---------------------------------------------------");
             System.out.println("EBALUAZIOA BURUTUKO DA");

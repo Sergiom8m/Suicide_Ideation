@@ -1,3 +1,5 @@
+package Ebaluazioa;
+
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
