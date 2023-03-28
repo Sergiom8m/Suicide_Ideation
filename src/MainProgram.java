@@ -13,7 +13,7 @@ public class MainProgram {
             System.out.println("DATUAK KARGATUKO DIRA ARFF FORMATUAN");
             System.out.println("---------------------------------------------------");
             System.out.println("Sartu hartzeko instantzien ehunekoa: ");
-            getARFF.getArff("Suicide_Detection.csv", "dataRAW.arff", 8,"testRAW.arff");
+            getARFF.getArff("Suicide_Detection.csv", "dataRAW.arff", 29,"testRAW.arff");
 
             System.out.println("---------------------------------------------------");
             System.out.println("BoW SORTUKO DA");
