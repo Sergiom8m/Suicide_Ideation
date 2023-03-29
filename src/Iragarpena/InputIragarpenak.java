@@ -83,7 +83,7 @@ public class InputIragarpenak {
 
         //ATRIBUTUAK ARFF-AN GEHITU
         myWriter.append("\n" + "@attribute text string");
-        myWriter.append("\n" + "@attribute klasea {'suicide', 'non-suicide'}");
+        myWriter.append("\n" + "@attribute class {'suicide', 'non-suicide'}");
 
         myWriter.close();
     }

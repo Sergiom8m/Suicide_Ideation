@@ -39,13 +39,12 @@ public class Iragarpenak {
             PrintWriter pw = new PrintWriter(file);
 
             int kont = 0; //ASMATUTAKO KOP
-            System.out.println(test.numInstances());
             int inst = test.numInstances();
             //LORTUTAKO PARTIKETAREN INSTANTZIAK IRAGARRI
             for (int j = 0; j<inst; j++){
-                Instance x=test.instance(j);
-                double pred = randomForest.classifyInstance(x);
+                double pred = randomForest.classifyInstance(test.instance(j));
                 pw.println((j+1)+"INSTANTZIAREN IRAGARPENA:"+ test.classAttribute().value((int) pred));
+                System.out.println(test.classAttribute().value((int) pred));
 
                 if(test.instance(j).classValue()==pred){
                     kont=kont+1;
@@ -53,9 +52,14 @@ public class Iragarpenak {
 
             }
             int numInst = test.numInstances();
+            pw.println("//////////////////////////////////////////////////////////");
+            pw.println("INSTANTZIA TOTALAK: " + numInst);
+            pw.println("ASMATUTAKOAK: " + kont);
+            pw.println("ASMATZE TASA: " + (double) kont/numInst + "\n");
+            pw.println("//////////////////////////////////////////////////////////");
             System.out.println("INSTANTZIA TOTALAK: " + numInst);
             System.out.println("ASMATUTAKOAK: " + kont);
             System.out.println("ASMATZE TASA: " + (double) kont/numInst + "\n");
-
+            pw.close();
     }
 }
