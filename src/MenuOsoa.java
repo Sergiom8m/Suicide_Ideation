@@ -99,7 +99,7 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("EBALUAZIOA BURUTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    Ebaluazioa.ebaluazioa("trainFSS.arff", "devFSS.arff", "dataFSS.arff", parametroak[0], parametroak[1], parametroak[2], parametroak[3], "textPred.txt");
+                    Ebaluazioa.ebaluazioa("dataFSS.arff", parametroak[0], parametroak[1], parametroak[2], parametroak[3], "textPred.txt");
                     break;
                 case 10:
                     System.out.println("---------------------------------------------------");

@@ -15,98 +15,101 @@ import java.util.Random;
 
 public class Ebaluazioa {
 
-    public static void main (String[] args){
+    public static void main(String[] args) {
 
-        try{
-            ebaluazioa(args[0], args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7]);
-        }catch (Exception e){
+        try {
+            ebaluazioa( args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), args[5]);
+        } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Konprobatu ondo sartu direla beste FSS-ak lortzeko parametroak:" +
-                    "\n     1. /path/to/trainFSS.arff"+
-                    "\n     2. /path/to/devFSS.arff"+
-                    "\n     3. /path/to/dataFSS.arff"+
-                    "\n     4. NumOfFeatues (optimoa 297)"+
-                    "\n     5. NumIterations (optimoa 102)"+
-                    "\n     6. BagSizePercentage (optimoa 100)"+
-                    "\n     7. MaxDepth (optimoa 1090)"+
-                    "\n     8. Sartu 0 --> BoW edo 1 --> TF-IDF"+
-                    "\n     9. Sartu 0 --> Sparse edo 1 --> NonSparse");
+            System.out.println("Konprobatu ondo sartu direla beste FSS-ak lortzeko parametroak:");
         }
-
 
     }
 
+    public static void ebaluazioa(String dataPath, int p1, int p2, int p3, int p4, String emaitzak) throws Exception { //TODO blind test gehitu?
 
-    public static void ebaluazioa(String trainPath,String devPath,String dataPath, int p1, int p2, int p3, int p4, String emaitzak) { //TODO blind test gehitu?
+        System.out.println("TRAIN ETA DEV MULTZOAK ERABILITA SAILKATZAILEA EBALUATUKO DA" + "\n");
 
-        try {
+        //1. DATUAK KARGATU
+        ConverterUtils.DataSource source = new ConverterUtils.DataSource(dataPath);
+        Instances data = source.getDataSet();
+        data.setClassIndex(data.numAttributes() - 1);
 
-            System.out.println("TRAIN ETA DEV MULTZOAK ERABILITA SAILKATZAILEA EBALUATUKO DA" + "\n");
+        //2. RANDOM FOREST PARAMETROAK KARGATU
+        RandomForest randomForest = new RandomForest();
+        randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors());
+        randomForest.setNumFeatures(p1);
+        randomForest.setNumIterations(p2);
+        randomForest.setBagSizePercent(p3);
+        randomForest.setMaxDepth(p4);
+        randomForest.buildClassifier(data);
 
-            //1. DATUAK KARGATU
-            ConverterUtils.DataSource source = new ConverterUtils.DataSource(dataPath);
-            Instances data = source.getDataSet();
-            data.setClassIndex(data.numAttributes()-1);
-
-            //2. RANDOM FOREST PARAMETROAK KARGATU
-            RandomForest randomForest = new RandomForest();
-            randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors());
-            randomForest.setNumFeatures(p1);
-            randomForest.setNumIterations(p2);
-            randomForest.setBagSizePercent(p3);
-            randomForest.setMaxDepth(p4);
-            randomForest.buildClassifier(data);
-
-            //.MODEL GORDE
-            SerializationHelper.write("RF.model",randomForest);
+        //.MODEL GORDE
+        SerializationHelper.write("RF.model", randomForest);
 
 
-            FileWriter f = new FileWriter(emaitzak);
-            BufferedWriter bf = new BufferedWriter(f);
+        FileWriter f = new FileWriter(emaitzak);
+        BufferedWriter bf = new BufferedWriter(f);
 
 
-            //3. EBALUAZIO EZ ZINTZOA
-            System.out.println("EBALUAZIO EZ ZINTZOA BURUTZEN..." + "\n");
-            bf.append("\n=============================================================\n");
-            bf.append("EBALUAZIO EZ ZINTZOA:\n");
+        //3. EBALUAZIO EZ ZINTZOA
+        System.out.println("EBALUAZIO EZ ZINTZOA BURUTZEN..." + "\n");
+        bf.append("\n=============================================================\n");
+        bf.append("EBALUAZIO EZ ZINTZOA:\n");
 
-            Evaluation evaluation = new Evaluation(data);
-            evaluation.evaluateModel(randomForest, data);
+        Evaluation evaluation = new Evaluation(data);
+        evaluation.evaluateModel(randomForest, data);
 
-            bf.append(evaluation.toSummaryString()+"\n");
-            bf.append(evaluation.toClassDetailsString()+"\n");
-            bf.append(evaluation.toMatrixString());
-
-
-            //4. K-FOLD CROSS EBALUAZIOA
-            System.out.println("K-FOLD CROSS VALIDATION BURUTZEN..." + "\n");
-            bf.append("\n=============================================================\n");
-            bf.append("K-FOLD CROSS EBALUAZIOA:\n");
-
-            evaluation = new Evaluation(data);
-            evaluation.crossValidateModel(randomForest, data, 10, new Random(1));
-
-            bf.append(evaluation.toSummaryString()+"\n");
-            bf.append(evaluation.toClassDetailsString()+"\n");
-            bf.append(evaluation.toMatrixString());
+        bf.append(evaluation.toSummaryString() + "\n");
+        bf.append(evaluation.toClassDetailsString() + "\n");
+        bf.append(evaluation.toMatrixString());
 
 
+        //4. K-FOLD CROSS EBALUAZIOA
+        System.out.println("K-FOLD CROSS VALIDATION BURUTZEN..." + "\n");
+        bf.append("\n=============================================================\n");
+        bf.append("K-FOLD CROSS EBALUAZIOA:\n");
 
-            //5. STRATIFIED HOLD OUT
-            System.out.println("HOLD OUT BURUTZEN..." + "\n");
-            bf.append("\n=============================================================\n");
+        evaluation = new Evaluation(data);
+        evaluation.crossValidateModel(randomForest, data, 10, new Random(1));
+
+        bf.append(evaluation.toSummaryString() + "\n");
+        bf.append(evaluation.toClassDetailsString() + "\n");
+        bf.append(evaluation.toMatrixString());
+
+
+        //5. STRATIFIED REPEATED HOLD OUT
+        System.out.println("HOLD OUT BURUTZEN..." + "\n");
+        bf.append("\n=============================================================\n");
+
+        double fMeasureMin = 1;
+        String summary = "";
+        String classDet = "";
+        String matrix = "";
+
+        for (int i = 0; i < 20; i++) {
 
             //TRAINFSS ETA TESTFSS LORTU
-            source = new ConverterUtils.DataSource(trainPath);
-            Instances train = source.getDataSet();
-            train.setClassIndex(train.numAttributes()-1);
+            source = new ConverterUtils.DataSource(dataPath);
+            Instances dataHO = source.getDataSet();
+            dataHO.setClassIndex(data.numAttributes() - 1);
 
-            source = new ConverterUtils.DataSource(devPath);
-            Instances test = source.getDataSet();
-            test.setClassIndex(test.numAttributes()-1);
+            Resample r = new Resample();
+            r.setRandomSeed(i);
+            r.setSampleSizePercent(70);
+            r.setNoReplacement(true);
+            r.setInvertSelection(false);
+            r.setInputFormat(dataHO);
+            Instances train = Filter.useFilter(dataHO, r);
+
+            r.setRandomSeed(i);
+            r.setSampleSizePercent(70);
+            r.setNoReplacement(true);
+            r.setInvertSelection(true);
+            r.setInputFormat(dataHO);
+            Instances test = Filter.useFilter(dataHO, r);
 
             evaluation = new Evaluation(train);
-
 
             randomForest = new RandomForest();
             randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors());
@@ -118,14 +121,20 @@ public class Ebaluazioa {
 
             evaluation.evaluateModel(randomForest, test);
 
+            if (evaluation.weightedFMeasure() < fMeasureMin) {
 
-            bf.append(evaluation.toSummaryString()+"\n");
-            bf.append(evaluation.toClassDetailsString()+"\n");
-            bf.append(evaluation.toMatrixString());
+                summary = evaluation.toSummaryString() + "\n";
+                classDet = evaluation.toClassDetailsString() + "\n";
+                matrix = evaluation.toMatrixString();
+
+            }
+
+            bf.append(summary);
+            bf.append(classDet);
+            bf.append(matrix);
 
             bf.close();
 
-
-        }catch (Exception e){e.printStackTrace();}
+        }
     }
 }

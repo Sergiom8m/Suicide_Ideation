@@ -52,7 +52,7 @@ public class MainProgram {
             System.out.println("---------------------------------------------------");
             System.out.println("EBALUAZIOA BURUTUKO DA");
             System.out.println("---------------------------------------------------");
-            Ebaluazioa.ebaluazioa("trainFSS.arff", "devFSS.arff", "dataFSS.arff", 297, 100, 100, 109, "textPred.txt");
+            Ebaluazioa.ebaluazioa( "dataFSS.arff", 297, 100, 100, 109, "textPred.txt");
 
             System.out.println("---------------------------------------------------");
             System.out.println("IRAGARPENAK BURUTUKO DIRA");
