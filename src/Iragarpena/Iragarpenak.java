@@ -2,6 +2,7 @@ package Iragarpena;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.rules.PART;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ArffSaver;
@@ -16,14 +17,13 @@ public class Iragarpenak {
 
     public static void main (String[] args){
         try {
-            iragarpenak(args[0], args[1], args[2]);
+            iragarpen(args[0], args[1], args[2]);
         }catch (Exception e){
             e.printStackTrace();
         }
 
     }
-    public static void iragarpenak(String modelPath,String testPath, String iragarpenakPath){
-        try{
+    public static void iragarpen(String modelPath,String testPath, String iragarpenakPath) throws Exception{
 
             System.out.println("IRAGARPENAK EGINGO DIRA" + "\n");
 
@@ -39,11 +39,12 @@ public class Iragarpenak {
             PrintWriter pw = new PrintWriter(file);
 
             int kont = 0; //ASMATUTAKO KOP
-
+            System.out.println(test.numInstances());
+            int inst = test.numInstances();
             //LORTUTAKO PARTIKETAREN INSTANTZIAK IRAGARRI
-            for (int j = 0; j<test.numInstances(); j++){
-
-                double pred = randomForest.classifyInstance(test.instance(j));
+            for (int j = 0; j<inst; j++){
+                Instance x=test.instance(j);
+                double pred = randomForest.classifyInstance(x);
                 pw.println((j+1)+"INSTANTZIAREN IRAGARPENA:"+ test.classAttribute().value((int) pred));
 
                 if(test.instance(j).classValue()==pred){
@@ -55,13 +56,6 @@ public class Iragarpenak {
             System.out.println("INSTANTZIA TOTALAK: " + numInst);
             System.out.println("ASMATUTAKOAK: " + kont);
             System.out.println("ASMATZE TASA: " + (double) kont/numInst + "\n");
-
-
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
 
     }
 }

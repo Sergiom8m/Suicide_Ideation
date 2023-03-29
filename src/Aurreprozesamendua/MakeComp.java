@@ -14,7 +14,7 @@ public class MakeComp {
 
     public static void main (String[] args){
         try{
-            makeComp(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+            makeComp(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[4]);
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("Konprobatu ondo sartu direla beste FSS-ak lortzeko parametroak:" +
@@ -25,7 +25,7 @@ public class MakeComp {
         }
 
     }
-    public static void makeComp(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse) {
+    public static void makeComp(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse, String hiztegiFSS) {
         try {
 
             System.out.println("ONDORENGO FITXATEGIA KONPATIBLEA BIHURTUKO DA (FSS): " + inputPath + "\n");
@@ -39,7 +39,7 @@ public class MakeComp {
             data.renameAttribute(data.numAttributes()-1, "klasea");
             data.setClassIndex(data.numAttributes()-1);
 
-            Instances testFSS= fixedDictionaryStringToWordVector("hiztegiaFSS.txt",data,errepresentazioBektoriala);
+            Instances testFSS= fixedDictionaryStringToWordVector(hiztegiFSS,data,errepresentazioBektoriala);
 
 
             // SPARSE/NONSPARSE

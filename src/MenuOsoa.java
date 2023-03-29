@@ -1,5 +1,7 @@
 import Aurreprozesamendua.*;
 import Ebaluazioa.*;
+import Iragarpena.InputIragarpenak;
+import Iragarpena.Iragarpenak;
 
 import java.util.Scanner;
 
@@ -39,7 +41,7 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Sartu hartzeko instantzien ehunekoa: ");
                     int ehuneko = scanner.nextInt();
-                    getARFF.main(new String[]{"Suicide_Detection.csv", "dataRAW.arff", Integer.toString(ehuneko),"destRAW.arff"});
+                    getARFF.main(new String[]{"Suicide_Detection.csv", "dataRAW.arff", Integer.toString(ehuneko),"testRAW.arff"});
                     break;
                 case 2:
                     System.out.println("---------------------------------------------------");
@@ -62,19 +64,19 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW DEV FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    MakeComp.main(new String[]{"devRAW.arff","devFSS.arff",Integer.toString(0),Integer.toString(1)});
+                    MakeComp.main(new String[]{"devRAW.arff","devFSS.arff",Integer.toString(0),Integer.toString(1),"hiztegiaFSS.txt"});
                     break;
                 case 5:
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW TEST FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    MakeComp.main(new String[]{"testRAW.arff","testFSS.arff",Integer.toString(0),Integer.toString(1)});
+                    MakeComp.main(new String[]{"testRAW.arff","testFSS.arff",Integer.toString(0),Integer.toString(1),"hiztegiaFSS.txt"});
                     break;
                 case 6:
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW DATA FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    MakeComp.main(new String[]{"dataRAW.arff","dataFSS.arff",Integer.toString(0),Integer.toString(1)});
+                    MakeComp.main(new String[]{"dataRAW.arff","dataFSS.arff",Integer.toString(0),Integer.toString(1),"hiztegiaFSS.txt"});
                     break;
 
                 case 7:
@@ -105,7 +107,8 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Modeloaren path-a sartu (.model): ");
                     String pathModel = scanner.next();
-                    Iragarpena.Iragarpenak.main(new String[]{pathModel,"testFSS.arff","iragarpenak.txt"});
+                    InputIragarpenak.main(new String[]{"Predictions.csv", "test_blind.arff", "hiztegiaFSS.txt"});
+                    Iragarpena.Iragarpenak.main(new String[]{pathModel,"test_blind.arff","iragarpenak.txt"});
                     break;
                 default:
                     System.out.println("Sartu baliozko zenbakia");

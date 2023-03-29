@@ -29,17 +29,17 @@ public class MainProgram {
             System.out.println("---------------------------------------------------");
             System.out.println("BoW DEV FSS SORTUKO DA");
             System.out.println("---------------------------------------------------");
-            MakeComp.main("devRAW.arff","devFSS.arff",0,1);
+            //MakeComp.main("devRAW.arff","devFSS.arff",0,1,"hiztegiaFSS.txt");
 
             System.out.println("---------------------------------------------------");
             System.out.println("BoW TEST FSS SORTUKO DA");
             System.out.println("---------------------------------------------------");
-            MakeComp.main("testRAW.arff","testFSS.arff",0,1);
+            //MakeComp.main("testRAW.arff","testFSS.arff",0,1,"hiztegiaFSS.txt");
 
             System.out.println("---------------------------------------------------");
             System.out.println("BoW DATA FSS SORTUKO DA");
             System.out.println("---------------------------------------------------");
-            MakeComp.main("dataRAW.arff","dataFSS.arff",0,1);
+            //MakeComp.main("dataRAW.arff","dataFSS.arff",0,1,"hiztegiaFSS.txt");
 
             System.out.println("---------------------------------------------------");
             System.out.println("BASELINE SORTUKO DA");

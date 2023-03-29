@@ -34,7 +34,7 @@ public class getARFF {
 
         System.out.println("CSV BATETIK ABIATUTA ARFF FITXATEGI GARBI BAT SORTUKO DA" + "\n");
 
-        String pathOsoa = arffPath.split("\\.")[0] + "_Osoa.arff";
+        String pathOsoa = arffPath.split("\\.arff")[0] + "_Osoa.arff";
         //INSTANTZIEN IRAKURKETA:
         String[] instantzien_lista = getInstantzienLista(csvPath);
         String[][] instantzienMatrizea = getInstantzienMatrizea(instantzien_lista);
@@ -42,9 +42,56 @@ public class getARFF {
         //ARFF-A SORTU
         arffGoiburuaEzarri(instantzien_lista, pathOsoa);
         instantziakSartuArff(instantzienMatrizea, pathOsoa);
+
+
+        sortuErabiltzekoArff(pathOsoa, arffPath, ehuneko, testPath);
     }
 
+    public static void sortuErabiltzekoArff(String originPath, String newPath, int ehunekoa, String testPath) throws Exception {
 
+        ConverterUtils.DataSource source = new ConverterUtils.DataSource(originPath);
+        Instances data = source.getDataSet();
+        data.setClassIndex(data.numAttributes() - 1);
+
+        System.out.println("INSTANTZIA GUZTIEN KOPURUA: " + data.numInstances()+ "\n");
+
+        Resample resample = new Resample();
+        resample.setRandomSeed(1);
+        resample.setNoReplacement(true);
+        resample.setInvertSelection(false);
+        resample.setSampleSizePercent(ehunekoa);
+        resample.setInputFormat(data);
+        Instances dataGurea = Filter.useFilter(data, resample);
+        dataGurea.setClassIndex(dataGurea.numAttributes() - 1);
+
+        System.out.println("ENTRENAMENDUA EGITEKO ERABILIKO DIREN INSTANTZIA KOPURUA: " + dataGurea.numInstances()+ "\n");
+
+        ConverterUtils.DataSink dataSink = new ConverterUtils.DataSink(newPath);
+        dataSink.write(dataGurea);
+
+
+        //IRAGARPENETARAKO TEST %100-ehunekoa
+        resample.setRandomSeed(1);
+        resample.setNoReplacement(true);
+        resample.setInvertSelection(true);
+        resample.setInputFormat(data);
+        Instances test = Filter.useFilter(data, resample);
+        test.setClassIndex(test.numAttributes() - 1);
+
+        resample = new Resample();
+        resample.setRandomSeed(1);
+        resample.setNoReplacement(true);
+        resample.setInvertSelection(false);
+        resample.setSampleSizePercent(30);
+        resample.setInputFormat(test);
+        test = Filter.useFilter(test, resample);
+        test.setClassIndex(test.numAttributes() - 1);
+        System.out.println("IRAGARPENAK EGITEKO ERRESERBATUTAKO INSTANTZIA KOPURUA: " + test.numInstances() + "\n");
+
+        dataSink = new ConverterUtils.DataSink(testPath);
+        dataSink.write(test);
+
+    }
 
     public static void arffGoiburuaEzarri(String[] instantzien_lista, String path) throws IOException {
 
@@ -116,12 +163,7 @@ public class getARFF {
             testua = testua.replace(matcher.group(), "");
         }
 
-        regex = "\\b\\w{1}\\b";
-        pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(testua);
-        if (matcher.find()) {
-            testua = testua.replace(matcher.group(), "");
-        }
+        testua = testua.replaceAll("\\b\\w{1}\\b", ""); //KARAKTERE BAKARREKO HITZAK EZABATU
 
         //ZENBAKIAK EDO LETRAK EZ DIREN ELEMENTU DENAK KENDU
         if (!testua.matches(".*[a-zA-Z0-9]+.*")) {
