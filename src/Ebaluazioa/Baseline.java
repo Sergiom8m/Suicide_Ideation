@@ -8,8 +8,8 @@ import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
-import weka.filters.supervised.instance.Resample;
 import weka.filters.unsupervised.instance.Randomize;
+import weka.filters.unsupervised.instance.Resample;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -39,20 +39,12 @@ public class Baseline {
         Instances data = source.getDataSet();
         data.setClassIndex(data.numAttributes() - 1);
 
-        source = new ConverterUtils.DataSource(trainPath);
-        Instances train = source.getDataSet();
-        train.setClassIndex(train.numAttributes() - 1);
-
-        source = new ConverterUtils.DataSource(devPath);
-        Instances dev = source.getDataSet();
-        dev.setClassIndex(dev.numAttributes() - 1);
-
-        //NAIVE BAYES CLASSIFIER SORTU
-        RandomForest klasifikadore = new RandomForest();
-        klasifikadore.buildClassifier(data);
+        //DEFAULT RANDOM FOREST CLASSIFIER SORTU
+        RandomForest randomForest = new RandomForest();
+        randomForest.buildClassifier(data);
 
         //.MODEL GORDE
-        SerializationHelper.write("Ebaluazioa.Baseline.model",klasifikadore);
+        SerializationHelper.write("Ebaluazioa.Baseline.model",randomForest);
 
         FileWriter f = new FileWriter(emaitzak);
         BufferedWriter bf = new BufferedWriter(f);
@@ -63,7 +55,7 @@ public class Baseline {
         bf.append("EBALUAZIO EZ ZINTZOA:\n");
 
         Evaluation evaluation = new Evaluation(data);
-        evaluation.evaluateModel(klasifikadore, data);
+        evaluation.evaluateModel(randomForest, data);
 
         bf.append(evaluation.toSummaryString()+"\n");
         bf.append(evaluation.toClassDetailsString()+"\n");
@@ -76,30 +68,64 @@ public class Baseline {
         bf.append("K-FOLD CROSS EBALUAZIOA:\n");
 
         evaluation = new Evaluation(data);
-        evaluation.crossValidateModel(klasifikadore, data, 10, new Random(1));
+        evaluation.crossValidateModel(randomForest, data, 10, new Random(1));
 
         bf.append(evaluation.toSummaryString()+"\n");
         bf.append(evaluation.toClassDetailsString()+"\n");
         bf.append(evaluation.toMatrixString());
 
 
-        //3. STRATIFIED HOLD OUT
+        //3. STRATIFIED REPEATED HOLD OUT
         System.out.println("HOLD OUT BURUTZEN..." + "\n");
         bf.append("\n=============================================================\n");
-        bf.append("STRATIFIED HOLD OUT (%80):\n");
 
-        evaluation = new Evaluation(train);
+        double fMeasureMin = 1;
+        String summary = "";
+        String classDet = "";
+        String matrix = "";
 
-        klasifikadore = new RandomForest();
-        klasifikadore.buildClassifier(train);
+        for (int i = 0; i < 5; i++) {
 
-        evaluation.evaluateModel(klasifikadore, dev);
+            //TRAINFSS ETA TESTFSS LORTU
+            source = new ConverterUtils.DataSource(dataPath);
+            Instances dataHO = source.getDataSet();
+            dataHO.setClassIndex(data.numAttributes() - 1);
 
-        bf.append(evaluation.toSummaryString()+"\n");
-        bf.append(evaluation.toClassDetailsString()+"\n");
-        bf.append(evaluation.toMatrixString());
+            weka.filters.unsupervised.instance.Resample r = new Resample();
+            r.setRandomSeed(i);
+            r.setSampleSizePercent(70);
+            r.setNoReplacement(true);
+            r.setInvertSelection(false);
+            r.setInputFormat(dataHO);
+            Instances train = Filter.useFilter(dataHO, r);
 
-        bf.close();
+            r.setRandomSeed(i);
+            r.setSampleSizePercent(70);
+            r.setNoReplacement(true);
+            r.setInvertSelection(true);
+            r.setInputFormat(dataHO);
+            Instances test = Filter.useFilter(dataHO, r);
+
+            evaluation = new Evaluation(train);
+
+            randomForest.buildClassifier(train);
+
+            evaluation.evaluateModel(randomForest, test);
+
+            if (evaluation.weightedFMeasure() < fMeasureMin) {
+
+                summary = evaluation.toSummaryString() + "\n";
+                classDet = evaluation.toClassDetailsString() + "\n";
+                matrix = evaluation.toMatrixString();
+
+            }
+
+            bf.append(summary);
+            bf.append(classDet);
+            bf.append(matrix);
+
+            bf.close();
+        }
 
     }
 }

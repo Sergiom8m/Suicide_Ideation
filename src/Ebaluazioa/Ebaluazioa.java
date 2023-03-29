@@ -87,7 +87,7 @@ public class Ebaluazioa {
         String classDet = "";
         String matrix = "";
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 5; i++) {
 
             //TRAINFSS ETA TESTFSS LORTU
             source = new ConverterUtils.DataSource(dataPath);
