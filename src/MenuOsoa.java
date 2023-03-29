@@ -58,7 +58,7 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW TRAIN FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    fssInfoGain.fssInfoGain("trainBOW.arff","trainFSS.arff", "hiztegia.txt","hiztegiaFSS.txt");
+                    fssInfoGain.main(new String[]{"trainBOW.arff","trainFSS.arff", "hiztegia.txt","hiztegiaFSS.txt"});
                     break;
                 case 4:
                     System.out.println("---------------------------------------------------");
@@ -92,14 +92,14 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("BASELINE SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    Baseline.baseline("dataFSS.arff", "trainFSS.arff", "devFSS.arff", "BaselineEmaitzak.txt");
+                    Baseline.main(new String[]{"dataFSS.arff",  "BaselineEmaitzak.txt", "baseline.model"});
                     break;
 
                 case 9:
                     System.out.println("---------------------------------------------------");
                     System.out.println("EBALUAZIOA BURUTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    Ebaluazioa.ebaluazioa("dataFSS.arff", parametroak[0], parametroak[1], parametroak[2], parametroak[3], "textPred.txt");
+                    Ebaluazioa.main(new String[]{"dataFSS.arff", Integer.toString(parametroak[0]), Integer.toString(parametroak[1]), Integer.toString(parametroak[2]), Integer.toString(parametroak[3]), "textPred.txt", "RF.model"});
                     break;
                 case 10:
                     System.out.println("---------------------------------------------------");

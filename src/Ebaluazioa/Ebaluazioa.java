@@ -18,7 +18,7 @@ public class Ebaluazioa {
     public static void main(String[] args) {
 
         try {
-            ebaluazioa( args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), args[5]);
+            ebaluazioa( args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), args[5], args[6]);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Konprobatu ondo sartu direla beste FSS-ak lortzeko parametroak:");
@@ -26,7 +26,7 @@ public class Ebaluazioa {
 
     }
 
-    public static void ebaluazioa(String dataPath, int p1, int p2, int p3, int p4, String emaitzak) throws Exception { //TODO blind test gehitu?
+    public static void ebaluazioa(String dataPath, int p1, int p2, int p3, int p4, String emaitzak, String modeloPath) throws Exception { //TODO blind test gehitu?
 
         System.out.println("TRAIN ETA DEV MULTZOAK ERABILITA SAILKATZAILEA EBALUATUKO DA" + "\n");
 
@@ -45,7 +45,7 @@ public class Ebaluazioa {
         randomForest.buildClassifier(data);
 
         //.MODEL GORDE
-        SerializationHelper.write("RF.model", randomForest);
+        SerializationHelper.write(modeloPath, randomForest);
 
 
         FileWriter f = new FileWriter(emaitzak);

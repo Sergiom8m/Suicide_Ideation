@@ -29,22 +29,22 @@ public class MainProgram {
             System.out.println("---------------------------------------------------");
             System.out.println("BoW DEV FSS SORTUKO DA");
             System.out.println("---------------------------------------------------");
-            //MakeComp.main("devRAW.arff","devFSS.arff",0,1,"hiztegiaFSS.txt");
+            MakeComp.main(new String[]{"devRAW.arff","devFSS.arff",Integer.toString(0),Integer.toString(1),"hiztegiaFSS.txt"});
 
             System.out.println("---------------------------------------------------");
             System.out.println("BoW TEST FSS SORTUKO DA");
             System.out.println("---------------------------------------------------");
-            //MakeComp.main("testRAW.arff","testFSS.arff",0,1,"hiztegiaFSS.txt");
+            MakeComp.main(new String[]{"testRAW.arff","testFSS.arff",Integer.toString(0),Integer.toString(1),"hiztegiaFSS.txt"});
 
             System.out.println("---------------------------------------------------");
             System.out.println("BoW DATA FSS SORTUKO DA");
             System.out.println("---------------------------------------------------");
-            //MakeComp.main("dataRAW.arff","dataFSS.arff",0,1,"hiztegiaFSS.txt");
+            MakeComp.main(new String[]{"dataRAW.arff","dataFSS.arff",Integer.toString(0),Integer.toString(1),"hiztegiaFSS.txt"});
 
             System.out.println("---------------------------------------------------");
             System.out.println("BASELINE SORTUKO DA");
             System.out.println("---------------------------------------------------");
-            Baseline.baseline("dataFSS.arff", "trainFSS.arff", "devFSS.arff", "BaselineEmaitzak.txt");
+            Baseline.main(new String[]{"dataFSS.arff", "trainFSS.arff", "devFSS.arff", "BaselineEmaitzak.txt", "baseline.model"});
 
             System.out.println("---------------------------------------------------");
             System.out.println("RANDOM FOREST SORTUKO DA");
@@ -52,7 +52,7 @@ public class MainProgram {
             System.out.println("---------------------------------------------------");
             System.out.println("EBALUAZIOA BURUTUKO DA");
             System.out.println("---------------------------------------------------");
-            Ebaluazioa.ebaluazioa( "dataFSS.arff", 297, 100, 100, 109, "textPred.txt");
+            Ebaluazioa.main( new String[]{"dataFSS.arff", Integer.toString(297), Integer.toString(102), Integer.toString(100), Integer.toString(109), "textPred.txt", "RF.model"});
 
             System.out.println("---------------------------------------------------");
             System.out.println("IRAGARPENAK BURUTUKO DIRA");

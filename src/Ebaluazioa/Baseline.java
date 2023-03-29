@@ -19,7 +19,7 @@ public class Baseline {
 
     public static void main (String[] args){
         try {
-            baseline (args[0], args[1], args[2], args[3]);
+            baseline (args[0], args[1], args[2]);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Konprobatu ondo sartu direla baseline lortzeko parametroak:" +
@@ -30,7 +30,7 @@ public class Baseline {
         }
     }
 
-    public static void baseline(String dataPath, String trainPath, String devPath, String emaitzak) throws Exception {
+    public static void baseline(String dataPath, String emaitzak, String modelPath) throws Exception {
 
         System.out.println("DEFAULT RANDOM FOREST ERABILIZ BASELINE BURUTUKO DA" + "\n");
 
@@ -44,7 +44,7 @@ public class Baseline {
         randomForest.buildClassifier(data);
 
         //.MODEL GORDE
-        SerializationHelper.write("Ebaluazioa.Baseline.model",randomForest);
+        SerializationHelper.write(modelPath,randomForest);
 
         FileWriter f = new FileWriter(emaitzak);
         BufferedWriter bf = new BufferedWriter(f);
