@@ -1,14 +1,13 @@
 package Ebaluazioa;
 
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
+
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils;
+
 import weka.filters.Filter;
-import weka.filters.unsupervised.instance.Randomize;
 import weka.filters.unsupervised.instance.Resample;
 
 import java.io.BufferedWriter;

@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import static com.vdurmont.emoji.EmojiParser.parseToAliases;
 
-public class getARFF {
+public class getArff {
 
     /**
      *<h3>Aurre-baldintzak:</h3>
@@ -36,8 +36,8 @@ public class getARFF {
      *
      */
 
-
     public static void main(String[] args) throws Exception {
+
         try{
             getArff(args[0], args[1], Integer.parseInt(args[2]), args[3]);
         }catch (Exception e){
@@ -51,7 +51,8 @@ public class getARFF {
 
         System.out.println("CSV BATETIK ABIATUTA ARFF FITXATEGI GARBI BAT SORTUKO DA" + "\n");
 
-        String pathOsoa = arffPath.split("\\.arff")[0] + "_Osoa.arff";
+        String pathOsoa = arffPath.split("\\.arff")[0] + "_Osoa.arff"; //Hemendik aterako da csv-ko instantzia guztien arff-a
+
         //INSTANTZIEN IRAKURKETA:
         String[] instantzien_lista = getInstantzienLista(csvPath);
         String[][] instantzienMatrizea = getInstantzienMatrizea(instantzien_lista);
@@ -62,6 +63,7 @@ public class getARFF {
 
 
         sortuErabiltzekoArff(pathOsoa, arffPath, ehuneko, testPath);
+
     }
 
     public static void sortuErabiltzekoArff(String originPath, String newPath, int ehunekoa, String testPath) throws Exception {
@@ -87,7 +89,7 @@ public class getARFF {
         dataSink.write(dataGurea);
 
 
-        //IRAGARPENETARAKO TEST %100-ehunekoa
+        //IRAGARPENETARAKO TEST SOBERAN DAUDEN INSTANTZIETATIK
         resample.setRandomSeed(1);
         resample.setNoReplacement(true);
         resample.setInvertSelection(true);
@@ -124,6 +126,7 @@ public class getARFF {
         myWriter.append("\n" + "@attribute " + atributuen_lista[2] + " {'suicide', 'non-suicide'}");
 
         myWriter.close();
+
     }
 
     public static void instantziakSartuArff(String[][] instantzien_matrizea, String path) throws IOException {
@@ -136,6 +139,7 @@ public class getARFF {
             myWriter.append("\n" + instantzien_matrizea[i][1] + " " + instantzien_matrizea[i][2]);
         }
         myWriter.close();
+
     }
 
     public static String[][] getInstantzienMatrizea(String[] lista) {
@@ -145,11 +149,12 @@ public class getARFF {
         for (int i = 0; i < lista.length; i++) {
             String unekoInstantzia = lista[i]; //INSTANTZIA LERRO OSOA
             String[] l = unekoInstantzia.split(",");
-            instantziaMat[i][0] = l[0]; //IDENTIFIKADOREA
-            instantziaMat[i][2] = "\'" + l[l.length - 1].replace("\n", "") + "\'"; //KLASEA
-            instantziaMat[i][1] = garbituTestua(l); //TESTUA
+            instantziaMat[i][0] = l[0];                                                              //IDENTIFIKADOREA
+            instantziaMat[i][2] = "\'" + l[l.length - 1].replace("\n", "") + "\'";  //KLASEA
+            instantziaMat[i][1] = garbituTestua(l);                                                 //TESTUA
         }
         return garbituInstantzienMatrizea(instantziaMat);
+
     }
 
     public static String garbituTestua(String[] l) {
@@ -159,6 +164,7 @@ public class getARFF {
             erdikoa.append(l[j]).append(" ");
         }
         return filtratuKaraktereak(erdikoa.toString());
+
     }
 
     public static String filtratuKaraktereak(String testua) {
@@ -188,6 +194,7 @@ public class getARFF {
         }
         //TESTUA KOMILLEN ARTEAN BUELTATU
         return "\"" + testua + "\",";
+
     }
 
     public static String[][] garbituInstantzienMatrizea(String[][] mat) {
@@ -221,6 +228,7 @@ public class getARFF {
         //INSTANTZIAK BANATU
         String[] instantzien_lista = csvEdukia.split("(?<=suicide\n)");
         return instantzien_lista;
+
     }
 
     public static String puntuazioMarkaKendu(String testua) {

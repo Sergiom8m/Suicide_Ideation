@@ -1,15 +1,10 @@
 package Iragarpena;
 
 import weka.classifiers.Classifier;
-import weka.classifiers.rules.PART;
-import weka.core.Instance;
+
 import weka.core.Instances;
 import weka.core.SerializationHelper;
-import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils;
-import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.ReplaceWithMissingValue;
-import weka.filters.unsupervised.instance.Resample;
 
 import java.io.*;
 
@@ -69,7 +64,9 @@ public class Iragarpenak {
             }
 
         }
+
         int numInst = test.numInstances();
+
         pw.println("\n\n//////////////////////////////////////////////////////////");
         pw.println("INSTANTZIA TOTALAK: " + numInst);
         if(!test.instance(0).classIsMissing()){
@@ -83,6 +80,7 @@ public class Iragarpenak {
             System.out.println("ASMATUTAKOAK: " + kont);
             System.out.println("ASMATZE TASA: " + (double) kont / numInst + "\n");
         }
+
         pw.close();
     }
 }

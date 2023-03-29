@@ -2,11 +2,12 @@ package Ebaluazioa;
 
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
+
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils;
+
 import weka.filters.Filter;
-import weka.filters.unsupervised.instance.Randomize;
 import weka.filters.unsupervised.instance.Resample;
 
 import java.io.BufferedWriter;
@@ -69,10 +70,8 @@ public class Ebaluazioa {
         //.MODEL GORDE
         SerializationHelper.write(modeloPath, randomForest);
 
-
         FileWriter f = new FileWriter(emaitzak);
         BufferedWriter bf = new BufferedWriter(f);
-
 
         //3. EBALUAZIO EZ ZINTZOA
         System.out.println("EBALUAZIO EZ ZINTZOA BURUTZEN..." + "\n");
@@ -86,7 +85,6 @@ public class Ebaluazioa {
         bf.append(evaluation.toClassDetailsString() + "\n");
         bf.append(evaluation.toMatrixString());
 
-
         //4. K-FOLD CROSS EBALUAZIOA
         System.out.println("K-FOLD CROSS VALIDATION BURUTZEN..." + "\n");
         bf.append("\n=============================================================\n");
@@ -98,7 +96,6 @@ public class Ebaluazioa {
         bf.append(evaluation.toSummaryString() + "\n");
         bf.append(evaluation.toClassDetailsString() + "\n");
         bf.append(evaluation.toMatrixString());
-
 
         //5. STRATIFIED REPEATED HOLD OUT
         System.out.println("HOLD OUT BURUTZEN..." + "\n");

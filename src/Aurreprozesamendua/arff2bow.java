@@ -1,23 +1,18 @@
 package Aurreprozesamendua;
 
-import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils;
+
 import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.RemoveByName;
-import weka.filters.unsupervised.attribute.RemoveUseless;
 import weka.filters.unsupervised.attribute.Reorder;
 import weka.filters.unsupervised.attribute.StringToWordVector;
-import weka.filters.unsupervised.instance.Randomize;
-import weka.filters.unsupervised.instance.RemovePercentage;
 import weka.filters.unsupervised.instance.Resample;
 import weka.filters.unsupervised.instance.SparseToNonSparse;
 
 import java.io.*;
-import java.util.HashMap;
 
-public class getBowArff {
+public class arff2bow {
 
     /**
      *<h3>Aurre-baldintzak:</h3>
@@ -49,7 +44,6 @@ public class getBowArff {
             System.out.println("Zeozer gaizki sartu da. Exekuzio-adibidea:\n" +
                     "\t\t\tjava -jar arff2bow.jar path/to/dataRAW.arff \"0/1\" \"0/1\"  path/to/irteerako/hiztegia.txt path/to/irteerako/trainBOW.arff path/to/irteerako/devRAW.arff");
         }
-
 
     }
     public static void getBowArff(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWPath,String devPath) {
@@ -100,8 +94,6 @@ public class getBowArff {
             trainBoW = reorder(trainBoW);
             //BoW ARFF-AN GORDE
             datuakGorde(trainBoWPath, trainBoW);
-
-
 
         }catch (Exception e){
             e.printStackTrace();
@@ -155,49 +147,4 @@ public class getBowArff {
         return nonSparseData;
     }
 
-
-    public static void hiztegiaGorde(HashMap<String, Integer> hiztegia, String path, Instances data) throws IOException {
-        FileWriter fw = new FileWriter(path);
-        fw.write("@@@numDocs="+data.numInstances()+"@@@\n"); //Beharrezkoa TF·IDF bihurketa egiteko
-
-        for(int i=0; i<data.numAttributes()-1;i++){
-            String atributua = data.attribute(i).name();
-            if(hiztegia.containsKey(atributua)){
-                fw.write(atributua+","+hiztegia.get(atributua)+"\n");
-            }
-        }
-        fw.close();
-    }
-
-    public static HashMap<String,Integer> hiztegiaSortu(String pathRaw, Instances data) throws IOException {
-        HashMap<String, Integer> hiztegia = new HashMap();
-
-        for(int i=0;i<data.numAttributes()-1;i++) {
-            Attribute attrib = data.attribute(i);
-            hiztegia.put(attrib.name(),1);
-        }
-
-        BufferedReader br;
-        try {
-            br = new BufferedReader(new FileReader(pathRaw));
-            String contentLine = br.readLine();     // @numDocs=numinstances kendu
-            contentLine = br.readLine();
-            while (contentLine != null) {
-
-                String[] lerroa = contentLine.split(",");
-                String atributua = lerroa[0];
-                Integer maiztasuna = Integer.parseInt(lerroa[1]);
-
-                if(hiztegia.containsKey(atributua)){
-                    hiztegia.put(atributua,maiztasuna);
-                }
-
-                contentLine = br.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        return hiztegia;
-    }
 }

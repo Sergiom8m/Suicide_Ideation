@@ -42,7 +42,7 @@ import java.util.HashMap;
  *
  * <p>Ebaluaketa metika optimizatzeko: <b>klase minoritarioaren f-measure</b> izango da. </p>
  */
-public class RandomForestOptimoa {
+public class ParametroEkorketa {
 
     private static String train_sourceArff;
     private static String dev_sourceArff;

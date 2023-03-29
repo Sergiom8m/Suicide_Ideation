@@ -40,8 +40,8 @@ public class MakeComp {
         }
 
     }
-    public static void makeComp(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse, String hiztegiFSS) {
-        try {
+
+    public static void makeComp(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse, String hiztegiFSS) throws Exception {
 
             System.out.println("ONDORENGO FITXATEGIA KONPATIBLEA BIHURTUKO DA (FSS): " + inputPath + "\n");
 
@@ -66,11 +66,8 @@ public class MakeComp {
 
             datuakGorde(outputFSSPath,testFSS);
 
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
+
     private static Instances fixedDictionaryStringToWordVector(String hiztegia, Instances data, int bektorea) throws Exception {
         FixedDictionaryStringToWordVector fixedDict= new FixedDictionaryStringToWordVector();
         if(bektorea==1){
@@ -103,12 +100,12 @@ public class MakeComp {
         s.setFile(new File(path));
         s.writeBatch();
     }
+
     private static Instances SparseToNonSparse(Instances data) throws Exception{
         SparseToNonSparse filterNonSparse = new SparseToNonSparse();
         filterNonSparse.setInputFormat(data);
         Instances nonSparseData = Filter.useFilter(data,filterNonSparse);
         return nonSparseData;
     }
-
 
 }

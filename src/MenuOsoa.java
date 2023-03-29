@@ -1,7 +1,7 @@
 import Aurreprozesamendua.*;
 import Ebaluazioa.*;
+import Inferentzia.ParametroEkorketa;
 import Iragarpena.InputIragarpenak;
-import Iragarpena.Iragarpenak;
 
 import java.util.Scanner;
 
@@ -41,7 +41,7 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Sartu hartzeko instantzien ehunekoa: ");
                     int ehuneko = scanner.nextInt();
-                    getARFF.main(new String[]{"Suicide_Detection.csv", "dataRAW.arff", Integer.toString(ehuneko),"testRAW.arff"});
+                    getArff.main(new String[]{"Suicide_Detection.csv", "dataRAW.arff", Integer.toString(ehuneko),"testRAW.arff"});
                     break;
                 case 2:
                     System.out.println("---------------------------------------------------");
@@ -52,7 +52,7 @@ public class MenuOsoa {
                     System.out.println("Sartu 0 --> Sparse edo 1 --> NonSparse");
                     int sparse = scanner.nextInt();
                     // hoberena bektorea=0 eta sparse=1 da
-                    getBowArff.main(new String[]{"dataRAW.arff", String.valueOf(bektorea), String.valueOf(sparse), "hiztegia.txt", "trainBOW.arff", "devRAW.arff"});
+                    arff2bow.main(new String[]{"dataRAW.arff", String.valueOf(bektorea), String.valueOf(sparse), "hiztegia.txt", "trainBOW.arff", "devRAW.arff"});
                     break;
                 case 3:
                     System.out.println("---------------------------------------------------");
@@ -83,7 +83,7 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("RANDOM FOREST SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    Inferentzia.RandomForestOptimoa.main(
+                    ParametroEkorketa.main(
                             new String[]{"trainFSS.arff","devFSS.arff", "dataFSS.arff", "param_ekork_ema.txt",
                                          "80", "5", "120", "100", "20", "300", "102", "1", "102", "100", "1", "100"
                             });

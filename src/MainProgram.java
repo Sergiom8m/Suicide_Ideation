@@ -1,9 +1,8 @@
 import Aurreprozesamendua.MakeComp;
 import Aurreprozesamendua.fssInfoGain;
-import Aurreprozesamendua.getARFF;
-import Aurreprozesamendua.getBowArff;
+import Aurreprozesamendua.getArff;
+import Aurreprozesamendua.arff2bow;
 import Ebaluazioa.*;
-import Inferentzia.RandomForestOptimoa;
 import Iragarpena.Iragarpenak;
 
 public class MainProgram {
@@ -13,13 +12,13 @@ public class MainProgram {
             System.out.println("DATUAK KARGATUKO DIRA ARFF FORMATUAN");
             System.out.println("---------------------------------------------------");
             System.out.println("Sartu hartzeko instantzien ehunekoa: ");
-            getARFF.getArff("Suicide_Detection.csv", "dataRAW.arff", 29,"testRAW.arff");
+            getArff.getArff("Suicide_Detection.csv", "dataRAW.arff", 29,"testRAW.arff");
 
             System.out.println("---------------------------------------------------");
             System.out.println("BoW SORTUKO DA");
             System.out.println("---------------------------------------------------");
             // hoberena bektorea=0 eta sparse=1 da
-            getBowArff.main(new String[]{"dataRAW.arff","0","1", "hiztegia.txt", "trainBoW.arff", "devRAW.arff"});
+            arff2bow.main(new String[]{"dataRAW.arff","0","1", "hiztegia.txt", "trainBoW.arff", "devRAW.arff"});
 
             System.out.println("---------------------------------------------------");
             System.out.println("BoW TRAIN FSS SORTUKO DA");

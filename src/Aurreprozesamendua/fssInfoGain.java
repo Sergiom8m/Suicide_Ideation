@@ -2,18 +2,15 @@ package Aurreprozesamendua;
 
 import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
-import weka.classifiers.Evaluation;
-import weka.classifiers.meta.FilteredClassifier;
-import weka.classifiers.trees.RandomForest;
+
 import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils;
+
 import weka.filters.Filter;
 import weka.filters.supervised.attribute.AttributeSelection;
-import weka.filters.supervised.instance.Resample;
 import weka.filters.unsupervised.attribute.RemoveByName;
-import weka.filters.unsupervised.attribute.Reorder;
 
 import java.io.*;
 import java.util.HashMap;
@@ -82,6 +79,16 @@ public class fssInfoGain {
         }catch (Exception e){e.printStackTrace();}
     }
 
+    private static Instances ezabatuUselessAttributes(Instances data) throws Exception {
+        RemoveByName remove = new RemoveByName();
+        remove.setExpression(".*[a-zA-Z0-9]+.*");
+        remove.setInvertSelection(true);
+        remove.setInputFormat(data);
+        data = Filter.useFilter(data, remove);
+
+        return data;
+    }
+
     public static void hiztegiaGorde(HashMap<String, Integer> hiztegia, String path, Instances data) throws IOException {
         FileWriter fw = new FileWriter(path);
         fw.write("@@@numDocs="+data.numInstances()+"@@@\n"); //Beharrezkoa TF·IDF bihurketa egiteko
@@ -135,13 +142,4 @@ public class fssInfoGain {
         s.writeBatch();
     }
 
-    private static Instances ezabatuUselessAttributes(Instances data) throws Exception {
-        RemoveByName remove = new RemoveByName();
-        remove.setExpression(".*[a-zA-Z0-9]+.*");
-        remove.setInvertSelection(true);
-        remove.setInputFormat(data);
-        data = Filter.useFilter(data, remove);
-
-        return data;
-    }
 }
