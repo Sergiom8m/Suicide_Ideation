@@ -107,8 +107,16 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Modeloaren path-a sartu (.model): ");
                     String pathModel = scanner.next();
-                    InputIragarpenak.main(new String[]{"Predictions.csv", "test_blind.arff", "hiztegiaFSS.txt"});
-                    Iragarpena.Iragarpenak.main(new String[]{pathModel,"test_input.arff","iragarpenak.txt"});
+                    System.out.println("Zure instantziak dituen CSV-a sartu nahi duzu?\n" +
+                            "Bai -> 0\n" +
+                            "Ez (defektuz menuaren 1. aukeran sortzen dena erabiliko da) -> 1\n");
+                    int berria=scanner.nextInt();
+                    if (berria==0){
+                        InputIragarpenak.main(new String[]{"Predictions.csv", "test_blind.arff", "hiztegiaFSS.txt"});
+                        Iragarpena.Iragarpenak.main(new String[]{pathModel,"test_input.arff","iragarpenak.txt"});
+                    }else{
+                        Iragarpena.Iragarpenak.main(new String[]{pathModel,"testFSS.arff","iragarpenak.txt"});
+                    }
                     break;
                 default:
                     System.out.println("Sartu baliozko zenbakia");

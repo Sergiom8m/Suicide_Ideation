@@ -19,19 +19,35 @@ import java.util.HashMap;
 
 public class getBowArff {
 
+    /**
+     *<h3>Aurre-baldintzak:</h3>
+     * <ol>
+     *     <li> parametro bezala train fitxategia</li>
+     *     <li> parametro bezala bektorearen errepresentazioa: BoW (0) edo TF-IDF(1)</li>
+     *     <li> parametro bezala Sparse edo NonSparse: Sparse (0) edo NonSparse(1)</li>
+     *     <li> parametro bezala hiztegia gordetzeko .txt fitxategia</li>
+     *     <li> parametro bezala train-aren bektore errepresentazioa gordetzeko .arff fitxategiaren izena</li>
+     *     <li> parametro bezala dev gordetzeko .arff fitxategiaren izena</li>
+     *</ol>
+     *
+     * <h3>Ondorengo-baldintzak:</h3>
+     * <ol>
+     *      <li> fitxategi bezala 4. parametroan adierazitako .txt fitxategia</li>
+     *      <li> fitxategi bezala 5. parametroan adierazitako .arff fitxategia</li>
+     *      <li> fitxategi bezala 6. parametroan adierazitako .arff fitxategia</li>
+     *</ol>
+     * <h3>Exekuzio-adibidea:</h3>
+     *      java -jar arff2bow.jar path/to/dataRAW.arff "0/1" "0/1"  path/to/irteerako/hiztegia.txt path/to/irteerako/trainBOW.arff path/to/irteerako/devRAW.arff
+     */
+
     public static void main(String[] args){
 
         try{
             getBowArff(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3], args[4], args[5]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Konprobatu ondo sartu direla BOW lortzeko parametroak: " +
-                    "\n     1. /path/to/dataRAW.arff"+
-                    "\n     2. Sartu 0 --> BoW edo 1 --> TF-IDF"+
-                    "\n     3. Sartu 0 --> Sparse edo 1 --> NonSparse"+
-                    "\n     4. /path/to/hiztegia.txt"+
-                    "\n     5. /path/to/trainBOW.arff"+
-                    "\n     6. /path/to/devRAW.arff");
+            System.out.println("Zeozer gaizki sartu da. Exekuzio-adibidea:\n" +
+                    "\t\t\tjava -jar arff2bow.jar path/to/dataRAW.arff \"0/1\" \"0/1\"  path/to/irteerako/hiztegia.txt path/to/irteerako/trainBOW.arff path/to/irteerako/devRAW.arff");
         }
 
 
@@ -101,7 +117,6 @@ public class getBowArff {
     }
 
     private static void datuakGorde(String path, Instances data) throws Exception {
-
         ArffSaver saver = new ArffSaver();
         saver.setInstances(data);
         saver.setFile(new File(path));
@@ -122,7 +137,7 @@ public class getBowArff {
         }
 
         stringToWordVector.setAttributeIndices("first-last");
-        stringToWordVector.setWordsToKeep(5000);                //defektuz 1000
+        stringToWordVector.setWordsToKeep(4500);                //defektuz 1000
         stringToWordVector.setPeriodicPruning(-1.0);
 
         stringToWordVector.setLowerCaseTokens(true); //MAYUS ETA MINUS ARTEKO BEREIZKETARIK EZ TRUE BADAGO

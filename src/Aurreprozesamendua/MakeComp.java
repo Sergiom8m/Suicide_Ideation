@@ -12,16 +12,31 @@ import java.io.*;
 
 public class MakeComp {
 
+    /**
+     *<h3>Aurre-baldintzak:</h3>
+     * <ol>
+     *     <li> parametro bezala bateragarri egin nahi den .arff fitxategia</li>
+     *     <li> parametro bezala bateragarria den .arff fitxategia</li>
+     *     <li> parametro bezala bektorearen errepresentazioa: BoW (0) edo TF-IDF(1)</li>
+     *     <li> parametro bezala Sparse edo NonSparse: Sparse (0) edo NonSparse(1)</li>
+     *     <li> parametro bezala FSS hiztegiaren .txt fitxategia</li>
+     *</ol>
+     *
+     * <h3>Ondorengo-baldintzak:</h3>
+     * <ol>
+     *      <li> fitxategi bezala 2. parametroan adierazitako .arff fitxategia</li>
+     *</ol>
+     * <h3>Exekuzio-adibidea:</h3>
+     *      java -jar MakeComp.jar path/to/inputData.arff path/to/irteerako/dataFSS.arff "0/1" "0/1" path/to/hiztegiaFSS.txt
+     */
+
     public static void main (String[] args){
         try{
             makeComp(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[4]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Konprobatu ondo sartu direla beste FSS-ak lortzeko parametroak:" +
-                    "\n     1. /path/to/devRAW.arff"+
-                    "\n     2. /path/to/devFSS.arff"+
-                    "\n     3. Sartu 0 --> BoW edo 1 --> TF-IDF"+
-                    "\n     4. Sartu 0 --> Sparse edo 1 --> NonSparse");
+            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar MakeComp.jar path/to/inputData.arff path/to/irteerako/dataFSS.arff \"0/1\" \"0/1\" path/to/hiztegiaFSS.txt");
         }
 
     }

@@ -12,11 +12,33 @@ import java.util.regex.Pattern;
 import static com.vdurmont.emoji.EmojiParser.parseToAliases;
 
 public class InputIragarpenak {
+
+    /**
+     *<h3>Aurre-baldintzak:</h3>
+     * <ol>
+     *     <li> parametro bezala instantzia berriak dituen .csv fitxategia</li>
+     *     <li> parametro bezala test-blindRAW gordetzeko .arff fitxategiaren izena</li>
+     *     <li> parametro bezala FSS hiztegiaren .txt fitxategia</li>
+     *</ol>
+     *
+     * <h3>Ondorengo-baldintzak:</h3>
+     * <ol>
+     *      <li> fitxategi bezala 2. parametroan adierazitako .arff fitxategia</li>
+     *</ol>
+     * <h3>Exekuzio-adibidea:</h3>
+     *      java -jar InputIragarpenak.jar path/to/Predictions.csv path/to/test_blind.arff path/to/irteerako/hiztegiaFSS.txt
+     */
+
     public static void main(String[] args) {
         try {
             datuakPrestatu(args[0], args[1], args[2]);
-        }catch (Exception e){e.printStackTrace();}
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar InputIragarpenak.jar path/to/Predictions.csv path/to/test_blind.arff path/to/irteerako/hiztegiaFSS.txt");
+        }
     }
+
     public static void datuakPrestatu(String csvPath, String arffPath, String hiztegiPath) throws Exception {
         getArff(csvPath, arffPath);
         MakeComp.makeComp(arffPath, "test_input.arff", 0, 1, hiztegiPath);

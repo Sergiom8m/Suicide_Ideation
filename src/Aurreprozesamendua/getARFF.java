@@ -1,10 +1,8 @@
 package Aurreprozesamendua;
 
-
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
-import weka.filters.supervised.instance.StratifiedRemoveFolds;
 import weka.filters.unsupervised.instance.Resample;
 
 import java.io.FileWriter;
@@ -18,18 +16,37 @@ import static com.vdurmont.emoji.EmojiParser.parseToAliases;
 
 public class getARFF {
 
+    /**
+     *<h3>Aurre-baldintzak:</h3>
+     * <ol>
+     *     <li> parametro bezala datuen csv originala</li>
+     *     <li> parametro bezala train gordetzeko .arff fitxategiaren izena</li>
+     *     <li> parametro bezala csv horretatik train-erako erabili nahi den ehunekoa</li>
+     *     <li> parametro bezala test gordetzeko .arff fitxategiaren izena</li>
+     *</ol>
+     *
+     * <h3>Ondorengo-baldintzak:</h3>
+     * <ol>
+     *      <li> fitxategi bezala 2. parametroan adierazitako .arff fitxategia</li>
+     *      <li> fitxategi bezala 4. parametroan adierazitako .arff fitxategia</li>
+     *</ol>
+     * <h3>Exekuzio-adibidea:</h3>
+     *      java -jar getArff.jar path/to/Suicide_Detection.csv path/to/irteerako/dataRAW.arff "ehunekoa" path/to/irteerako/testRAW.arff
+     *
+     *
+     */
+
+
     public static void main(String[] args) throws Exception {
         try{
             getArff(args[0], args[1], Integer.parseInt(args[2]), args[3]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Konprobatu ondo sartu direla ARFF-ak lortzeko parametroak: " +
-                    "\n     1. /path/to/Suicide_Detection.csv"+
-                    "\n     2. /path/to/dataRAW.arff"+
-                    "\n     3. Dauden datu guztietatik zer eguneko atera entrenamendurako [1-29]"+
-                    "\n     4. /path/to/dataRAW.arff");
+            System.out.println("Zeozer gaizki sartu da. Exekuzio-adibidea:\n" +
+                    "\t\t\tjava -jar getArff.jar path/to/Suicide_Detection.csv path/to/irteerako/dataRAW.arff \"ehunekoa\" path/to/irteerako/testRAW.arff");
         }
     }
+
     public static void getArff(String csvPath, String arffPath, int ehuneko, String testPath) throws Exception {
 
         System.out.println("CSV BATETIK ABIATUTA ARFF FITXATEGI GARBI BAT SORTUKO DA" + "\n");

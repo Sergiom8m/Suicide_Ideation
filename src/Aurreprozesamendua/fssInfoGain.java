@@ -20,17 +20,32 @@ import java.util.HashMap;
 
 public class fssInfoGain {
 
+    /**
+     *<h3>Aurre-baldintzak:</h3>
+     * <ol>
+     *     <li> parametro bezala train-aren bektore errepresentazio fitxategia</li>
+     *     <li> parametro bezala atributuen hautapena egin ondoren lortutako .arff fitxategia</li>
+     *     <li> parametro bezala hasierako hiztegiaren .txt fitxategia</li>
+     *     <li> parametro bezala atributuen hautapenean lortutako atributuak gordetzeko .txt fitxategia</li>
+     *</ol>
+     *
+     * <h3>Ondorengo-baldintzak:</h3>
+     * <ol>
+     *      <li> fitxategi bezala 2. parametroan adierazitako .arff fitxategia</li>
+     *      <li> fitxategi bezala 4. parametroan adierazitako .txt fitxategia</li>
+     *</ol>
+     * <h3>Exekuzio-adibidea:</h3>
+     *      java -jar fssInfoGain.jar path/to/trainBOW.arff path/to/irteerako/trainFSS.arf path/to/hiztegia.txt path/to/irteerako/hiztegiaFSS.txt
+     */
+
     public static void main (String[] args){
 
         try{
             fssInfoGain(args[0], args[1], args[2], args[3]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Konprobatu ondo sartu direla ARFF-ak lortzeko parametroak:" +
-                    "\n     1. /path/to/trainBOW.arff"+
-                    "\n     2. /path/to/trainFSS.arff"+
-                    "\n     3. /path/to/hiztegia.txt"+
-                    "\n     4. /path/to/hiztegiaFSS.txt");
+            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar fssInfoGain.jar path/to/trainBOW.arff path/to/irteerako/trainFSS.arf path/to/hiztegia.txt path/to/irteerako/hiztegiaFSS.txt");
         }
 
     }

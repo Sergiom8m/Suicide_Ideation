@@ -17,16 +17,30 @@ import java.util.Random;
 
 public class Baseline {
 
+    /**
+     *<h3>Aurre-baldintzak:</h3>
+     * <ol>
+     *     <li> parametro bezala trainFSS datu multzoaren .arff fitxategia</li>
+     *     <li> parametro bezala devFSS datu multzoaren .arff fitxategia</li>
+     *     <li> parametro bezala trainFSS + devFSS datu multzoaren .arff fitxategia</li>
+     *     <li> parametro bezala emaitzak gordetzeko .txt fitxategia</li>
+     *</ol>
+     *
+     * <h3>Ondorengo-baldintzak:</h3>
+     * <ol>
+     *      <li> fitxategi bezala .model  fitxategia</li>
+     *</ol>
+     * <h3>Exekuzio-adibidea:</h3>
+     *      java -jar Baseline.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/EvaluationBaseline.txt
+     */
+
     public static void main (String[] args){
         try {
             baseline (args[0], args[1], args[2]);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Konprobatu ondo sartu direla baseline lortzeko parametroak:" +
-                    "\n     1. /path/to/dataFSS.arff"+
-                    "\n     2. /path/to/trainFSS.arff"+
-                    "\n     3. /path/to/devFSS.arff"+
-                    "\n     4. /path/to/BaselineEmaitzak.txt");
+            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar Baseline.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/EvaluationBaseline.txt");
         }
     }
 

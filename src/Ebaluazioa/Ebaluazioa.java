@@ -15,13 +15,35 @@ import java.util.Random;
 
 public class Ebaluazioa {
 
+    /**
+     *<h3>Aurre-baldintzak:</h3>
+     * <ol>
+     *     <li> parametro bezala trainFSS datu multzoaren .arff fitxategia</li>
+     *     <li> parametro bezala devFSS datu multzoaren .arff fitxategia</li>
+     *     <li> parametro bezala trainFSS + devFSS datu multzoaren .arff fitxategia</li>
+     *     <li> parametro bezala RandomForest-aren NumFeatures parametroa</li>
+     *     <li> parametro bezala RandomForest-aren NumIterations parametroa</li>
+     *     <li> parametro bezala RandomForest-aren BagSizePercent parametroa</li>
+     *     <li> parametro bezala RandomForest-aren MaxDepth parametroa</li>
+     *     <li> parametro bezala emaitzak gordetzeko .txt fitxategia</li>
+     *</ol>
+     *
+     * <h3>Ondorengo-baldintzak:</h3>
+     * <ol>
+     *      <li> fitxategi bezala 8. parametroan adierazitako .txt fitxategia</li>
+     *</ol>
+     * <h3>Exekuzio-adibidea:</h3>
+     *      java -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff 	"NumFeatures" "NumIterations" "BagSizePercent" "MaxDepth" path/to/irteerako/EvaluationAlgorithm.txt
+     */
+
     public static void main(String[] args) {
 
         try {
             ebaluazioa( args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), args[5], args[6]);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Konprobatu ondo sartu direla beste FSS-ak lortzeko parametroak:");
+            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff \t\"NumFeatures\" \"NumIterations\" \"BagSizePercent\" \"MaxDepth\" path/to/irteerako/EvaluationAlgorithm.txt");
         }
 
     }
