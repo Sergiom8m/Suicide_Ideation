@@ -17,7 +17,21 @@ public class Ebaluazioa {
 
     public static void main (String[] args){
 
-        ebaluazioa(args[0], args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7]);
+        try{
+            ebaluazioa(args[0], args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7]);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Konprobatu ondo sartu direla beste FSS-ak lortzeko parametroak:" +
+                    "\n     1. /path/to/trainFSS.arff"+
+                    "\n     2. /path/to/devFSS.arff"+
+                    "\n     3. /path/to/dataFSS.arff"+
+                    "\n     4. NumOfFeatues (optimoa 297)"+
+                    "\n     5. NumIterations (optimoa 102)"+
+                    "\n     6. BagSizePercentage (optimoa 100)"+
+                    "\n     7. MaxDepth (optimoa 1090)"+
+                    "\n     8. Sartu 0 --> BoW edo 1 --> TF-IDF"+
+                    "\n     9. Sartu 0 --> Sparse edo 1 --> NonSparse");
+        }
 
 
     }

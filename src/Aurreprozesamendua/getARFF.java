@@ -19,9 +19,16 @@ import static com.vdurmont.emoji.EmojiParser.parseToAliases;
 public class getARFF {
 
     public static void main(String[] args) throws Exception {
-
-        getArff(args[0], args[1], Integer.parseInt(args[2]), args[3]);
-
+        try{
+            getArff(args[0], args[1], Integer.parseInt(args[2]), args[3]);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Konprobatu ondo sartu direla ARFF-ak lortzeko parametroak: " +
+                    "\n     1. /path/to/Suicide_Detection.csv"+
+                    "\n     2. /path/to/dataRAW.arff"+
+                    "\n     3. Dauden datu guztietatik zer eguneko atera entrenamendurako [1-29]"+
+                    "\n     4. /path/to/dataRAW.arff");
+        }
     }
     public static void getArff(String csvPath, String arffPath, int ehuneko, String testPath) throws Exception {
 
@@ -35,56 +42,9 @@ public class getARFF {
         //ARFF-A SORTU
         arffGoiburuaEzarri(instantzien_lista, pathOsoa);
         instantziakSartuArff(instantzienMatrizea, pathOsoa);
-
-
-        sortuErabiltzekoArff(pathOsoa, arffPath, ehuneko, testPath);
     }
 
-    public static void sortuErabiltzekoArff(String originPath, String newPath, int ehunekoa, String testPath) throws Exception {
-        
-        ConverterUtils.DataSource source = new ConverterUtils.DataSource(originPath);
-        Instances data = source.getDataSet();
-        data.setClassIndex(data.numAttributes() - 1);
 
-        System.out.println("INSTANTZIA GUZTIEN KOPURUA: " + data.numInstances()+ "\n");
-
-        Resample resample = new Resample();
-        resample.setRandomSeed(1);
-        resample.setNoReplacement(true);
-        resample.setInvertSelection(false);
-        resample.setSampleSizePercent(ehunekoa);
-        resample.setInputFormat(data);
-        Instances dataGurea = Filter.useFilter(data, resample);
-        dataGurea.setClassIndex(dataGurea.numAttributes() - 1);
-
-        System.out.println("ENTRENAMENDUA EGITEKO ERABILIKO DIREN INSTANTZIA KOPURUA: " + dataGurea.numInstances()+ "\n");
-
-        ConverterUtils.DataSink dataSink = new ConverterUtils.DataSink(newPath);
-        dataSink.write(dataGurea);
-
-
-        //IRAGARPENETARAKO TEST %100-ehunekoa
-        resample.setRandomSeed(1);
-        resample.setNoReplacement(true);
-        resample.setInvertSelection(true);
-        resample.setInputFormat(data);
-        Instances test = Filter.useFilter(data, resample);
-        test.setClassIndex(test.numAttributes() - 1);
-
-        resample = new Resample();
-        resample.setRandomSeed(1);
-        resample.setNoReplacement(true);
-        resample.setInvertSelection(false);
-        resample.setSampleSizePercent(30);
-        resample.setInputFormat(test);
-        test = Filter.useFilter(test, resample);
-        test.setClassIndex(test.numAttributes() - 1);
-        System.out.println("IRAGARPENAK EGITEKO ERRESERBATUTAKO INSTANTZIA KOPURUA: " + test.numInstances() + "\n");
-
-        dataSink = new ConverterUtils.DataSink(testPath);
-        dataSink.write(test);
-
-    }
 
     public static void arffGoiburuaEzarri(String[] instantzien_lista, String path) throws IOException {
 

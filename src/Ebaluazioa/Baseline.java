@@ -22,12 +22,17 @@ public class Baseline {
             baseline (args[0], args[1], args[2], args[3]);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Konprobatu ondo sartu direla baseline lortzeko parametroak:" +
+                    "\n     1. /path/to/dataFSS.arff"+
+                    "\n     2. /path/to/trainFSS.arff"+
+                    "\n     3. /path/to/devFSS.arff"+
+                    "\n     4. /path/to/BaselineEmaitzak.txt");
         }
     }
 
     public static void baseline(String dataPath, String trainPath, String devPath, String emaitzak) throws Exception {
 
-        System.out.println("NAIVE BAYES ERABILIZ BASELINE BURUTUKO DA" + "\n");
+        System.out.println("DEFAULT RANDOM FOREST ERABILIZ BASELINE BURUTUKO DA" + "\n");
 
         //DATUAK DITUEN FITXATEGIA KARGATU
         ConverterUtils.DataSource source = new ConverterUtils.DataSource(dataPath);
@@ -43,7 +48,7 @@ public class Baseline {
         dev.setClassIndex(dev.numAttributes() - 1);
 
         //NAIVE BAYES CLASSIFIER SORTU
-        NaiveBayes klasifikadore = new NaiveBayes();
+        RandomForest klasifikadore = new RandomForest();
         klasifikadore.buildClassifier(data);
 
         //.MODEL GORDE
@@ -85,7 +90,7 @@ public class Baseline {
 
         evaluation = new Evaluation(train);
 
-        klasifikadore = new NaiveBayes();
+        klasifikadore = new RandomForest();
         klasifikadore.buildClassifier(train);
 
         evaluation.evaluateModel(klasifikadore, dev);

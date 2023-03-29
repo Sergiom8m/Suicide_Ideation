@@ -20,7 +20,7 @@ public class MenuOsoa {
                     "   4 -> DevFSS egin\n"+
                     "   5 -> TestFSS egin\n"+
                     "   6 -> DataFSS egin\n"+
-                    "   7 -> Random Forest modeloa sortu\n"+
+                    "   7 -> Random Forest modeloa  (ez exekutatu, koste konputazional handia)\n"+
                     "AURREKO 3., 4., ETA 6. PAUSUEN FITXATEGIAK IZANDA: \n"+
                     "   8 -> Baseline atera\n"+
                     "   9 -> Ebaluazioa egin\n"+
@@ -39,7 +39,7 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("Sartu hartzeko instantzien ehunekoa: ");
                     int ehuneko = scanner.nextInt();
-                    getARFF.getArff("Suicide_Detection.csv", "dataRAW.arff", ehuneko,"destRAW.arff");
+                    getARFF.main(new String[]{"Suicide_Detection.csv", "dataRAW.arff", Integer.toString(ehuneko),"destRAW.arff"});
                     break;
                 case 2:
                     System.out.println("---------------------------------------------------");
@@ -50,7 +50,7 @@ public class MenuOsoa {
                     System.out.println("Sartu 0 --> Sparse edo 1 --> NonSparse");
                     int sparse = scanner.nextInt();
                     // hoberena bektorea=0 eta sparse=1 da
-                    getBowArff.main(new String[]{"dataRAW.arff", String.valueOf(bektorea), String.valueOf(sparse), "hiztegia.txt", "trainBoW.arff", "devRAW.arff"});
+                    getBowArff.main(new String[]{"dataRAW.arff", String.valueOf(bektorea), String.valueOf(sparse), "hiztegia.txt", "trainBOW.arff", "devRAW.arff"});
                     break;
                 case 3:
                     System.out.println("---------------------------------------------------");
@@ -62,26 +62,29 @@ public class MenuOsoa {
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW DEV FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    MakeComp.main("devRAW.arff","devFSS.arff",0,1);
+                    MakeComp.main(new String[]{"devRAW.arff","devFSS.arff",Integer.toString(0),Integer.toString(1)});
                     break;
                 case 5:
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW TEST FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    MakeComp.main("testRAW.arff","testFSS.arff",0,1);
+                    MakeComp.main(new String[]{"testRAW.arff","testFSS.arff",Integer.toString(0),Integer.toString(1)});
                     break;
                 case 6:
                     System.out.println("---------------------------------------------------");
                     System.out.println("BoW DATA FSS SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    MakeComp.main("dataRAW.arff","dataFSS.arff",0,1);
+                    MakeComp.main(new String[]{"dataRAW.arff","dataFSS.arff",Integer.toString(0),Integer.toString(1)});
                     break;
 
                 case 7:
                     System.out.println("---------------------------------------------------");
                     System.out.println("RANDOM FOREST SORTUKO DA");
                     System.out.println("---------------------------------------------------");
-                    parametroak = Inferentzia.RandomForestOptimoa.main(new String[]{"trainFSS.arff","."});
+                    Inferentzia.RandomForestOptimoa.main(
+                            new String[]{"trainFSS.arff","devFSS.arff", "dataFSS.arff", "param_ekork_ema.txt",
+                                         "80", "5", "120", "100", "20", "300", "102", "1", "102", "100", "1", "100"
+                            });
                     break;
                 case 8:
                     System.out.println("---------------------------------------------------");

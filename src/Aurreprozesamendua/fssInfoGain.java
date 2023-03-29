@@ -22,8 +22,16 @@ public class fssInfoGain {
 
     public static void main (String[] args){
 
-        fssInfoGain(args[0], args[1], args[2], args[3]);
-
+        try{
+            fssInfoGain(args[0], args[1], args[2], args[3]);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Konprobatu ondo sartu direla ARFF-ak lortzeko parametroak:" +
+                    "\n     1. /path/to/trainBOW.arff"+
+                    "\n     2. /path/to/trainFSS.arff"+
+                    "\n     3. /path/to/hiztegia.txt"+
+                    "\n     4. /path/to/hiztegiaFSS.txt");
+        }
 
     }
     public static void fssInfoGain(String trainBowPath, String FSSArffPath, String hiztegiPath, String hiztegiFSSpath) {

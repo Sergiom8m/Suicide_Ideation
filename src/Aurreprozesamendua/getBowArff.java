@@ -21,7 +21,19 @@ public class getBowArff {
 
     public static void main(String[] args){
 
-        getBowArff(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3], args[4], args[5]);
+        try{
+            getBowArff(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3], args[4], args[5]);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Konprobatu ondo sartu direla BOW lortzeko parametroak: " +
+                    "\n     1. /path/to/dataRAW.arff"+
+                    "\n     2. Sartu 0 --> BoW edo 1 --> TF-IDF"+
+                    "\n     3. Sartu 0 --> Sparse edo 1 --> NonSparse"+
+                    "\n     4. /path/to/hiztegia.txt"+
+                    "\n     5. /path/to/trainBOW.arff"+
+                    "\n     6. /path/to/devRAW.arff");
+        }
+
 
     }
     public static void getBowArff(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWPath,String devPath) {

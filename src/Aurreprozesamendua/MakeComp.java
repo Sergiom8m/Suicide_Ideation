@@ -13,11 +13,19 @@ import java.io.*;
 public class MakeComp {
 
     public static void main (String[] args){
-
-        main(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+        try{
+            makeComp(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Konprobatu ondo sartu direla beste FSS-ak lortzeko parametroak:" +
+                    "\n     1. /path/to/devRAW.arff"+
+                    "\n     2. /path/to/devFSS.arff"+
+                    "\n     3. Sartu 0 --> BoW edo 1 --> TF-IDF"+
+                    "\n     4. Sartu 0 --> Sparse edo 1 --> NonSparse");
+        }
 
     }
-    public static void main(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse) {
+    public static void makeComp(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse) {
         try {
 
             System.out.println("ONDORENGO FITXATEGIA KONPATIBLEA BIHURTUKO DA (FSS): " + inputPath + "\n");

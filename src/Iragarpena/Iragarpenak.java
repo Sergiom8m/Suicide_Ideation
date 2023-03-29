@@ -15,8 +15,11 @@ import java.io.*;
 public class Iragarpenak {
 
     public static void main (String[] args){
-
-        iragarpenak(args[0], args[1], args[2]);
+        try {
+            iragarpenak(args[0], args[1], args[2]);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
     public static void iragarpenak(String modelPath,String testPath, String iragarpenakPath){
