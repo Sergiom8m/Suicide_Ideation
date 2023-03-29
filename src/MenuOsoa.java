@@ -112,7 +112,7 @@ public class MenuOsoa {
                             "Ez (defektuz menuaren 1. aukeran sortzen dena erabiliko da) -> 1\n");
                     int berria=scanner.nextInt();
                     if (berria==0){
-                        InputIragarpenak.main(new String[]{"Predictions.csv", "test_blind.arff", "hiztegiaFSS.txt"});
+                        InputIragarpenak.main(new String[]{"Predictions.csv", "test_blind.arff", "test_input.arff", "hiztegiaFSS.txt"});
                         Iragarpena.Iragarpenak.main(new String[]{pathModel,"test_input.arff","iragarpenak.txt"});
                     }else{
                         Iragarpena.Iragarpenak.main(new String[]{pathModel,"testFSS.arff","iragarpenak.txt"});

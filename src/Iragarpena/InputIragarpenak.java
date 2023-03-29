@@ -31,7 +31,7 @@ public class InputIragarpenak {
 
     public static void main(String[] args) {
         try {
-            datuakPrestatu(args[0], args[1], args[2]);
+            datuakPrestatu(args[0], args[1], args[2], args[3]);
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
@@ -39,9 +39,9 @@ public class InputIragarpenak {
         }
     }
 
-    public static void datuakPrestatu(String csvPath, String arffPath, String hiztegiPath) throws Exception {
+    public static void datuakPrestatu(String csvPath, String arffPath, String blindFSSPath, String hiztegiPath) throws Exception { //TODO añadir test blind fss a todo
         getArff(csvPath, arffPath);
-        MakeComp.makeComp(arffPath, "test_input.arff", 0, 1, hiztegiPath);
+        MakeComp.makeComp(arffPath, blindFSSPath, 0, 1, hiztegiPath);
 
     }
 
