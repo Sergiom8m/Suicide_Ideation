@@ -19,9 +19,8 @@ import java.util.HashMap;
  * Klase hau, sailkatzailearen parametro ekorketa egiteko eraibliko da.
  * Erabiliko den datu sortan, klase atributua azken atributuan doa.
  * Erabiliko den sailkatzailea 'RandomForest' sailkatzailea da.
- *
  * Hau egiteko, oso komenigarria da RandomForest nola funtzionatzen duen jakitea.
- * RandomForest sailkatzaileak erabiltzen dituen atributuak:
+ * <p>RandomForest sailkatzaileak erabiltzen dituen atributuak:</p>
  * <ul>
  *     <li><b>setMaxDepth</b>, zuhaitz bakoitzaren sakonera: RandomForest erabiltzen dituen zuhaitzen sakonera ezarritzen duen parametroa
  *     da. 'int' motako balioak har ditzake. 0 balioa ematen bazaio, limiterik gabeko zuhaitzak egingo ditu.</li>
@@ -46,7 +45,7 @@ public class ParametroEkorketa {
 
     private static String train_sourceArff;
     private static String dev_sourceArff;
-    private static String data_sourceArff; // train+test instances
+    private static String data_sourceArff; // train + dev instances
     private static String storeDir;
     private static Instances data;
     private static Instances train_data;
@@ -54,12 +53,12 @@ public class ParametroEkorketa {
     private static String date;
     private static double exekuzioDenbora;
     private static RandomForest randomForest_optimo;
-    private static int min_depth; // probar siempre con 0
+    private static int min_depth;
     private static int jump_depth;
     private static int max_depth;
-    private static int min_num_features; // >20 segun resultados
+    private static int min_num_features;
     private static int jump_num_features;
-    private static int max_num_features; // En el video de la descrición de la clase, se menciona que la raiz cuadrada de la cantidad de atributos es un buen número. >25
+    private static int max_num_features;
     private static int min_num_iterations;
     private static int jump_num_iterations;
     private static int max_num_iterations;
@@ -81,19 +80,7 @@ public class ParametroEkorketa {
      *     <li>args[0]: train DataSet</li>
      *     <li>args[1]: dev DataSet</li>
      *     <li>args[2]: data (train+dev) DataSet</li>
-     *     <li>args[3]: emaitzak gordetzeko direktorioa</li>
-     *     <li>args[4]: min_depth</li>
-     *     <li>args[5]: jump_depth</li>
-     *     <li>args[6]: max_depth</li>
-     *     <li>args[7]: min_num_features</li>
-     *     <li>args[8]: jump_num_features</li>
-     *     <li>args[9]: max_num_features</li>
-     *     <li>args[10]: min_num_iterations</li>
-     *     <li>args[11]: jump_num_iterations</li>
-     *     <li>args[12]: max_num_iterations</li>
-     *     <li>args[13]: min_bag_size</li>
-     *     <li>args[14]: jump_bag_size</li>
-     *     <li>args[15]: max_bag_size</li>
+     *     <li>args[3]: emaitzak, csv-ak eta .model-a gordetzeko direktorioa gordetzeko direktorioa</li>
      * </ul>
      */
     public static void main(String[] args) {
@@ -108,45 +95,42 @@ public class ParametroEkorketa {
             buildCSV();
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Programak 16 argumentu behar ditu:");
+            System.out.println("Programak 4 argumentu behar ditu:");
             System.out.println("1. train.arff fitxategiaren path-a");
             System.out.println("2. dev.arff fitxategiaren path-a");
             System.out.println("3. data.arff (train+test) fitxategiaren patha-a");
-            System.out.println("4. emaitzak gordeko den direktorioaren path (azkenena \\ barik)");
-            System.out.println("5. min_depth (int)");
-            System.out.println("6. jump_depth (int)");
-            System.out.println("7. max_depth (int)");
-            System.out.println("8. min_num_features (int)");
-            System.out.println("9. jump_num_features (int)");
-            System.out.println("10. max_num_features (int)");
-            System.out.println("11. min_num_iterations (int)");
-            System.out.println("12. jump_num_iterations (int)");
-            System.out.println("13. max_num_iterations (int)");
-            System.out.println("14. min_bag_size (int)");
-            System.out.println("15. jump_bag_size (int)");
-            System.out.println("16. max_bag_size (int)");
+            System.out.println("4. emaitzak eta saikatzaile optimoa gordeko den direktorioaren path (azkenena \\ barik)");
         }
     }
 
+    /**
+     * Ekorketa egiteko erabiliko diren aldagaien hasierketa. Metodo honetan uzten dira aurrerantzean erabiltzailea
+     * argumentuetan blaioak sartzeko aukera erraz inplementatu ahal izateko.
+     * @param args
+     * @throws Exception
+     */
     private static void ezarpenak(String[] args) throws Exception{
         train_sourceArff = args[0];
         dev_sourceArff = args[1];
         data_sourceArff = args[2];
         storeDir = args[3];
-        min_depth = Integer.parseInt(args[4]);
-        jump_depth = Integer.parseInt(args[5]);
-        max_depth = Integer.parseInt(args[6]);
-        min_num_features = Integer.parseInt(args[7]);
-        jump_num_features = Integer.parseInt(args[8]);
-        max_num_features = Integer.parseInt(args[9]); // sqrt(data.numAttributes()) ???
-        min_num_iterations = Integer.parseInt(args[10]);
-        jump_num_iterations = Integer.parseInt(args[11]);
-        max_num_iterations = Integer.parseInt(args[12]);
-        min_bag_size = Integer.parseInt(args[13]);
-        jump_bag_size = Integer.parseInt(args[14]);
-        max_bag_size = Integer.parseInt(args[15]);
+        min_depth = 80; // 0 balioak 'unlimited' adierazten du
+        jump_depth = 50;
+        max_depth = 80; //TODO 120
+        min_num_features = 100;
+        jump_num_features = 20;
+        max_num_features = 100; // sqrt(data.numAttributes()) //TODO 300
+        min_num_iterations = 102;
+        jump_num_iterations = 1;
+        max_num_iterations = 102;
+        min_bag_size = 100;
+        jump_bag_size = 1;
+        max_bag_size = 100;
     }
 
+    /**
+     * Ekorketa egiteko erabiliko diren datuen karga
+     */
     private static void datuakKargatu(){
         try{
             System.out.println("Parametro ekorketa egiteko erabiliko diren fitxategiak: ");
@@ -182,11 +166,13 @@ public class ParametroEkorketa {
             int best_bag_size = 0;
             int iteration = 1;
 
+            // Parametro ekorketak izango dituen iterazio kopurua
             int sum_iterations = (((max_depth-min_depth)/jump_depth)+1) *
                     (((max_num_features-min_num_features)/jump_num_features)+1) *
                     (((max_num_iterations-min_num_iterations)/jump_num_iterations)+1) *
                     (((max_bag_size-min_bag_size)/jump_bag_size)+1);
             System.out.println("\nExekuzioak izango dituen iterazio kopurua: " + sum_iterations);
+
             randomForest.setNumExecutionSlots(Runtime.getRuntime().availableProcessors()); // prozesadore gehiago erabili dezan (bukleak azkarrago)
             for (int depth = min_depth; depth <= max_depth; depth+=jump_depth) {
                 for (int num_features = min_num_features; num_features <= max_num_features; num_features+=jump_num_features){
@@ -197,15 +183,18 @@ public class ParametroEkorketa {
                             System.out.println("num_features: " + num_features);
                             System.out.println("num_iterations: " + num_iterations);
                             System.out.println("bag_size: " + bag_size);
+                            // Sailkatzailea sortu
                             randomForest.setMaxDepth(depth);
                             randomForest.setNumFeatures(num_features);
                             randomForest.setNumIterations(num_iterations);
                             randomForest.setBagSizePercent(bag_size);
                             randomForest.buildClassifier(train_data);
 
+                            // Sortutako sailkatzailearen gainean ebaluazioa gauzatu
                             Evaluation evaluation = new Evaluation(train_data);
                             evaluation.evaluateModel(randomForest, dev_data);
 
+                            // Lortutako f-measure aztertu
                             double fMeasure = evaluation.fMeasure(minMaizPos);
                             System.out.println(iteration + ". iterazioko klase minoritarioaren f-measure: " + fMeasure);
                             balioakGorde(depth, num_features, num_iterations, bag_size, fMeasure);
@@ -230,6 +219,14 @@ public class ParametroEkorketa {
         }
     }
 
+    /**
+     * Ekorketaren iterazio bakoitzeko, lortutako balioak gordeko dira.
+     * @param depth
+     * @param num_features
+     * @param num_iterations
+     * @param bag_size
+     * @param fmeas
+     */
     private static void balioakGorde(int depth, int num_features, int num_iterations, int bag_size, double fmeas){
         if (depth_values.get(depth) != null) {
             depth_values.get(depth).add(fmeas);
@@ -278,6 +275,9 @@ public class ParametroEkorketa {
         }
     }
 
+    /**
+     * Ekorketa prozesuan eraibli diren aldagaiak eta lortutako balioak gorde.
+     */
     private static void emaitzak(){
         try{
             FileWriter myWriter = new FileWriter(storeDir + File.separator + date +"RF_optimo_ema.txt");
