@@ -57,8 +57,6 @@ public class Iragarpenak {
         for (int j = 0; j<inst; j++){
             double pred = randomForest.classifyInstance(test.instance(j));
             pw.println((j+1)+". INSTANTZIAREN IRAGARPENA    --->   "+ test.classAttribute().value((int) pred));
-            System.out.println(test.classAttribute().value((int) pred));
-
             if(test.instance(j).classValue()==pred){
                 kont=kont+1;
             }
