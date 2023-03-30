@@ -5,6 +5,7 @@ import weka.classifiers.trees.RandomForest;
 
 import weka.core.Instances;
 import weka.core.SerializationHelper;
+import weka.core.Utils;
 import weka.core.converters.ConverterUtils;
 
 import weka.filters.Filter;
@@ -38,8 +39,8 @@ public class Baseline {
             baseline (args[0], args[1], args[2]);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
-                    "\t\t\tjava -jar Baseline.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/EvaluationBaseline.txt");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar Baseline.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/EvaluationBaseline.txt\n\n");
         }
     }
 
@@ -93,6 +94,7 @@ public class Baseline {
         bf.append("\n=============================================================\n");
         bf.append("STRATIFIED REPEATED HOLD OUT:\n");
 
+        int klaseMin = Utils.minIndex(data.attributeStats(data.classIndex()).nominalCounts);
         double fMeasureMin = 1;
         String summary = "";
         String classDet = "";
@@ -126,7 +128,7 @@ public class Baseline {
 
             evaluation.evaluateModel(randomForest, test);
 
-            if (evaluation.weightedFMeasure() < fMeasureMin) {
+            if (evaluation.fMeasure(klaseMin) < fMeasureMin) {
 
                 summary = evaluation.toSummaryString() + "\n";
                 classDet = evaluation.toClassDetailsString() + "\n";
@@ -134,12 +136,12 @@ public class Baseline {
 
             }
 
-            bf.append(summary);
-            bf.append(classDet);
-            bf.append(matrix);
-
-            bf.close();
         }
+        bf.append(summary);
+        bf.append(classDet);
+        bf.append(matrix);
+
+        bf.close();
 
     }
 }

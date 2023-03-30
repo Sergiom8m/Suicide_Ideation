@@ -34,8 +34,8 @@ public class InputIragarpenak {
             datuakPrestatu(args[0], args[1], args[2], args[3]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
-                    "\t\t\tjava -jar InputIragarpenak.jar path/to/Predictions.csv path/to/test_blind.arff path/to/irteerako/hiztegiaFSS.txt");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar InputIragarpenak.jar path/to/Predictions.csv path/to/test_blind.arff path/to/test_input.arff path/to/irteerako/hiztegiaFSS.txt\n\n");
         }
     }
 
@@ -66,6 +66,7 @@ public class InputIragarpenak {
 
         //INSTANTZIAK BANATU
         String[] instantzien_lista = csvEdukia.split("(?<=NaN\r\n)");
+        if (instantzien_lista.length==1){instantzien_lista = csvEdukia.split("(?<=NaN\n)");}
         return instantzien_lista;
     }
 

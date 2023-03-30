@@ -5,6 +5,7 @@ import weka.classifiers.trees.RandomForest;
 
 import weka.core.Instances;
 import weka.core.SerializationHelper;
+import weka.core.Utils;
 import weka.core.converters.ConverterUtils;
 
 import weka.filters.Filter;
@@ -43,8 +44,8 @@ public class Ebaluazioa {
             ebaluazioa( args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), args[5], args[6]);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
-                    "\t\t\tjava -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff \t\"NumFeatures\" \"NumIterations\" \"BagSizePercent\" \"MaxDepth\" path/to/irteerako/EvaluationAlgorithm.txt");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff \t\"NumFeatures\" \"NumIterations\" \"BagSizePercent\" \"MaxDepth\" path/to/irteerako/EvaluationAlgorithm.txt\n\n");
         }
 
     }
@@ -102,6 +103,7 @@ public class Ebaluazioa {
         bf.append("\n=============================================================\n");
         bf.append("STRATIFIED REPEATED HOLD OUT:\n");
 
+        int klaseMin = Utils.minIndex(data.attributeStats(data.classIndex()).nominalCounts);
         double fMeasureMin = 1;
         String summary = "";
         String classDet = "";
@@ -141,7 +143,7 @@ public class Ebaluazioa {
 
             evaluation.evaluateModel(randomForest, test);
 
-            if (evaluation.weightedFMeasure() < fMeasureMin) {
+            if (evaluation.fMeasure(klaseMin) < fMeasureMin) {
 
                 summary = evaluation.toSummaryString() + "\n";
                 classDet = evaluation.toClassDetailsString() + "\n";
@@ -149,12 +151,11 @@ public class Ebaluazioa {
 
             }
 
-            bf.append(summary);
-            bf.append(classDet);
-            bf.append(matrix);
-
-            bf.close();
-
         }
+        bf.append(summary);
+        bf.append(classDet);
+        bf.append(matrix);
+
+        bf.close();
     }
 }

@@ -31,8 +31,8 @@ public class Iragarpenak {
             iragarpen(args[0], args[1], args[2]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
-                    "\t\t\tjava -jar Iragarpenak.jar path/to/Modeloa.model path/to/testFSS.arff path/to/devFSS.arff path/to/irteerako/TestPredictions.txt");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar Iragarpenak.jar path/to/Modeloa.model path/to/testFSS.arff path/to/devFSS.arff path/to/irteerako/TestPredictions.txt\n\n");
         }
 
     }
@@ -57,8 +57,6 @@ public class Iragarpenak {
         for (int j = 0; j<inst; j++){
             double pred = randomForest.classifyInstance(test.instance(j));
             pw.println((j+1)+". INSTANTZIAREN IRAGARPENA    --->   "+ test.classAttribute().value((int) pred));
-            System.out.println(test.classAttribute().value((int) pred));
-
             if(test.instance(j).classValue()==pred){
                 kont=kont+1;
             }

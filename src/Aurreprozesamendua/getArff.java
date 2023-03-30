@@ -42,8 +42,8 @@ public class getArff {
             getArff(args[0], args[1], Integer.parseInt(args[2]), args[3]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio-adibidea:\n" +
-                    "\t\t\tjava -jar getArff.jar path/to/Suicide_Detection.csv path/to/irteerako/dataRAW.arff \"ehunekoa\" path/to/irteerako/testRAW.arff");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio-adibidea:\n" +
+                    "\t\t\tjava -jar getArff.jar path/to/Suicide_Detection.csv path/to/irteerako/dataRAW.arff \"ehunekoa\" path/to/irteerako/testRAW.arff\n\n");
         }
     }
 
