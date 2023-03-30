@@ -8,6 +8,7 @@ Proiektu honek, hurrengo dependentziak ditu:
  * Java JDK (JVM + JRE + Developer Tools). [JDK download](https://www.oracle.com/es/java/technologies/downloads/)
  * Weka .jar library. [Weka.jar Download](https://waikato.github.io/weka-wiki/downloading_weka/)
  * Emojis library. Proiektuaren iturri kodearekin batera: [emoji-java-5.1.1.jar](emojis%2Femoji-java-5.1.1.jar)
+ * JSON library. Proiektuaren iturri kodearekin batera: [json-20170516.jar](emojis%2Fjson-20170516.jar)
 
 ## 0. Aurreprozesamendua
 
