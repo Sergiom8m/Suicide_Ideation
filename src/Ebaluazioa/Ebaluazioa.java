@@ -43,8 +43,8 @@ public class Ebaluazioa {
             ebaluazioa( args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), args[5], args[6]);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
-                    "\t\t\tjava -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff \t\"NumFeatures\" \"NumIterations\" \"BagSizePercent\" \"MaxDepth\" path/to/irteerako/EvaluationAlgorithm.txt");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff \t\"NumFeatures\" \"NumIterations\" \"BagSizePercent\" \"MaxDepth\" path/to/irteerako/EvaluationAlgorithm.txt\n\n");
         }
 
     }

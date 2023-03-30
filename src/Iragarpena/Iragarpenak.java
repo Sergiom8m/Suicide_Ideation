@@ -31,8 +31,8 @@ public class Iragarpenak {
             iragarpen(args[0], args[1], args[2]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
-                    "\t\t\tjava -jar Iragarpenak.jar path/to/Modeloa.model path/to/testFSS.arff path/to/devFSS.arff path/to/irteerako/TestPredictions.txt");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar Iragarpenak.jar path/to/Modeloa.model path/to/testFSS.arff path/to/devFSS.arff path/to/irteerako/TestPredictions.txt\n\n");
         }
 
     }

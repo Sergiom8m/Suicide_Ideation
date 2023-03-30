@@ -41,8 +41,8 @@ public class fssInfoGain {
             fssInfoGain(args[0], args[1], args[2], args[3]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
-                    "\t\t\tjava -jar fssInfoGain.jar path/to/trainBOW.arff path/to/irteerako/trainFSS.arf path/to/hiztegia.txt path/to/irteerako/hiztegiaFSS.txt");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar fssInfoGain.jar path/to/trainBOW.arff path/to/irteerako/trainFSS.arf path/to/hiztegia.txt path/to/irteerako/hiztegiaFSS.txt\n\n");
         }
 
     }

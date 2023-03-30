@@ -35,8 +35,8 @@ public class MakeComp {
             makeComp(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[4]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
-                    "\t\t\tjava -jar MakeComp.jar path/to/inputData.arff path/to/irteerako/dataFSS.arff \"0/1\" \"0/1\" path/to/hiztegiaFSS.txt");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar MakeComp.jar path/to/inputData.arff path/to/irteerako/dataFSS.arff \"0/1\" \"0/1\" path/to/hiztegiaFSS.txt\n\n");
         }
 
     }

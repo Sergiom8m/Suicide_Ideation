@@ -38,8 +38,8 @@ public class Baseline {
             baseline (args[0], args[1], args[2]);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Zeozer gaizki sartu da. Exekuzio adibidea: \n" +
-                    "\t\t\tjava -jar Baseline.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/EvaluationBaseline.txt");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea: \n" +
+                    "\t\t\tjava -jar Baseline.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/EvaluationBaseline.txt\n\n");
         }
     }
 

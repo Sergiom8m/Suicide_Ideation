@@ -74,15 +74,23 @@ public class ParametroEkorketa {
 
 
     /**
+     *<h3>Aurre-baldintzak:</h3>
+     * <ol>
+     *     <li> parametro bezala trainFSS datu multzoaren .arff fitxategia</li>
+     *     <li> parametro bezala devFSS datu multzoaren .arff fitxategia</li>
+     *     <li> parametro bezala trainFSS + devFSS datu multzoaren .arff fitxategia</li>
+     *     <li> parametro bezala emaitzak gordetzeko .txt fitxategia</li>
+     *</ol>
      *
-     * @param args
-     * <ul>
-     *     <li>args[0]: train DataSet</li>
-     *     <li>args[1]: dev DataSet</li>
-     *     <li>args[2]: data (train+dev) DataSet</li>
-     *     <li>args[3]: emaitzak, csv-ak eta .model-a gordetzeko direktorioa gordetzeko direktorioa</li>
-     * </ul>
+     * <h3>Ondorengo-baldintzak:</h3>
+     * <ol>
+     *      <li> fitxategi bezala .model fitxategia</li>
+     *      <li> fitxategi bezala 4. parametroan adierazitako .txt fitxategia</li>
+     *</ol>
+     * <h3>Exekuzio-adibidea:</h3>
+     *      java -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/ParametroEkorketaEmaitzak.txt
      */
+
     public static void main(String[] args) {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd-HHmmss");
@@ -95,20 +103,11 @@ public class ParametroEkorketa {
             buildCSV();
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("Programak 4 argumentu behar ditu:");
-            System.out.println("1. train.arff fitxategiaren path-a");
-            System.out.println("2. dev.arff fitxategiaren path-a");
-            System.out.println("3. data.arff (train+test) fitxategiaren patha-a");
-            System.out.println("4. emaitzak eta saikatzaile optimoa gordeko den direktorioaren path (azkenena \\ barik)");
+            System.out.println("\nZeozer gaizki sartu da. Exekuzio adibidea:\n" +
+                    "\t\t\t java -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/ParametroEkorketaEmaitzak.txt\n\n");
         }
     }
 
-    /**
-     * Ekorketa egiteko erabiliko diren aldagaien hasierketa. Metodo honetan uzten dira aurrerantzean erabiltzailea
-     * argumentuetan blaioak sartzeko aukera erraz inplementatu ahal izateko.
-     * @param args
-     * @throws Exception
-     */
     private static void ezarpenak(String[] args) throws Exception{
         train_sourceArff = args[0];
         dev_sourceArff = args[1];
