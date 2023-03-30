@@ -66,6 +66,7 @@ public class InputIragarpenak {
 
         //INSTANTZIAK BANATU
         String[] instantzien_lista = csvEdukia.split("(?<=NaN\r\n)");
+        if (instantzien_lista.length==1){instantzien_lista = csvEdukia.split("(?<=NaN\n)");}
         return instantzien_lista;
     }
 

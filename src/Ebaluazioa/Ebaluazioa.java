@@ -5,6 +5,7 @@ import weka.classifiers.trees.RandomForest;
 
 import weka.core.Instances;
 import weka.core.SerializationHelper;
+import weka.core.Utils;
 import weka.core.converters.ConverterUtils;
 
 import weka.filters.Filter;
@@ -101,6 +102,7 @@ public class Ebaluazioa {
         System.out.println("HOLD OUT BURUTZEN..." + "\n");
         bf.append("\n=============================================================\n");
 
+        int klaseMin = Utils.minIndex(data.attributeStats(data.classIndex()).nominalCounts);
         double fMeasureMin = 1;
         String summary = "";
         String classDet = "";
@@ -140,7 +142,7 @@ public class Ebaluazioa {
 
             evaluation.evaluateModel(randomForest, test);
 
-            if (evaluation.weightedFMeasure() < fMeasureMin) {
+            if (evaluation.fMeasure(klaseMin) < fMeasureMin) {
 
                 summary = evaluation.toSummaryString() + "\n";
                 classDet = evaluation.toClassDetailsString() + "\n";
@@ -148,12 +150,11 @@ public class Ebaluazioa {
 
             }
 
-            bf.append(summary);
-            bf.append(classDet);
-            bf.append(matrix);
-
-            bf.close();
-
         }
+        bf.append(summary);
+        bf.append(classDet);
+        bf.append(matrix);
+
+        bf.close();
     }
 }

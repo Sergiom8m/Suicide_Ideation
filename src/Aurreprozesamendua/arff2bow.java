@@ -129,7 +129,7 @@ public class arff2bow {
         }
 
         stringToWordVector.setAttributeIndices("first-last");
-        stringToWordVector.setWordsToKeep(4500);                //defektuz 1000
+        stringToWordVector.setWordsToKeep(10000);                //defektuz 1000
         stringToWordVector.setPeriodicPruning(-1.0);
 
         stringToWordVector.setLowerCaseTokens(true); //MAYUS ETA MINUS ARTEKO BEREIZKETARIK EZ TRUE BADAGO
