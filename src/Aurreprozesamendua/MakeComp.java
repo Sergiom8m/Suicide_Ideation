@@ -29,7 +29,6 @@ public class MakeComp {
      * <h3>Exekuzio-adibidea:</h3>
      *      java -jar MakeComp.jar path/to/inputData.arff path/to/irteerako/dataFSS.arff "0/1" "0/1" path/to/hiztegiaFSS.txt
      */
-
     public static void main (String[] args){
         try{
             makeComp(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[4]);
@@ -41,6 +40,15 @@ public class MakeComp {
 
     }
 
+    /**
+     *
+     * @param inputPath
+     * @param outputFSSPath
+     * @param errepresentazioBektoriala
+     * @param sparse
+     * @param hiztegiFSS
+     * @throws Exception
+     */
     public static void makeComp(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse, String hiztegiFSS) throws Exception {
 
             System.out.println("ONDORENGO FITXATEGIA KONPATIBLEA BIHURTUKO DA (FSS): " + inputPath + "\n");
@@ -68,6 +76,14 @@ public class MakeComp {
 
     }
 
+    /**
+     *
+     * @param hiztegia
+     * @param data
+     * @param bektorea
+     * @return
+     * @throws Exception
+     */
     private static Instances fixedDictionaryStringToWordVector(String hiztegia, Instances data, int bektorea) throws Exception {
         FixedDictionaryStringToWordVector fixedDict= new FixedDictionaryStringToWordVector();
         if(bektorea==1){
@@ -86,6 +102,12 @@ public class MakeComp {
         return dataFSS;
     }
 
+    /**
+     *
+     * @param test
+     * @return
+     * @throws Exception
+     */
     private static Instances reorder(Instances test) throws Exception {
         Reorder filterR = new Reorder();
         filterR.setAttributeIndices("2-"+ test.numAttributes()+",1"); //2-atributu kop, 1.  2-atributu kop bitarteko atributuak goian jarriko dira eta 1 atributua (klasea dena) amaieran.
@@ -94,6 +116,12 @@ public class MakeComp {
         return test;
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @throws Exception
+     */
     private static void datuakGorde(String path, Instances data) throws Exception {
         ArffSaver s = new ArffSaver();
         s.setInstances(data);
@@ -101,6 +129,12 @@ public class MakeComp {
         s.writeBatch();
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     * @throws Exception
+     */
     private static Instances SparseToNonSparse(Instances data) throws Exception{
         SparseToNonSparse filterNonSparse = new SparseToNonSparse();
         filterNonSparse.setInputFormat(data);

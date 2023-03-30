@@ -38,7 +38,6 @@ public class Ebaluazioa {
      * <h3>Exekuzio-adibidea:</h3>
      *      java -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff 	"NumFeatures" "NumIterations" "BagSizePercent" "MaxDepth" path/to/irteerako/EvaluationAlgorithm.txt
      */
-
     public static void main(String[] args) {
 
         try {
@@ -51,6 +50,17 @@ public class Ebaluazioa {
 
     }
 
+    /**
+     *
+     * @param dataPath
+     * @param p1
+     * @param p2
+     * @param p3
+     * @param p4
+     * @param emaitzak
+     * @param modeloPath
+     * @throws Exception
+     */
     public static void ebaluazioa(String dataPath, int p1, int p2, int p3, int p4, String emaitzak, String modeloPath) throws Exception { //TODO blind test gehitu?
 
         int iterazioKop=5;

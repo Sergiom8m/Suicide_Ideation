@@ -28,7 +28,6 @@ public class InputIragarpenak {
      * <h3>Exekuzio-adibidea:</h3>
      *      java -jar InputIragarpenak.jar path/to/Predictions.csv path/to/test_blind.arff path/to/irteerako/hiztegiaFSS.txt
      */
-
     public static void main(String[] args) {
         try {
             datuakPrestatu(args[0], args[1], args[2], args[3]);
@@ -39,12 +38,26 @@ public class InputIragarpenak {
         }
     }
 
+    /**
+     *
+     * @param csvPath
+     * @param arffPath
+     * @param blindFSSPath
+     * @param hiztegiPath
+     * @throws Exception
+     */
     public static void datuakPrestatu(String csvPath, String arffPath, String blindFSSPath, String hiztegiPath) throws Exception { //TODO añadir test blind fss a todo
         getArff(csvPath, arffPath);
         MakeComp.makeComp(arffPath, blindFSSPath, 0, 1, hiztegiPath);
 
     }
 
+    /**
+     *
+     * @param csvPath
+     * @param arffPath
+     * @throws Exception
+     */
     public static void getArff(String csvPath, String arffPath) throws Exception {
 
         System.out.println("CSV BATETIK ABIATUTA ARFF FITXATEGI GARBI BAT SORTUKO DA" + "\n");
@@ -58,6 +71,12 @@ public class InputIragarpenak {
         instantziakSartuArff(instantzienMatrizea, arffPath);
     }
 
+    /**
+     *
+     * @param path
+     * @return
+     * @throws IOException
+     */
     public static String[] getInstantzienLista(String path) throws IOException {
 
         //CSV FITXATEGIA IRAKURRI
@@ -70,6 +89,11 @@ public class InputIragarpenak {
         return instantzien_lista;
     }
 
+    /**
+     *
+     * @param lista
+     * @return
+     */
     public static String[][] getInstantzienMatrizea(String[] lista) {
 
         //INSTANZIA KOP X 3 DIMENTSIOKO MATRIZEA SORTU
@@ -83,6 +107,11 @@ public class InputIragarpenak {
         return instantziaMat;
     }
 
+    /**
+     *
+     * @param l
+     * @return
+     */
     public static String garbituTestua(String[] l) {
 
         StringBuilder erdikoa = new StringBuilder();
@@ -95,6 +124,12 @@ public class InputIragarpenak {
         return filtratuKaraktereak(erdikoa.toString());
     }
 
+    /**
+     *
+     * @param instantzien_lista
+     * @param path
+     * @throws IOException
+     */
     public static void arffGoiburuaEzarri(String[] instantzien_lista, String path) throws IOException {
 
         FileWriter myWriter = new FileWriter(path);
@@ -111,6 +146,12 @@ public class InputIragarpenak {
         myWriter.close();
     }
 
+    /**
+     *
+     * @param instantzien_matrizea
+     * @param path
+     * @throws IOException
+     */
     public static void instantziakSartuArff(String[][] instantzien_matrizea, String path) throws IOException {
 
         FileWriter myWriter = new FileWriter(path, true);
@@ -123,6 +164,11 @@ public class InputIragarpenak {
         myWriter.close();
     }
 
+    /**
+     *
+     * @param testua
+     * @return
+     */
     public static String filtratuKaraktereak(String testua) {
 
         testua = testua.replaceAll("[\\u2800-\\u28FF]", ""); //BRAILLE TESTUA EZABATU
@@ -152,6 +198,11 @@ public class InputIragarpenak {
         return "\"" + testua + "\",";
     }
 
+    /**
+     *
+     * @param testua
+     * @return
+     */
     public static String puntuazioMarkaKendu(String testua) {
 
         return testua.replaceAll("\\p{Punct}", " "); //PUNTUAZIO MARKAK EZABATU

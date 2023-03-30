@@ -33,7 +33,6 @@ public class Baseline {
      * <h3>Exekuzio-adibidea:</h3>
      *      java -jar Baseline.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/EvaluationBaseline.txt
      */
-
     public static void main (String[] args){
         try {
             baseline (args[0], args[1], args[2]);
@@ -44,6 +43,13 @@ public class Baseline {
         }
     }
 
+    /**
+     *
+     * @param dataPath
+     * @param emaitzak
+     * @param modelPath
+     * @throws Exception
+     */
     public static void baseline(String dataPath, String emaitzak, String modelPath) throws Exception {
 
         System.out.println("DEFAULT RANDOM FOREST ERABILIZ BASELINE BURUTUKO DA" + "\n");

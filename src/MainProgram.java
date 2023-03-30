@@ -6,6 +6,13 @@ import Ebaluazioa.*;
 import Iragarpena.Iragarpenak;
 
 public class MainProgram {
+
+
+    /**
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 
             System.out.println("---------------------------------------------------");

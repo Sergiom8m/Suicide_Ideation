@@ -8,6 +8,12 @@ import java.util.Scanner;
 import static java.lang.System.exit;
 
 public class MenuOsoa {
+
+    /**
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         int parametroak[] = new int[]{297, 102, 100, 109};
         Scanner scanner = new Scanner(System.in);

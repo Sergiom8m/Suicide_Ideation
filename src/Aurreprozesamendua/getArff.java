@@ -35,18 +35,31 @@ public class getArff {
      *
      *
      */
-
     public static void main(String[] args) throws Exception {
 
         try{
             getArff(args[0], args[1], Integer.parseInt(args[2]), args[3]);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("\nZeozer gaizki sartu da. Exekuzio-adibidea:\n" +
-                    "\t\t\tjava -jar getArff.jar path/to/Suicide_Detection.csv path/to/irteerako/dataRAW.arff \"ehunekoa\" path/to/irteerako/testRAW.arff\n\n");
+            System.out.println("""
+
+                    Zeozer gaizki sartu da. Exekuzio-adibidea:
+                    \t\t\tjava -jar getArff.jar path/to/Suicide_Detection.csv path/to/irteerako/dataRAW.arff "ehunekoa" path/to/irteerako/testRAW.arff
+
+                    """);
         }
     }
 
+    /**
+     * Instantzia multzo bat CSV formatuan jasota eta ehuneko bat jasota, CSV-aren instnantzien garbiketa egingo da. Ondoren,
+     * zatikatea bat egingo da; ehunekoak adierazten duen portzentaia instantzien multzotik entrenamendu faserako
+     * geratuko diren instantzi kopurua adierazten du; beste instantzi guztiak, irgarpen faserako gordeko da.
+     * @param csvPath jasoko diren instantzien zerrendaren path-a
+     * @param arffPath gordeko den arff-aren path-a
+     * @param ehuneko instantzia guztietatik entrenamendurako erabiliko diren instantzien ehunekoa
+     * @param testPath iragarpenetarako erabiliko den test multzoaren output path-a
+     * @throws Exception
+     */
     public static void getArff(String csvPath, String arffPath, int ehuneko, String testPath) throws Exception {
 
         System.out.println("CSV BATETIK ABIATUTA ARFF FITXATEGI GARBI BAT SORTUKO DA" + "\n");
@@ -61,11 +74,17 @@ public class getArff {
         arffGoiburuaEzarri(instantzien_lista, pathOsoa);
         instantziakSartuArff(instantzienMatrizea, pathOsoa);
 
-
         sortuErabiltzekoArff(pathOsoa, arffPath, ehuneko, testPath);
-
     }
 
+    /**
+     *
+     * @param originPath
+     * @param newPath
+     * @param ehunekoa
+     * @param testPath
+     * @throws Exception
+     */
     public static void sortuErabiltzekoArff(String originPath, String newPath, int ehunekoa, String testPath) throws Exception {
 
         ConverterUtils.DataSource source = new ConverterUtils.DataSource(originPath);
@@ -109,9 +128,17 @@ public class getArff {
 
         dataSink = new ConverterUtils.DataSink(testPath);
         dataSink.write(test);
-
     }
 
+    /**
+     * .arff fitxategiaren goiburua lortzen duen metodoa. Instantzien lista bat jasota, lehenengo lerroa irakurtzen da.
+     * Lerro hau lerro berezia da eta instantziak eduki ez ezik, atributuen izena adierazten da. Metodo honek,
+     * atributuen izena hartuko du. Metodoak, fitxategi berri bat sortuko du, lehehengo lerroan @relation etiqueta
+     * erabiliko du eta hurrengo lerroetan atributuen izenak gordeko ditu.
+     * @param instantzien_lista jasoko den instantzien lista
+     * @param path sortuko den fitxategiaren path-a
+     * @throws IOException fitxategia ezin bada sortu sortuko den salbuespena
+     */
     public static void arffGoiburuaEzarri(String[] instantzien_lista, String path) throws IOException {
 
         FileWriter myWriter = new FileWriter(path);
@@ -129,6 +156,13 @@ public class getArff {
 
     }
 
+    /**
+     * arff fitxategi baten path-a jasota, fitxategi horretan instantzia sortan jasotako instantziak eta bere
+     * atributuak arff horretan gordeko dira
+     * @param instantzien_matrizea jasoko den instantza sorta
+     * @param path arff fitxategiaren path-a
+     * @throws IOException
+     */
     public static void instantziakSartuArff(String[][] instantzien_matrizea, String path) throws IOException {
 
         FileWriter myWriter = new FileWriter(path, true);
@@ -142,6 +176,12 @@ public class getArff {
 
     }
 
+    /**
+     * Instantzien lerroak jasota, instantzien atributuengatik banatzen duen metodoa. 'lista'-ren balio bakoitzeko,
+     * identifikatzailea, klasea eta testua lortzen da.
+     * @param lista instantizen lista
+     * @return instantzien lista eta instantzia bakoitzeko bere identifikatzailea, klasea eta testua
+     */
     public static String[][] getInstantzienMatrizea(String[] lista) {
 
         //INSTANZIA KOP X 3 DIMENTSIOKO MATRIZEA SORTU
@@ -154,9 +194,13 @@ public class getArff {
             instantziaMat[i][1] = garbituTestua(l);                                                 //TESTUA
         }
         return garbituInstantzienMatrizea(instantziaMat);
-
     }
 
+    /**
+     * Jasotako mezu bat hartuz, mezu horren garbiketa egingo da.
+     * @param l filtratu behar diren instantzia sorta
+     * @return
+     */
     public static String garbituTestua(String[] l) {
 
         StringBuilder erdikoa = new StringBuilder();
@@ -167,6 +211,23 @@ public class getArff {
 
     }
 
+    /**
+     * Instantzia baten mezua jasota, instantzia horren mezuan aldaketak eta ezabaketak egiten ditu. Hurrengo aldaketak
+     * egin dezake:
+     * <ul>
+     *     <li>Braille testua ezabatu</li>
+     *     <li>Emojiak testu moduan aldatu</li>
+     *     <li>Puntuazio markak ezabatu</li>
+     *     <li>Zenbakiak ezabatu</li>
+     *     <li>Komillak ezabatu</li>
+     *     <li>Enter-ak ezabatu</li>
+     *     <li>20 karaktere baino gehiagoko hitzak ezabatu</li>
+     *     <li>Karaktere bakarreko hitzak ezabatu</li>
+     *     <li>Zenbakiak edo letrak ez diren elementuak kendu</li>
+     * </ul>
+     * @param testua garbitu nahi den mezua
+     * @return mezu garbitua
+     */
     public static String filtratuKaraktereak(String testua) {
 
         testua = testua.replaceAll("[\\u2800-\\u28FF]", ""); //BRAILLE TESTUA EZABATU
@@ -197,6 +258,11 @@ public class getArff {
 
     }
 
+    /**
+     * Instantzia sorta bat jasota, mezu oso laburrak eta mezo oso luzeak dituzten mezuak kenduko dira.
+     * @param mat jasoko den instantzia sorta atribuekin banatuta, matrize moduan
+     * @return garbitutako instantzia sorta (instantzia matrize moduan)
+     */
     public static String[][] garbituInstantzienMatrizea(String[][] mat) {
 
         System.out.println("GARBITU AURRETIK INSTANTZIA KOPURUA: " + mat.length+ "\n");
@@ -219,6 +285,12 @@ public class getArff {
 
     }
 
+    /**
+     * Jasotako CSV bat hartuta, CSV horretan dauden instantzien lista itzuliko da.
+     * @param path CSV fitxategiaren path-a
+     * @return itzuliko den instantzien lista
+     * @throws IOException
+     */
     public static String[] getInstantzienLista(String path) throws IOException {
 
         //CSV FITXATEGIA IRAKURRI
@@ -231,9 +303,12 @@ public class getArff {
 
     }
 
+    /**
+     * Jasotako String bati puntuazio marka guztiak kentzen zaizkio. Puntuazio markak: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+     * @param testua puntuazio markak kenduko zaizkion testua
+     * @return puntuazio markarik gabeko String-a
+     */
     public static String puntuazioMarkaKendu(String testua) {
-
         return testua.replaceAll("\\p{Punct}", " "); //PUNTUAZIO MARKAK EZABATU
-
     }
 }

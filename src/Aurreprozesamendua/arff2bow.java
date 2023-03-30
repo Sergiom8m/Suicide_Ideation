@@ -12,6 +12,9 @@ import weka.filters.unsupervised.instance.SparseToNonSparse;
 
 import java.io.*;
 
+/**
+ *
+ */
 public class arff2bow {
 
     /**
@@ -34,9 +37,7 @@ public class arff2bow {
      * <h3>Exekuzio-adibidea:</h3>
      *      java -jar arff2bow.jar path/to/dataRAW.arff "0/1" "0/1"  path/to/irteerako/hiztegia.txt path/to/irteerako/trainBOW.arff path/to/irteerako/devRAW.arff
      */
-
     public static void main(String[] args){
-
         try{
             getBowArff(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3], args[4], args[5]);
         }catch (Exception e){
@@ -44,8 +45,17 @@ public class arff2bow {
             System.out.println("\nZeozer gaizki sartu da. Exekuzio-adibidea:\n" +
                     "\t\t\tjava -jar arff2bow.jar path/to/dataRAW.arff \"0/1\" \"0/1\"  path/to/irteerako/hiztegia.txt path/to/irteerako/trainBOW.arff path/to/irteerako/devRAW.arff\n\n");
         }
-
     }
+
+    /**
+     *
+     * @param cleanDataArffPath
+     * @param errepresentazioBektoriala
+     * @param sparse
+     * @param hiztegiPath
+     * @param trainBoWPath
+     * @param devPath
+     */
     public static void getBowArff(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWPath,String devPath) {
 
         try{
@@ -100,6 +110,12 @@ public class arff2bow {
         }
     }
 
+    /**
+     * 'test' instantzia multzoari reorder
+     * @param test reorder filtroa aplikatuko zaion parametroa
+     * @return reorder aplikatutako instantzia multzoa
+     * @throws Exception
+     */
     private static Instances reorder(Instances test) throws Exception {
         Reorder filterR = new Reorder();
         filterR.setAttributeIndices("2-"+ test.numAttributes()+",1"); //2-atributu kop, 1.  2-atributu kop bitarteko atributuak goian jarriko dira eta 1 atributua (klasea dena) amaieran.
@@ -108,6 +124,12 @@ public class arff2bow {
         return test;
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @throws Exception
+     */
     private static void datuakGorde(String path, Instances data) throws Exception {
         ArffSaver saver = new ArffSaver();
         saver.setInstances(data);
@@ -115,6 +137,14 @@ public class arff2bow {
         saver.writeBatch();
     }
 
+    /**
+     *
+     * @param train
+     * @param hiztegia
+     * @param bektorea
+     * @return
+     * @throws Exception
+     */
     private static Instances stringToWordVector(Instances train, File hiztegia, int bektorea) throws Exception {
 
         StringToWordVector stringToWordVector= new StringToWordVector();
@@ -139,8 +169,13 @@ public class arff2bow {
         return trainBOW;
     }
 
+    /**
+     * Sarrerako 'test' instantzia multzoa jasota, SparseToNonSparse filtroa aplikatuko zaio eta hori itzuliko da.
+     * @param data SparseToNonSparse filtroa aplikatuko zaion instantzia multzoa
+     * @return SparseToNonSparse filtroa aplikatuta daukan instantzia multzoa
+     * @throws Exception
+     */
     private static Instances SparseToNonSparse(Instances data) throws Exception{
-
         SparseToNonSparse filterNonSparse = new SparseToNonSparse();
         filterNonSparse.setInputFormat(data);
         Instances nonSparseData = Filter.useFilter(data,filterNonSparse);

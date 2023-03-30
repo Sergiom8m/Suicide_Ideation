@@ -25,7 +25,6 @@ public class Iragarpenak {
      * <h3>Exekuzio-adibidea:</h3>
      *      java -jar Iragarpenak.jar path/to/Modeloa.model path/to/testFSS.arff path/to/devFSS.arff path/to/irteerako/TestPredictions.txt
      */
-
     public static void main (String[] args){
         try {
             iragarpen(args[0], args[1], args[2]);
@@ -36,6 +35,14 @@ public class Iragarpenak {
         }
 
     }
+
+    /**
+     *
+     * @param modelPath
+     * @param testPath
+     * @param iragarpenakPath
+     * @throws Exception
+     */
     public static void iragarpen(String modelPath,String testPath, String iragarpenakPath) throws Exception{
 
         System.out.println("IRAGARPENAK EGINGO DIRA" + "\n");

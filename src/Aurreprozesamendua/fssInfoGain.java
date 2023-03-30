@@ -34,7 +34,6 @@ public class fssInfoGain {
      * <h3>Exekuzio-adibidea:</h3>
      *      java -jar fssInfoGain.jar path/to/trainBOW.arff path/to/irteerako/trainFSS.arf path/to/hiztegia.txt path/to/irteerako/hiztegiaFSS.txt
      */
-
     public static void main (String[] args){
 
         try{
@@ -46,6 +45,14 @@ public class fssInfoGain {
         }
 
     }
+
+    /**
+     *
+     * @param trainBowPath
+     * @param FSSArffPath
+     * @param hiztegiPath
+     * @param hiztegiFSSpath
+     */
     public static void fssInfoGain(String trainBowPath, String FSSArffPath, String hiztegiPath, String hiztegiFSSpath) {
         try {
 
@@ -79,6 +86,12 @@ public class fssInfoGain {
         }catch (Exception e){e.printStackTrace();}
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     * @throws Exception
+     */
     private static Instances ezabatuUselessAttributes(Instances data) throws Exception {
         RemoveByName remove = new RemoveByName();
         remove.setExpression(".*[a-zA-Z0-9]+.*");
@@ -89,6 +102,13 @@ public class fssInfoGain {
         return data;
     }
 
+    /**
+     *
+     * @param hiztegia
+     * @param path
+     * @param data
+     * @throws IOException
+     */
     public static void hiztegiaGorde(HashMap<String, Integer> hiztegia, String path, Instances data) throws IOException {
         FileWriter fw = new FileWriter(path);
         fw.write("@@@numDocs="+data.numInstances()+"@@@\n"); //Beharrezkoa TF·IDF bihurketa egiteko
@@ -102,7 +122,13 @@ public class fssInfoGain {
         fw.close();
     }
 
-
+    /**
+     *
+     * @param pathRaw
+     * @param data
+     * @return
+     * @throws IOException
+     */
     public static HashMap<String,Integer> hiztegiaSortu(String pathRaw, Instances data) throws IOException {
         HashMap<String, Integer> hiztegia = new HashMap();
 
@@ -134,6 +160,12 @@ public class fssInfoGain {
         return hiztegia;
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @throws Exception
+     */
     private static void datuakGorde(String path, Instances data) throws Exception {
         //INSTANTZIAK GORDE
         ArffSaver s = new ArffSaver();

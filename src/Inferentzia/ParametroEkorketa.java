@@ -90,7 +90,6 @@ public class ParametroEkorketa {
      * <h3>Exekuzio-adibidea:</h3>
      *      java -jar ParametroEkorketa.jar path/to/trainFSS.arff path/to/devFSS.arff path/to/dataFSS.arff path/to/irteerako/ParametroEkorketaEmaitzak.txt
      */
-
     public static void main(String[] args) {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd-HHmmss");
@@ -108,6 +107,11 @@ public class ParametroEkorketa {
         }
     }
 
+    /**
+     *
+     * @param args
+     * @throws Exception
+     */
     private static void ezarpenak(String[] args) throws Exception{
         train_sourceArff = args[0];
         dev_sourceArff = args[1];
@@ -115,10 +119,10 @@ public class ParametroEkorketa {
         storeDir = args[3];
         min_depth = 80; // 0 balioak 'unlimited' adierazten du
         jump_depth = 50;
-        max_depth = 80; //TODO 120
+        max_depth = 120;
         min_num_features = 100;
         jump_num_features = 20;
-        max_num_features = 100; // sqrt(data.numAttributes()) //TODO 300
+        max_num_features = 300; // sqrt(data.numAttributes())
         min_num_iterations = 102;
         jump_num_iterations = 1;
         max_num_iterations = 102;
@@ -128,7 +132,7 @@ public class ParametroEkorketa {
     }
 
     /**
-     * Ekorketa egiteko erabiliko diren datuen karga
+     * Ekorketa egiteko erabiliko diren datuen karga: train, dev eta test
      */
     private static void datuakKargatu(){
         try{
@@ -154,6 +158,9 @@ public class ParametroEkorketa {
         }
     }
 
+    /**
+     * Ekorketa prozesua garatuko da
+     */
     private static void ekorketa(){
         try{
             long hasiera = System.currentTimeMillis();
@@ -220,11 +227,11 @@ public class ParametroEkorketa {
 
     /**
      * Ekorketaren iterazio bakoitzeko, lortutako balioak gordeko dira.
-     * @param depth
-     * @param num_features
-     * @param num_iterations
-     * @param bag_size
-     * @param fmeas
+     * @param depth gordeko den depth balioa
+     * @param num_features gordeko den num_features balioa
+     * @param num_iterations gordeko den num_iterations balioa
+     * @param bag_size gordeko den bag_size balioa
+     * @param fmeas aurreko parametroen balio bakoitzeko gordeko den f-measure balioa
      */
     private static void balioakGorde(int depth, int num_features, int num_iterations, int bag_size, double fmeas){
         if (depth_values.get(depth) != null) {
@@ -260,6 +267,13 @@ public class ParametroEkorketa {
         }
     }
 
+    /**
+     * Ekorketa prozesuan lortu diren parametro optimoekin eredu sailkatzaile bat eraiki eta gordeko da.
+     * @param best_depth lortu den maxDepth baliorik hoberena
+     * @param best_num_features lortu den numFeatures baliorik handiena
+     * @param best_num_iterations lortu den numIterations baliorik handiena
+     * @param best_bag_size lortu den bagSizePercent baliorik handiena
+     */
     private static void optimoaGorde(int best_depth, int best_num_features, int best_num_iterations, int best_bag_size){
         try{
             randomForest_optimo = new RandomForest();
@@ -300,6 +314,10 @@ public class ParametroEkorketa {
         }
     }
 
+    /**
+     * Ekorketa prozesuan iterazio bakoitzeko gorden diren balioak CSV moduan gordetzeko. Horrela, beste programa
+     * batzuekin grafiko horiek prozesatu ahal izango dira eta grafiko moduan adierazi, adibidez.
+     */
     public static void buildCSV() {
         try{
             // 1. depth values
@@ -338,6 +356,11 @@ public class ParametroEkorketa {
         }
     }
 
+    /**
+     *
+     * @param myWriter
+     * @param toWrite
+     */
     public static void writeInCSV(FileWriter myWriter, String toWrite){
         try{
             myWriter.write(toWrite);
