@@ -92,6 +92,7 @@ public class Baseline {
         //3. STRATIFIED REPEATED HOLD OUT
         System.out.println("HOLD OUT BURUTZEN..." + "\n");
         bf.append("\n=============================================================\n");
+        bf.append("HOLD OUT EBALUAZIOA:\n");
 
         int klaseMin = Utils.minIndex(data.attributeStats(data.classIndex()).nominalCounts);
         double fMeasureMin = 1;
@@ -101,25 +102,20 @@ public class Baseline {
 
         for (int i = 0; i < 5; i++) {
 
-            //TRAINFSS ETA TESTFSS LORTU
-            source = new ConverterUtils.DataSource(dataPath);
-            Instances dataHO = source.getDataSet();
-            dataHO.setClassIndex(data.numAttributes() - 1);
-
             weka.filters.unsupervised.instance.Resample r = new Resample();
             r.setRandomSeed(i);
             r.setSampleSizePercent(70);
             r.setNoReplacement(true);
             r.setInvertSelection(false);
-            r.setInputFormat(dataHO);
-            Instances train = Filter.useFilter(dataHO, r);
+            r.setInputFormat(data);
+            Instances train = Filter.useFilter(data, r);
 
             r.setRandomSeed(i);
             r.setSampleSizePercent(70);
             r.setNoReplacement(true);
             r.setInvertSelection(true);
-            r.setInputFormat(dataHO);
-            Instances test = Filter.useFilter(dataHO, r);
+            r.setInputFormat(data);
+            Instances test = Filter.useFilter(data, r);
 
             evaluation = new Evaluation(train);
 
@@ -136,6 +132,7 @@ public class Baseline {
             }
 
         }
+
         bf.append(summary);
         bf.append(classDet);
         bf.append(matrix);
