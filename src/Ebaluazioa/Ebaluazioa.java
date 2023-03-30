@@ -98,8 +98,9 @@ public class Ebaluazioa {
         bf.append(evaluation.toMatrixString());
 
         //5. STRATIFIED REPEATED HOLD OUT
-        System.out.println("HOLD OUT BURUTZEN..." + "\n");
+        System.out.println("STRATIFIED REPEATED HOLD OUT BURUTZEN..." + "\n");
         bf.append("\n=============================================================\n");
+        bf.append("STRATIFIED REPEATED HOLD OUT:\n");
 
         double fMeasureMin = 1;
         String summary = "";
