@@ -17,6 +17,7 @@ import java.util.Random;
 
 public class Ebaluazioa {
 
+
     /**
      *<h3>Aurre-baldintzak:</h3>
      * <ol>
@@ -51,6 +52,8 @@ public class Ebaluazioa {
     }
 
     public static void ebaluazioa(String dataPath, int p1, int p2, int p3, int p4, String emaitzak, String modeloPath) throws Exception { //TODO blind test gehitu?
+
+        int iterazioKop=5;
 
         System.out.println("TRAIN ETA DEV MULTZOAK ERABILITA SAILKATZAILEA EBALUATUKO DA" + "\n");
 
@@ -109,7 +112,10 @@ public class Ebaluazioa {
         String classDet = "";
         String matrix = "";
 
-        for (int i = 0; i < 5; i++) {
+        double[] fmeasureZerrenda = new double[iterazioKop];
+        double fmeasureBatu=0;
+
+        for (int i = 0; i < iterazioKop; i++) {
 
             Resample r = new Resample();
             r.setRandomSeed(i);
@@ -145,11 +151,28 @@ public class Ebaluazioa {
                 matrix = evaluation.toMatrixString();
 
             }
+            double fMeasure = evaluation.fMeasure(klaseMin);
+            fmeasureZerrenda[i]=fMeasure;
+            fmeasureBatu=fmeasureBatu+fMeasure;
+
+            System.out.println(i+".iterazioa fmeasure:"+fMeasure);
 
         }
         bf.append(summary);
         bf.append(classDet);
         bf.append(matrix);
+
+        bf.append("\n Klase minoritarioaren f-measure batez bestekoa: "+fmeasureBatu/5);
+
+        double desb=0;
+
+        for (int i=0; i<fmeasureZerrenda.length; i++){
+            desb = desb+Math.pow((fmeasureZerrenda[i]-fmeasureBatu/iterazioKop), 2);
+        }
+
+        desb = desb/(iterazioKop-1);
+        desb= Math.sqrt(desb);
+        bf.append("\n F-measure desbiderapen: " + desb);
 
         bf.close();
     }
