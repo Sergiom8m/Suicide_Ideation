@@ -10,3 +10,8 @@
 /misc.xml
 /modules.xml
 /Suicide_Detection.csv
+
+# Ignore output files
+../*.txt
+../*.arff
+../*.model

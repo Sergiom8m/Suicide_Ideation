@@ -1,19 +1,26 @@
 # Suicide Detection
 
-In this project, where are collecting different datasets in order to detect possible suicide cases from tweets.
+Proiektu honetan, tweet-ak jasotzen ari dira datu-sorta desberdinetatik suizidio kasuak aurresateko.
 
-## 0. String garbiketa
+## Requirements
 
-## 1. raw ARFF
+Proiektu honek, hurrengo dependentziak ditu:
+ * Java JDK (JVM + JRE + Developer Tools). [JDK download](https://www.oracle.com/es/java/technologies/downloads/)
+ * Weka .jar library. [Weka.jar Download](https://waikato.github.io/weka-wiki/downloading_weka/)
+ * Emojis library. Proiektuaren iturri kodearekin batera: [emoji-java-5.1.1.jar](emojis%2Femoji-java-5.1.1.jar)
 
-## 2. BoW or TFIDF
+## 0. Aurreprozesamendua
 
-## 3. ATTRIBUTE SELECTION
-Remove useless attributes that don't help predicting the class attribute (suicide detection)
+Jasotako tweet-en instantziak, garbitu eta doituko dira programan tratatu ahal izateko. 
 
-## 4. Optimize parameters for the classifier (Parametro ekorketa)
+## 1. Inferentzia
 
-## 5. Kalitatearen estimazioa
+Atal honetan, erabiliko den `RandomForest` sailkatzailearen ekorketa egingo da.
 
-## 6. Tesing with predictions
+## 2. Ebaluazioa
 
+Datuekin eta sailkatzailearekin, ebaluazioaren emaitzak lortuk dira.
+
+## 3. Iragarpenak
+
+Instantzia berrien iragarpenak egingo dira.
