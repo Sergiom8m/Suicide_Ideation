@@ -33,7 +33,6 @@ public class getArff {
      * <h3>Exekuzio-adibidea:</h3>
      *      java -jar getArff.jar path/to/Suicide_Detection.csv path/to/irteerako/dataRAW.arff "ehunekoa" path/to/irteerako/testRAW.arff
      *
-     *
      */
     public static void main(String[] args) throws Exception {
 
@@ -78,11 +77,12 @@ public class getArff {
     }
 
     /**
-     *
-     * @param originPath
-     * @param newPath
-     * @param ehunekoa
-     * @param testPath
+     * Garbitutako arff jasota, jasotako ehunekoaren arabera partiketa bat egiten da. Entrenamendu eta test multzorako
+     * path-a ere adieraziko da, zatituako arff fitxategiak gordetzeko.
+     * @param originPath garbitutako arff-aren path-a
+     * @param newPath entrenamendu faserako erabiliko den arff-aren path-a
+     * @param ehunekoa entrenamendu faserako erabiliko dee arff-aren instantzia kopurua instantzia originalen gainean
+     * @param testPath iragarpenen faserako erabiliko den arff-aren path-a
      * @throws Exception
      */
     public static void sortuErabiltzekoArff(String originPath, String newPath, int ehunekoa, String testPath) throws Exception {
@@ -299,6 +299,7 @@ public class getArff {
 
         //INSTANTZIAK BANATU
         String[] instantzien_lista = csvEdukia.split("(?<=suicide\n)");
+        if(instantzien_lista.length==1){instantzien_lista = csvEdukia.split("(?<=suicide\r\n)");}
         return instantzien_lista;
 
     }

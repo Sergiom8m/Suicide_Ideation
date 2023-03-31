@@ -108,8 +108,8 @@ public class ParametroEkorketa {
     }
 
     /**
-     *
-     * @param args
+     * Parametro ekorketan egingo den parametro eta aukeren ezarpenak
+     * @param args programa deitzerakoan erabiltzaileak adierazten dituen parametroen ezarpenak
      * @throws Exception
      */
     private static void ezarpenak(String[] args) throws Exception{
@@ -357,11 +357,11 @@ public class ParametroEkorketa {
     }
 
     /**
-     *
-     * @param myWriter
-     * @param toWrite
+     * String bat adierazitako fitxategian gordeko da
+     * @param myWriter gordetako fitxategia
+     * @param toWrite fitxategiaren idatziko den String-a
      */
-    public static void writeInCSV(FileWriter myWriter, String toWrite){
+    private static void writeInCSV(FileWriter myWriter, String toWrite){
         try{
             myWriter.write(toWrite);
         } catch (IOException e){

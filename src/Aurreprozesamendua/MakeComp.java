@@ -41,12 +41,14 @@ public class MakeComp {
     }
 
     /**
-     *
-     * @param inputPath
-     * @param outputFSSPath
-     * @param errepresentazioBektoriala
-     * @param sparse
-     * @param hiztegiFSS
+     * Jasotako instantzia multzo baten arff fitxategiaren path-a, hiztegi bati egokituko zaio. Instantzia multzoa,
+     * errepresentazio bektoriala aplikatu gabe dago. Beraz, sartutako aukeren arabera, errepresentazio bektoriala
+     * sortuko da eta adierazitako hiztegi bati egokitiko da.
+     * @param inputPath instantzia multzoaren arff fitxategiaren path-a
+     * @param outputFSSPath egokitutako instantzia multzoaren arff fitxategiaren path-a
+     * @param errepresentazioBektoriala errepresentazio bektorial mota. 0 --> BoW; 1 --> TFIDF
+     * @param sparse 0 --> Sparse; 1 --> Non-sparse
+     * @param hiztegiFSS instantzia multzoa egokituko den hiztegiaren path-a
      * @throws Exception
      */
     public static void makeComp(String inputPath, String outputFSSPath,int errepresentazioBektoriala,int sparse, String hiztegiFSS) throws Exception {
@@ -77,10 +79,10 @@ public class MakeComp {
     }
 
     /**
-     *
-     * @param hiztegia
-     * @param data
-     * @param bektorea
+     * Instantzia multzo bat jasota, errepresentazio bektorial bat sortuko da hiztegi batekiko.
+     * @param hiztegia instantzia multzoa egokituko den hiztegia
+     * @param data jasotako instantzia multzoa
+     * @param bektorea 0 --> BoW; 1 --> TFIDF
      * @return
      * @throws Exception
      */
@@ -103,9 +105,9 @@ public class MakeComp {
     }
 
     /**
-     *
-     * @param test
-     * @return
+     * 'test' instantzia multzoari reorder
+     * @param test reorder filtroa aplikatuko zaion parametroa
+     * @return reorder aplikatutako instantzia multzoa
      * @throws Exception
      */
     private static Instances reorder(Instances test) throws Exception {
@@ -117,9 +119,9 @@ public class MakeComp {
     }
 
     /**
-     *
-     * @param path
-     * @param data
+     * Jasotako instantzia multzo bat jasota adierazitako path-ean gordeko da arff formatuan
+     * @param path arff fitxategia gordeko den path-a
+     * @param data instantzia multzoa
      * @throws Exception
      */
     private static void datuakGorde(String path, Instances data) throws Exception {
@@ -130,9 +132,9 @@ public class MakeComp {
     }
 
     /**
-     *
-     * @param data
-     * @return
+     * Jasotako instantzia multzo bat jasota, Non-Sparse bihutuko da
+     * @param data jasotako instantzia multzoa
+     * @return non-sparse motako instantzia multzoa
      * @throws Exception
      */
     private static Instances SparseToNonSparse(Instances data) throws Exception{

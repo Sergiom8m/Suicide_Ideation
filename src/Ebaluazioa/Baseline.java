@@ -44,10 +44,13 @@ public class Baseline {
     }
 
     /**
-     *
-     * @param dataPath
-     * @param emaitzak
-     * @param modelPath
+     * Jasotako instantzia multzo baten arff-aren path-a jasota, instantzia multzo horren ebaluzioak egiten dira
+     * defektuzko Random Forest sailkatzailea erabiliz. Hainbat ebaluazio eskema aplikatuko dira: ez-zintzoa, 10-fCV eta
+     * estratifikatutako hold-out
+     * @param dataPath instantzia multzoaren arff-aren path-a
+     * @param emaitzak ebaluazioan lortutako ebaluazio metriken balioak gordetzeko path-a
+     * @param modelPath defektuizko Random Foest eredu sailkatzailea jasotako instantzia multzoarekin entrenatuta
+     *                  gordeko den path-a
      * @throws Exception
      */
     public static void baseline(String dataPath, String emaitzak, String modelPath) throws Exception {

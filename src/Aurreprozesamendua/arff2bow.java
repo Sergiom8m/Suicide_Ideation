@@ -12,9 +12,6 @@ import weka.filters.unsupervised.instance.SparseToNonSparse;
 
 import java.io.*;
 
-/**
- *
- */
 public class arff2bow {
 
     /**
@@ -48,13 +45,14 @@ public class arff2bow {
     }
 
     /**
-     *
-     * @param cleanDataArffPath
-     * @param errepresentazioBektoriala
-     * @param sparse
-     * @param hiztegiPath
-     * @param trainBoWPath
-     * @param devPath
+     * Jasotako arff batetik, instantzien multzoa 'train' eta 'dev' partiketetan banatzen da. 'train' partiketarekin
+     * errepresentazio bektoriala sortuko da.
+     * @param cleanDataArffPath jasotako arff-aren path-a
+     * @param errepresentazioBektoriala BoW edo TFIDF erabiliko den erabakitzeko erabiltzen da. 0 --> BoW, 1 --> TFIDF
+     * @param sparse Sparse edo Non-Sparse erabiliko den erabakitzeko erabiltzen da. 0 --> Sparse, 1 --> Non-Sparse
+     * @param hiztegiPath errepresentazio bektorialan erabiltzen den hiztegia gordetzeko path-a
+     * @param trainBoWPath errepresntazio bektorialaren instantzia multzotik, 'train' banaketaren
+     * @param devPath 'dev' partikaeta gordeko den path-a
      */
     public static void getBowArff(String cleanDataArffPath,int errepresentazioBektoriala,int sparse, String hiztegiPath, String trainBoWPath,String devPath) {
 
@@ -125,9 +123,9 @@ public class arff2bow {
     }
 
     /**
-     *
-     * @param path
-     * @param data
+     * Instantzia multzo bat jasota, emandako path-ean gordeko da instantzia multzo hori arff formatuan
+     * @param path gordeko den arff-aren direktorioari erreferentzia egiten dio
+     * @param data instantzia multzoa
      * @throws Exception
      */
     private static void datuakGorde(String path, Instances data) throws Exception {
@@ -138,11 +136,12 @@ public class arff2bow {
     }
 
     /**
-     *
-     * @param train
-     * @param hiztegia
-     * @param bektorea
-     * @return
+     * Instantzia multzo bat jasota, instantzia multzo horrek duen mezuaren errepresentazio bektoriala lortuko da,
+     * erabakitako errepresentazio bektorial motaren arbera.
+     * @param train transformatuko den instantzia multzoa
+     * @param hiztegia lortutako errepresentazio bektorialaren hiztegia
+     * @param bektorea errepresentazio bektorial mota adierazten du. 0 --> BoW (Bag of Words); 1 --> TFIDF
+     * @return errepresentazio bektorialan lortutako instantzia multzoa
      * @throws Exception
      */
     private static Instances stringToWordVector(Instances train, File hiztegia, int bektorea) throws Exception {

@@ -37,10 +37,11 @@ public class Iragarpenak {
     }
 
     /**
-     *
-     * @param modelPath
-     * @param testPath
-     * @param iragarpenakPath
+     * test instantiza multzo bat eta eredu sailkatzaile bat jasota, sailkatzaileak test multzoan dauden instantzien iragarpenak
+     * egingo ditu
+     * @param modelPath eredu sailkatailea dagoen path-a
+     * @param testPath test instantzia multzoaren path-a
+     * @param iragarpenakPath egindako iragarpenak egingo diren fitxategiaren path-a
      * @throws Exception
      */
     public static void iragarpen(String modelPath,String testPath, String iragarpenakPath) throws Exception{

@@ -47,11 +47,14 @@ public class fssInfoGain {
     }
 
     /**
-     *
-     * @param trainBowPath
-     * @param FSSArffPath
-     * @param hiztegiPath
-     * @param hiztegiFSSpath
+     * Errepresentazio bektoriala aplikatuta daukan instantzia multzo bat jasota, atributu hautapena aplikatzen zaio.
+     * Behin aplikatuta, lortutako instantzia multzo berria eta hiztegi berria gordeko da.
+     * @param trainBowPath errepresentazio bektorial moduan dagoen instantzia multzoa, atributu aukeraketa aplikatuko
+     *                     zaiona
+     * @param FSSArffPath FSS aplikatutako instantzia multzoa gordeko den direktorioa
+     * @param hiztegiPath trainBow fitxategiaren erabiltzen duen hiztegia
+     * @param hiztegiFSSpath behin atributu hautaketa aplikatuta, geratzen den hiztegiaren direktorioa. Bertan gordeko
+     *                       da hiztegi berria
      */
     public static void fssInfoGain(String trainBowPath, String FSSArffPath, String hiztegiPath, String hiztegiFSSpath) {
         try {
@@ -87,9 +90,10 @@ public class fssInfoGain {
     }
 
     /**
-     *
-     * @param data
-     * @return
+     * Instantzia multzo bat jasota, erabilgarriak ez diren atributuk kenduko dira. Letrak eta zenbakiak dituzten atributuekin
+     * bakarrik geratuko da.
+     * @param data jasotako instantzi multzoa
+     * @return erabilgarriak ez diren atributuak ezabatuta daukan instantzia multzoa
      * @throws Exception
      */
     private static Instances ezabatuUselessAttributes(Instances data) throws Exception {
@@ -123,10 +127,10 @@ public class fssInfoGain {
     }
 
     /**
-     *
+     * Jasotako instantzi multzo batetik, instantzia multzo horrek duen dituen atributuak hiztegia osatuko dute.
      * @param pathRaw
      * @param data
-     * @return
+     * @return sortutako hiztegia
      * @throws IOException
      */
     public static HashMap<String,Integer> hiztegiaSortu(String pathRaw, Instances data) throws IOException {
@@ -161,9 +165,9 @@ public class fssInfoGain {
     }
 
     /**
-     *
-     * @param path
-     * @param data
+     * Jasotako instantzia multzo bat jasota adierazitako path-ean gordeko da arff formatuan
+     * @param path arff fitxategia gordeko den path-a
+     * @param data instantzia multzoa
      * @throws Exception
      */
     private static void datuakGorde(String path, Instances data) throws Exception {

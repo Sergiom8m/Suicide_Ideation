@@ -51,14 +51,16 @@ public class Ebaluazioa {
     }
 
     /**
-     *
-     * @param dataPath
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param p4
-     * @param emaitzak
-     * @param modeloPath
+     * Jasotako instantzia multzo baten arff-aren path-a jasota, instantzia multzo horren ebaluzioak egiten dira
+     * emandako parametroek adierazten duten Random Forest sailkatzailea erabiliz. Hainbat ebaluazio eskema aplikatuko
+     * dira: ez-zintzoa, 10-fCV eta estratifikatutako hold-out
+     * @param dataPath instantzia multzoarne arff fitxategiaren path-a
+     * @param p1 Random Forest sailkatzailearen numFeatures parametroa
+     * @param p2 Random Forest sailkatzailearen numIterations parametroa
+     * @param p3 Random Forest sailkatzailearen bagSizePercent parametroa
+     * @param p4 Random Forest sailkatzailearen maxDepth parametroa
+     * @param emaitzak ebaluazioan lortutako ebaluazio metriken balioak gordetzeko path-a
+     * @param modeloPath Random Foest eredu sailkatzailea jasotako instantzia multzoarekin entrenatuta gordeko den path-a
      * @throws Exception
      */
     public static void ebaluazioa(String dataPath, int p1, int p2, int p3, int p4, String emaitzak, String modeloPath) throws Exception { //TODO blind test gehitu?
