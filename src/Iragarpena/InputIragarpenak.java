@@ -13,6 +13,8 @@ import static com.vdurmont.emoji.EmojiParser.parseToAliases;
 
 public class InputIragarpenak {
 
+    private static boolean klasea;
+
     /**
      *<h3>Aurre-baldintzak:</h3>
      * <ol>
@@ -30,6 +32,7 @@ public class InputIragarpenak {
      */
     public static void main(String[] args) {
         try {
+            klasea=false;
             datuakPrestatu(args[0], args[1], args[2], args[3]);
         }catch (Exception e){
             e.printStackTrace();
@@ -86,7 +89,7 @@ public class InputIragarpenak {
         //INSTANTZIAK BANATU
         String[] instantzien_lista = csvEdukia.split("(?<=NaN\r\n)");
         if (instantzien_lista.length==1){instantzien_lista = csvEdukia.split("(?<=NaN\n)");}
-        if (instantzien_lista.length==1){instantzien_lista = csvEdukia.split("(?<=suicide\n)");}
+        if (instantzien_lista.length==1){instantzien_lista = csvEdukia.split("(?<=suicide\n)");klasea=true;}
         if (instantzien_lista.length==1){instantzien_lista = csvEdukia.split("(?<=suicide\r\n)");}
         return instantzien_lista;
     }
@@ -104,7 +107,8 @@ public class InputIragarpenak {
         for (int i = 0; i < lista.length; i++) {
             String unekoInstantzia = lista[i]; //INSTANTZIA LERRO OSOA
             String[] l = unekoInstantzia.split(",");
-            instantziaMat[i][1] = "?"; //KLASEA
+            if(!klasea){instantziaMat[i][1] = "?";} //KLASEA
+            else{instantziaMat[i][1] ="\'" + l[l.length - 1].replace("\n", "").replace("\r", "") + "\'";}
             instantziaMat[i][0] = garbituTestua(l); //TESTUA
         }
         return instantziaMat;
